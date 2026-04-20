@@ -30,6 +30,8 @@
         'info' => '<circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />',
     'camera' => '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" />',
     'alert-circle' => '<circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />',
+    'hourglass' => '<path d="M5 22h14" /><path d="M5 2h14" /><path d="M17 22v-4a4 4 0 0 0-4-4 4 4 0 0 0-4 4v4" /><path d="M7 2v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V2" />',
+    'refresh-cw' => '<path d="M21 12a9 9 0 1 1-3-6.7" /><polyline points="21 3 21 9 15 9" />',
     'calendar-days' => '<rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h18" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" />',
     'book-open' => '<path d="M2 4h6a4 4 0 0 1 4 4v12H8a4 4 0 0 0-4 4" /><path d="M22 4h-6a4 4 0 0 0-4 4v12h4a4 4 0 0 1 4 4" />',
     'wallet' => '<path d="M20 7H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" /><path d="M16 12h2" />',

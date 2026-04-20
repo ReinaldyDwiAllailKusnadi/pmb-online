@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\StatusPendaftaranController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RegistrationController::class, 'login'])->name('login');
@@ -15,6 +16,7 @@ Route::middleware('auth')->group(function () {
 	Route::post('/form/step-2', [RegistrationController::class, 'formStep2Store'])->name('form.step2.store');
 	Route::get('/form/step-3', [RegistrationController::class, 'formStep3'])->name('form.step3');
 	Route::get('/status', [RegistrationController::class, 'status'])->name('status');
+	Route::get('/status-pendaftaran', [StatusPendaftaranController::class, 'index'])->name('status.pendaftaran');
 	Route::get('/pdf', [RegistrationController::class, 'pdf'])->name('pdf');
 	Route::post('/logout', [RegistrationController::class, 'logout'])->name('logout');
 });

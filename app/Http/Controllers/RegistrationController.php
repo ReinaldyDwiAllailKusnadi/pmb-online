@@ -183,10 +183,6 @@ class RegistrationController extends Controller
     {
         $applicant = $this->getApplicant($request);
 
-        if ($redirect = $this->redirectIfDocumentsIncomplete($applicant)) {
-            return $redirect;
-        }
-
         return view('pages.status', compact('applicant'));
     }
 

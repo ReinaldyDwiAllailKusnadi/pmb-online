@@ -1,84 +1,50 @@
-<x-app-layout title="Status Pendaftaran">
+@extends('layouts.app')
+
+@section('content')
+    <style>
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scale-in {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s ease-out both;
+        }
+
+        .animate-scale-in {
+            animation: scale-in 0.4s ease-out both;
+        }
+    </style>
+
     <div class="flex min-h-screen">
-        <aside class="fixed left-0 top-0 h-full w-65 bg-primary shadow-xl flex flex-col py-8 z-50 overflow-y-auto">
-            <div class="px-6 mb-12 flex items-center gap-3">
-                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0">
-                    <img
-                        class="w-8 h-8"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnKPfyJb784urJ9ESdMl5gKQvmw4ump6h3g2uIigABsoG9DkPhVntq94vebfWWn3arggyx_TZHG0wCcRR3W-l3hU0JkRTSwTRUDBmrWv1_tHhPrTW4oQ7_HjVWpHz1hZjy-j-ZwBMId2aDiXFAezMNA-LyWXzax6cA3G6V2erbqblzyyDw2m0Mk0Uwt_gBsVXxOPFPSyfULFuW26y0JYLxr-F22U-BPtIiOdUQVmvbE7ohSzH_uXanhSIfaKR6IHuiPfapkhTWXsA"
-                        alt="Logo"
-                        referrerpolicy="no-referrer"
-                    />
-                </div>
-                <div>
-                    <h1 class="text-white text-lg font-extrabold leading-none tracking-tight">Akademi PMB</h1>
-                    <p class="text-slate-400 text-[10px] font-bold tracking-wider uppercase mt-1">Student Portal</p>
-                </div>
-            </div>
+        @include('partials.sidebar', ['sidebarLinks' => $sidebarLinks])
 
-            <nav class="flex-1 space-y-1.5 px-4">
-                @foreach ([
-                    ['label' => 'Beranda', 'route' => 'dashboard', 'icon' => 'layout-dashboard', 'active' => false],
-                    ['label' => 'Formulir Pendaftaran', 'route' => 'form.step1', 'icon' => 'file-text', 'active' => false],
-                    ['label' => 'Status Pendaftaran', 'route' => 'status', 'icon' => 'clipboard-check', 'active' => true],
-                    ['label' => 'Unduh Bukti PDF', 'route' => 'pdf', 'icon' => 'file-down', 'active' => false],
-                ] as $link)
-                    <a
-                        href="{{ route($link['route']) }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium text-sm group {{ $link['active'] ? 'bg-secondary text-white shadow-lg shadow-secondary/20 border-l-4 border-white' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}"
-                    >
-                        <x-lucide-icon name="{{ $link['icon'] }}" class="w-5 h-5 {{ $link['active'] ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" />
-                        <span>{{ $link['label'] }}</span>
-                    </a>
-                @endforeach
-            </nav>
+        <main class="ml-[260px] flex-1 bg-bg-light">
+            @include('partials.topbar', ['user' => $user])
 
-            <div class="px-4 mt-auto space-y-3">
-                <button class="w-full py-3 px-4 rounded-xl bg-white/5 text-white hover:bg-white/15 transition-all flex items-center justify-center gap-2 text-sm font-semibold border border-white/10 backdrop-blur-sm">
-                    <x-lucide-icon name="help-circle" class="w-4 h-4" />
-                    <span>Hubungi Bantuan</span>
-                </button>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all text-sm font-medium w-full text-left">
-                        <x-lucide-icon name="log-out" class="w-5 h-5" />
-                        <span>Keluar</span>
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-    <main class="ml-65 flex-1 bg-bg-light">
-            <header class="sticky top-0 h-16 w-full bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center justify-between px-8 z-40">
-                <h2 class="text-xl font-bold text-primary tracking-tight">Status Pendaftaran</h2>
-                <div class="flex items-center gap-6">
-                    <div class="relative cursor-pointer group">
-                        <x-lucide-icon name="bell" class="w-6 h-6 text-slate-500 group-hover:text-secondary transition-colors" />
-                        <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-secondary border-2 border-white rounded-full"></span>
-                    </div>
-                    <div class="flex items-center gap-4 pl-6 border-l border-slate-200">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-sm font-bold text-primary leading-tight">{{ $applicant->full_name }}</p>
-                            <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Reg No: 202409821</p>
-                        </div>
-                        <div class="w-10 h-10 rounded-full border-2 border-slate-100 overflow-hidden shadow-sm">
-                            <img
-                                class="w-full h-full object-cover"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEKqHQtIXgnAr9VcIT7V1RGBzMH56NhU5KBxdA_GmbZkyFYAobK5lZbpjzilL-HhzfpM29hIRc7KE8PvgvSw4OrojmOavLOnEeGLe8oY2F8XN1UDrARI95Kd694BvMq18MIF-N4VWQCikgMmpPUtCiqLWWl_1D1XS-WOqCgM9MGSdXK2tNcSEZbKAHR8J9eYpSA5APET73B4oKjB-r4_5F9lULcUokxKBUZ7vYFRyr1epRBxVtLQ72oysOLjFEu-0HByzxMEHu2v8"
-                                alt="Avatar"
-                                referrerpolicy="no-referrer"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <div class="p-8 max-w-6xl mx-auto space-y-10">
-                <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="p-8 max-w-7xl mx-auto space-y-10">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in-up">
                     <div class="lg:col-span-2 bg-white rounded-2xl p-8 shadow-soft relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
                         <div class="absolute top-0 right-0 w-48 h-48 bg-secondary/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
-                        <div class="relative z-10 w-24 h-24 shrink-0 flex items-center justify-center rounded-full bg-secondary/10 text-secondary ring-8 ring-secondary/5">
-                            <x-lucide-icon name="hourglass" class="w-10 h-10 animate-[spin_8s_linear_infinite]" />
+                        <div class="relative z-10 w-24 h-24 flex-shrink-0 flex items-center justify-center rounded-full bg-secondary/10 text-secondary ring-8 ring-secondary/5">
+                            <i class="bi bi-hourglass-split w-10 h-10 animate-[spin_8s_linear_infinite]"></i>
                         </div>
                         <div class="relative z-10 flex-1 space-y-4 text-center md:text-left">
                             <div>
@@ -108,7 +74,7 @@
                             <span class="font-bold text-secondary">Gelombang 2 (Mei - Juli)</span>
                         </div>
                     </div>
-                </section>
+                </div>
 
                 <section>
                     <div class="flex items-center gap-4 mb-8">
@@ -116,30 +82,36 @@
                         <div class="h-px flex-1 bg-slate-200"></div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        @foreach ([
-                            ['id' => '01', 'title' => 'Akun Dibuat', 'date' => '12 Mei 2024', 'status' => 'completed'],
-                            ['id' => '02', 'title' => 'Formulir Selesai', 'date' => '14 Mei 2024', 'status' => 'completed'],
-                            ['id' => '03', 'title' => 'Verifikasi Berkas', 'date' => 'Sedang Berlangsung', 'status' => 'current', 'subtitle' => 'Menunggu Antrian'],
-                            ['id' => '04', 'title' => 'Tes Seleksi', 'date' => 'Belum Terjadwal', 'status' => 'upcoming'],
-                        ] as $step)
-                            <div class="p-6 rounded-2xl relative transition-all duration-300 border-b-4 shadow-soft {{ $step['status'] === 'completed' ? 'bg-white border-primary' : ($step['status'] === 'current' ? 'bg-white border-secondary shadow-lg shadow-secondary/10' : 'bg-slate-50 border-slate-200 opacity-70') }}">
+                        @foreach ($timelineSteps as $step)
+                            <div
+                                class="p-6 rounded-2xl relative transition-all duration-300 border-b-4 animate-scale-in @if ($step['status'] === 'completed') bg-white border-primary @elseif ($step['status'] === 'current') bg-white border-secondary shadow-lg shadow-secondary/5 @else bg-slate-100 border-slate-300 opacity-60 @endif"
+                                style="animation-delay: {{ $loop->index * 0.1 }}s;"
+                            >
                                 <div class="flex items-center justify-between mb-4">
-                                    <div class="w-9 h-9 rounded-full flex items-center justify-center {{ $step['status'] === 'completed' ? 'bg-primary text-white' : ($step['status'] === 'current' ? 'bg-secondary text-white' : 'bg-slate-200 text-slate-500') }}">
+                                    <div class="w-9 h-9 rounded-full flex items-center justify-center @if ($step['status'] === 'completed') bg-primary text-white @elseif ($step['status'] === 'current') bg-secondary text-white @else bg-slate-200 text-slate-500 @endif">
                                         @if ($step['status'] === 'completed')
-                                            <x-lucide-icon name="check" class="w-5 h-5" />
+                                            <i class="bi bi-check-lg w-5 h-5"></i>
                                         @elseif ($step['status'] === 'current')
-                                            <x-lucide-icon name="refresh-cw" class="w-5 h-5 animate-spin duration-[1.5s]" />
+                                            <i class="bi bi-arrow-repeat w-5 h-5 animate-spin duration-[1.5s]"></i>
                                         @else
-                                            <x-lucide-icon name="clock" class="w-5 h-5" />
+                                            <i class="bi bi-clock w-5 h-5"></i>
                                         @endif
                                     </div>
-                                    <span class="text-[10px] font-black uppercase {{ $step['status'] === 'current' ? 'text-secondary' : 'text-slate-400' }}">
-                                        {{ $step['status'] === 'current' ? 'Sedang Berlangsung' : $step['id'] }}
+                                    <span class="text-[10px] font-black uppercase @if ($step['status'] === 'current') text-secondary @else text-slate-400 @endif">
+                                        @if ($step['status'] === 'current')
+                                            Sedang Berlangsung
+                                        @else
+                                            {{ $step['id'] }}
+                                        @endif
                                     </span>
                                 </div>
                                 <h5 class="font-bold text-primary text-sm mb-1">{{ $step['title'] }}</h5>
-                                <p class="text-xs {{ $step['status'] === 'current' ? 'text-slate-600 font-medium italic' : 'text-slate-500' }}">
-                                    {{ $step['status'] === 'current' ? $step['subtitle'] : $step['date'] }}
+                                <p class="text-xs @if ($step['status'] === 'current') text-slate-600 font-medium italic @else text-slate-500 @endif">
+                                    @if ($step['status'] === 'current')
+                                        {{ $step['subtitle'] }}
+                                    @else
+                                        {{ $step['date'] }}
+                                    @endif
                                 </p>
                             </div>
                         @endforeach
@@ -151,7 +123,7 @@
                         <div class="flex justify-between items-end">
                             <h3 class="text-xl font-bold text-primary tracking-tight">Riwayat Aktivitas</h3>
                             <button class="text-xs font-bold text-primary hover:text-secondary group transition-colors flex items-center gap-1.5 px-2 py-1">
-                                Lihat Detail <x-lucide-icon name="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                Lihat Detail <i class="bi bi-arrow-right w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
                             </button>
                         </div>
                         <div class="bg-white rounded-2xl overflow-hidden shadow-soft border border-slate-100">
@@ -165,11 +137,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-100">
-                                        @foreach ([
-                                            ['date' => '15 Mei 2024, 09:42', 'activity' => 'Berkas Diterima', 'description' => 'Sistem telah menerima unggahan berkas lengkap.', 'color' => 'bg-secondary'],
-                                            ['date' => '14 Mei 2024, 16:20', 'activity' => 'Finalisasi Data', 'description' => 'Peserta melakukan konfirmasi akhir formulir.', 'color' => 'bg-green-500'],
-                                            ['date' => '12 Mei 2024, 11:05', 'activity' => 'Registrasi Akun', 'description' => 'Akun portal PMB berhasil diaktifkan.', 'color' => 'bg-green-500'],
-                                        ] as $item)
+                                        @foreach ($activityLog as $item)
                                             <tr class="hover:bg-slate-50/50 transition-colors group">
                                                 <td class="px-6 py-5 text-sm font-medium text-slate-700">{{ $item['date'] }}</td>
                                                 <td class="px-6 py-5">
@@ -193,7 +161,7 @@
                             <div class="bg-white rounded-2xl p-6 border-l-4 border-secondary shadow-soft space-y-4">
                                 <div class="flex items-center gap-4">
                                     <div class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
-                                        <x-lucide-icon name="alert-circle" class="w-5 h-5" />
+                                        <i class="bi bi-exclamation-circle w-5 h-5"></i>
                                     </div>
                                     <h5 class="font-bold text-primary text-sm">Cek Email Berkala</h5>
                                 </div>
@@ -205,7 +173,7 @@
                             <div class="bg-white rounded-2xl p-6 shadow-soft space-y-4 border border-slate-100 hover:border-slate-200 transition-colors group">
                                 <div class="flex items-center gap-4">
                                     <div class="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
-                                        <x-lucide-icon name="graduation-cap" class="w-5 h-5" />
+                                        <i class="bi bi-mortarboard w-5 h-5"></i>
                                     </div>
                                     <h5 class="font-bold text-primary text-sm">Persiapan Materi Ujian</h5>
                                 </div>
@@ -213,13 +181,13 @@
                                     Sambil menunggu, pelajari materi Tes Potensi Akademik dan Bahasa Inggris untuk tahap seleksi mendatang.
                                 </p>
                                 <button class="text-[10px] font-black text-secondary uppercase tracking-widest hover:underline flex items-center gap-1">
-                                    Unduh Kisi-Kisi <x-lucide-icon name="arrow-right" class="w-3 h-3" />
+                                    Unduh Kisi-Kisi <i class="bi bi-arrow-right w-3 h-3"></i>
                                 </button>
                             </div>
 
-                            <div class="relative bg-linear-to-br from-primary to-[#0f2a4a] rounded-2xl p-8 text-white overflow-hidden shadow-xl">
+                            <div class="relative bg-gradient-to-br from-primary to-[#0f2a4a] rounded-2xl p-8 text-white overflow-hidden shadow-xl">
                                 <div class="absolute -bottom-6 -right-6 opacity-10">
-                                    <x-lucide-icon name="message-circle" class="w-32 h-32" />
+                                    <i class="bi bi-chat-dots w-32 h-32"></i>
                                 </div>
                                 <div class="relative z-10">
                                     <h5 class="font-bold text-base mb-2">Punya Pertanyaan?</h5>
@@ -237,9 +205,8 @@
                     <div class="flex items-center gap-6 opacity-40 hover:opacity-60 transition-opacity">
                         <img
                             class="h-8 grayscale"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS00hUvsSPZG6iN8RqgUbupQEmHA4OpHs5RGiDOtJkBoUfJ-kcVqyVd4KJM3Leq-3cyOOsqqJyKrl-v8OQwjd7pHa1btq5wR4pdHqx1XgdeLfSP_iVICdIxtjccKJ6n5iA_vgddWa5XS7CZ7M8aW0htNpJDmi163Ymek0QV66igDTK8B1QN9jxIvP6ubp5R49Dy8oS58TLvhgpXLw68ew1rLCgQJ8qIrerL7LccWsUyjufuHxnhIiD7XrzloB2g0rnSg8BTc0X8eA"
+                            src="{{ asset('images/accreditation.png') }}"
                             alt="Accreditation"
-                            referrerpolicy="no-referrer"
                         />
                     </div>
                     <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
@@ -249,4 +216,4 @@
             </div>
         </main>
     </div>
-</x-app-layout>
+@endsection
