@@ -1,9 +1,14 @@
 <x-app-layout title="Konfirmasi Pendaftaran">
     <div class="flex">
-        @include('partials.sidebar', ['current' => 'registration'])
+    @include('partials.sidebar', ['activePage' => 'formulir'])
 
         <div class="ml-65 flex-1 flex flex-col min-h-screen">
-            @include('partials.header', ['title' => 'Konfirmasi Pendaftaran', 'userName' => $applicant->full_name])
+            @include('partials.topbar', [
+                'pageLabel' => 'Konfirmasi Pendaftaran',
+                'userName' => $applicant->full_name,
+                'userRole' => 'Calon Mahasiswa',
+                'userAvatar' => 'https://ui-avatars.com/api/?name=' . urlencode($applicant->full_name),
+            ])
 
             <div class="p-10 max-w-6xl mx-auto">
                 <div class="mb-12">

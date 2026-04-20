@@ -66,7 +66,7 @@
     <div class="flex min-h-screen bg-background font-sans text-primary">
         @include('partials.sidebar', ['activePage' => 'unduh-bukti'])
 
-        <main class="flex-1 transition-all md:ml-64">
+    <main class="flex-1 transition-all ml-65">
             @include('partials.topbar', [
                 'pageLabel' => 'E-Sertifikat & Bukti',
                 'userName' => $student->nama_lengkap,

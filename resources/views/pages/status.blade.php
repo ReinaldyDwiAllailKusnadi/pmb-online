@@ -1,77 +1,14 @@
 <x-app-layout title="Status Pendaftaran">
     <div class="flex min-h-screen">
-        <aside class="fixed left-0 top-0 h-full w-65 bg-primary shadow-xl flex flex-col py-8 z-50 overflow-y-auto">
-            <div class="px-6 mb-12 flex items-center gap-3">
-                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0">
-                    <img
-                        class="w-8 h-8"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnKPfyJb784urJ9ESdMl5gKQvmw4ump6h3g2uIigABsoG9DkPhVntq94vebfWWn3arggyx_TZHG0wCcRR3W-l3hU0JkRTSwTRUDBmrWv1_tHhPrTW4oQ7_HjVWpHz1hZjy-j-ZwBMId2aDiXFAezMNA-LyWXzax6cA3G6V2erbqblzyyDw2m0Mk0Uwt_gBsVXxOPFPSyfULFuW26y0JYLxr-F22U-BPtIiOdUQVmvbE7ohSzH_uXanhSIfaKR6IHuiPfapkhTWXsA"
-                        alt="Logo"
-                        referrerpolicy="no-referrer"
-                    />
-                </div>
-                <div>
-                    <h1 class="text-white text-lg font-extrabold leading-none tracking-tight">Akademi PMB</h1>
-                    <p class="text-slate-400 text-[10px] font-bold tracking-wider uppercase mt-1">Student Portal</p>
-                </div>
-            </div>
+        @include('partials.sidebar', ['activePage' => 'status'])
 
-            <nav class="flex-1 space-y-1.5 px-4">
-                @foreach ([
-                    ['label' => 'Beranda', 'route' => 'dashboard', 'icon' => 'layout-dashboard', 'active' => false],
-                    ['label' => 'Formulir Pendaftaran', 'route' => 'form.step1', 'icon' => 'file-text', 'active' => false],
-                    ['label' => 'Status Pendaftaran', 'route' => 'status', 'icon' => 'clipboard-check', 'active' => true],
-                    ['label' => 'Unduh Bukti PDF', 'route' => 'pdf', 'icon' => 'file-down', 'active' => false],
-                ] as $link)
-                    <a
-                        href="{{ route($link['route']) }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium text-sm group {{ $link['active'] ? 'bg-secondary text-white shadow-lg shadow-secondary/20 border-l-4 border-white' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}"
-                    >
-                        <x-lucide-icon name="{{ $link['icon'] }}" class="w-5 h-5 {{ $link['active'] ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" />
-                        <span>{{ $link['label'] }}</span>
-                    </a>
-                @endforeach
-            </nav>
-
-            <div class="px-4 mt-auto space-y-3">
-                <button class="w-full py-3 px-4 rounded-xl bg-white/5 text-white hover:bg-white/15 transition-all flex items-center justify-center gap-2 text-sm font-semibold border border-white/10 backdrop-blur-sm">
-                    <x-lucide-icon name="help-circle" class="w-4 h-4" />
-                    <span>Hubungi Bantuan</span>
-                </button>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all text-sm font-medium w-full text-left">
-                        <x-lucide-icon name="log-out" class="w-5 h-5" />
-                        <span>Keluar</span>
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-    <main class="ml-65 flex-1 bg-bg-light">
-            <header class="sticky top-0 h-16 w-full bg-white/80 backdrop-blur-xl border-b border-slate-200/60 flex items-center justify-between px-8 z-40">
-                <h2 class="text-xl font-bold text-primary tracking-tight">Status Pendaftaran</h2>
-                <div class="flex items-center gap-6">
-                    <div class="relative cursor-pointer group">
-                        <x-lucide-icon name="bell" class="w-6 h-6 text-slate-500 group-hover:text-secondary transition-colors" />
-                        <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-secondary border-2 border-white rounded-full"></span>
-                    </div>
-                    <div class="flex items-center gap-4 pl-6 border-l border-slate-200">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-sm font-bold text-primary leading-tight">{{ $applicant->full_name }}</p>
-                            <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Reg No: 202409821</p>
-                        </div>
-                        <div class="w-10 h-10 rounded-full border-2 border-slate-100 overflow-hidden shadow-sm">
-                            <img
-                                class="w-full h-full object-cover"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEKqHQtIXgnAr9VcIT7V1RGBzMH56NhU5KBxdA_GmbZkyFYAobK5lZbpjzilL-HhzfpM29hIRc7KE8PvgvSw4OrojmOavLOnEeGLe8oY2F8XN1UDrARI95Kd694BvMq18MIF-N4VWQCikgMmpPUtCiqLWWl_1D1XS-WOqCgM9MGSdXK2tNcSEZbKAHR8J9eYpSA5APET73B4oKjB-r4_5F9lULcUokxKBUZ7vYFRyr1epRBxVtLQ72oysOLjFEu-0HByzxMEHu2v8"
-                                alt="Avatar"
-                                referrerpolicy="no-referrer"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </header>
+        <main class="ml-65 flex-1 bg-bg-light">
+            @include('partials.topbar', [
+                'pageLabel' => 'Status Pendaftaran',
+                'userName' => $applicant->full_name,
+                'userRole' => 'Calon Mahasiswa',
+                'userAvatar' => 'https://ui-avatars.com/api/?name=' . urlencode($applicant->full_name),
+            ])
 
             <div class="p-8 max-w-6xl mx-auto space-y-10">
                 <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">

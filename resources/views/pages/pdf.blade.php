@@ -1,9 +1,14 @@
 <x-app-layout title="Unduh Bukti PDF">
     <div class="flex">
-        @include('partials.sidebar', ['current' => 'pdf'])
+        @include('partials.sidebar', ['activePage' => 'unduh-bukti'])
 
         <div class="ml-65 flex-1 min-h-screen">
-            @include('partials.header', ['title' => 'Unduh Bukti PDF', 'userName' => $applicant->full_name])
+            @include('partials.topbar', [
+                'pageLabel' => 'Unduh Bukti PDF',
+                'userName' => $applicant->full_name,
+                'userRole' => 'Calon Mahasiswa',
+                'userAvatar' => 'https://ui-avatars.com/api/?name=' . urlencode($applicant->full_name),
+            ])
 
             <section class="p-10 max-w-6xl mx-auto">
                 <div class="mb-12">

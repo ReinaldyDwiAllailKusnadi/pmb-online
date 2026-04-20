@@ -1,9 +1,14 @@
 <x-app-layout title="Unggah Dokumen">
     <div class="flex min-h-screen bg-background font-body text-primary">
-    @include('partials.sidebar', ['current' => 'registration'])
+    @include('partials.sidebar', ['activePage' => 'formulir'])
 
         <main class="flex-1 ml-65 relative">
-            @include('partials.header', ['title' => 'Unggah Dokumen', 'userName' => $applicant->full_name])
+            @include('partials.topbar', [
+                'pageLabel' => 'Unggah Dokumen',
+                'userName' => $applicant->full_name,
+                'userRole' => 'Calon Mahasiswa',
+                'userAvatar' => 'https://ui-avatars.com/api/?name=' . urlencode($applicant->full_name),
+            ])
 
             <div class="max-w-5xl mx-auto p-10 pb-24">
                 <div class="flex items-center justify-between mb-12 relative px-4">

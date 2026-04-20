@@ -1,5 +1,12 @@
 @php
-    $activePage = $activePage ?? null;
+    $legacyCurrent = $current ?? null;
+    $activePage = $activePage ?? match ($legacyCurrent) {
+        'dashboard' => 'beranda',
+        'registration' => 'formulir',
+        'status' => 'status',
+        'pdf' => 'unduh-bukti',
+        default => null,
+    };
     $navItems = [
         [
             'id' => 'beranda',
@@ -32,9 +39,9 @@
     ];
 @endphp
 
-<aside class="fixed left-0 top-0 h-full w-[260px] bg-primary shadow-xl flex flex-col py-8 z-50 overflow-y-auto">
+<aside class="fixed left-0 top-0 h-full w-65 bg-primary shadow-xl flex flex-col py-8 z-50 overflow-y-auto">
     <div class="px-6 mb-12 flex items-center gap-3">
-        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0">
             <i class="bi bi-building text-primary text-xl"></i>
         </div>
         <div>

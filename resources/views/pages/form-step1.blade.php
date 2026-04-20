@@ -8,10 +8,15 @@
 
 <x-app-layout title="Formulir Pendaftaran">
     <div class="flex min-h-screen bg-background font-body text-primary">
-        @include('partials.sidebar', ['current' => 'registration'])
+    @include('partials.sidebar', ['activePage' => 'formulir'])
 
         <main class="flex-1 ml-65 relative">
-            @include('partials.header', ['title' => 'Formulir Pendaftaran', 'userName' => $applicant->full_name])
+            @include('partials.topbar', [
+                'pageLabel' => 'Formulir Pendaftaran',
+                'userName' => $applicant->full_name,
+                'userRole' => 'Calon Mahasiswa',
+                'userAvatar' => 'https://ui-avatars.com/api/?name=' . urlencode($applicant->full_name),
+            ])
 
             <div class="max-w-5xl mx-auto p-10 pb-24">
                 <div class="fixed top-20 right-8 z-50 flex items-center gap-4 bg-white p-4 rounded-xl shadow-xl border-l-4 border-secondary">

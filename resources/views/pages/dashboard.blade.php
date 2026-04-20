@@ -1,9 +1,14 @@
 <x-app-layout title="Dashboard">
     <div class="flex">
-        @include('partials.sidebar', ['current' => 'dashboard'])
+        @include('partials.sidebar', ['activePage' => 'beranda'])
 
         <div class="ml-65 flex-1 flex flex-col min-h-screen">
-            @include('partials.header', ['title' => 'Beranda', 'userName' => $applicant->full_name])
+            @include('partials.topbar', [
+                'pageLabel' => 'Beranda',
+                'userName' => $applicant->full_name,
+                'userRole' => 'Calon Mahasiswa',
+                'userAvatar' => 'https://ui-avatars.com/api/?name=' . urlencode($applicant->full_name),
+            ])
 
             <div class="p-8 space-y-8 max-w-7xl mx-auto w-full">
                 <nav class="flex items-center gap-2 text-sm text-on-surface-variant font-medium">
