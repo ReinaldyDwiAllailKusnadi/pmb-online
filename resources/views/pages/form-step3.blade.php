@@ -145,7 +145,7 @@
                                     Saya menyatakan bahwa seluruh data yang saya masukkan adalah benar dan dapat dipertanggungjawabkan sesuai dengan hukum yang berlaku di Indonesia.
                                 </label>
                             </div>
-                            <button class="w-full py-4 bg-secondary text-white font-black text-lg rounded-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative z-10 group">
+                            <button class="w-full py-4 bg-secondary text-white font-black text-lg rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative z-10 group">
                                 Kirim Pendaftaran
                                 <x-lucide-icon name="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </button>

@@ -66,7 +66,7 @@
     <div class="flex min-h-screen bg-background font-sans text-primary">
         @include('partials.sidebar', ['activePage' => 'unduh-bukti'])
 
-    <main class="flex-1 transition-all ml-65">
+        <main class="flex-1 transition-all ml-65">
             @include('partials.topbar', [
                 'pageLabel' => 'E-Sertifikat & Bukti',
                 'userName' => $student->nama_lengkap,
@@ -85,7 +85,7 @@
                         <div class="relative overflow-hidden rounded-2xl bg-white p-8 shadow-sm border border-slate-100 animate-fade-left delay-1">
                             <div class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/5"></div>
                             <h3 class="mb-6 flex items-center gap-2 text-xl font-bold text-primary">
-                                <i class="bi bi-info-circle text-secondary text-2xl"></i>
+                                <i class="bi bi-info-circle text-secondary text-xl"></i>
                                 Panduan Penting
                             </h3>
                             <ul class="space-y-6">
@@ -106,13 +106,13 @@
 
                         <div class="flex flex-col items-center rounded-2xl bg-primary p-8 text-center text-white shadow-xl animate-fade-left delay-2">
                             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-primary shadow-lg shadow-secondary/30">
-                                <i class="bi bi-file-text text-2xl"></i>
+                                <i class="bi bi-file-text text-xl"></i>
                             </div>
                             <h3 class="text-xl font-bold">Siap untuk diunduh</h3>
                             <p class="mb-8 mt-2 text-sm text-white/70">
                                 Format file PDF (2.4 MB). Dokumen ini telah ditandatangani secara elektronik oleh Bagian Admisi.
                             </p>
-                            <a href="{{ route('mahasiswa.unduh-bukti-pdf') }}" class="flex w-full items-center justify-center gap-3 rounded-xl bg-secondary py-4 font-bold text-primary transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-secondary/20">
+                            <a href="{{ route('mahasiswa.unduh-bukti-pdf') }}" class="flex w-full items-center justify-center gap-3 rounded-xl bg-secondary py-4 font-bold text-primary transition-all hover:brightness-110 hover:-translate-y-0.5 active:scale-95 shadow-lg shadow-secondary/20">
                                 <i class="bi bi-download text-lg"></i>
                                 Unduh Bukti Pendaftaran (PDF)
                             </a>
@@ -125,12 +125,12 @@
                                 <div class="h-full flex flex-col">
                                     <div class="flex items-center justify-between bg-primary p-8 text-white">
                                         <div class="flex items-center gap-4">
-                                            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-white">
-                                                <i class="bi bi-mortarboard-fill text-primary text-xl"></i>
+                                            <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-white">
+                                                <i class="bi bi-mortarboard-fill text-primary text-lg"></i>
                                             </div>
                                             <div>
                                                 <h4 class="text-lg font-bold uppercase tracking-wider leading-tight">Kartu Tanda Peserta</h4>
-                                                <p class="text-xs font-medium text-white/70">Penerimaan Mahasiswa Baru TA 2024/2025</p>
+                                                <p class="text-[10px] font-medium text-white/70">Penerimaan Mahasiswa Baru TA 2024/2025</p>
                                             </div>
                                         </div>
                                         <div class="text-right">
@@ -147,7 +147,7 @@
                                                     alt="Student"
                                                     class="absolute h-full w-full object-cover rounded"
                                                 />
-                                                <div class="absolute bottom-2 rounded bg-black/50 px-2 py-1 text-[8px] text-white">
+                                                <div class="absolute bottom-2 rounded bg-black/50 px-2 py-1 text-[10px] text-white">
                                                     Pas Foto 3x4
                                                 </div>
                                             </div>
@@ -177,9 +177,9 @@
                                         <div class="mt-auto flex items-end justify-between">
                                             <div class="space-y-4">
                                                 <div class="inline-block rounded-lg bg-slate-50 p-2">
-                                                    <i class="bi bi-qr-code text-slate-800 text-4xl"></i>
+                                                    <i class="bi bi-qr-code text-slate-800 text-3xl"></i>
                                                 </div>
-                                                <p class="max-w-[200px] text-[10px] leading-relaxed text-slate-400">
+                                                <p class="max-w-50 text-[10px] leading-relaxed text-slate-400">
                                                     Scan kode di atas untuk memverifikasi keaslian dokumen secara online melalui portal resmi kami.
                                                 </p>
                                             </div>
@@ -194,7 +194,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between border-t border-slate-100 bg-slate-50 px-8 py-4 text-[8px] font-bold tracking-widest text-slate-400 uppercase">
+                                    <div class="flex items-center justify-between border-t border-slate-100 bg-slate-50 px-8 py-4 text-[10px] font-bold tracking-widest text-slate-400 uppercase">
                                         <span>Dokumen Sah & Berlaku Selama Masa Pendaftaran</span>
                                         <span>Halaman 1 dari 1</span>
                                     </div>

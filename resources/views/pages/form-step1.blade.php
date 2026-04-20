@@ -51,7 +51,7 @@
                 <div class="bg-surface-container-lowest rounded-2xl shadow-editorial overflow-hidden">
                     <div class="p-8 lg:p-10">
                         <div class="mb-10 inline-block">
-                            <h2 class="text-2xl font-headline font-bold">Data Pribadi</h2>
+                            <h2 class="text-2xl font-headline font-bold tracking-tight">Data Pribadi</h2>
                             <div class="h-1 w-1/2 bg-primary mt-1 rounded-full"></div>
                         </div>
 

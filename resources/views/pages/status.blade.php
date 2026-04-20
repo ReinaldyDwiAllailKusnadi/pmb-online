@@ -12,14 +12,14 @@
 
             <div class="p-8 max-w-6xl mx-auto space-y-10">
                 <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 bg-white rounded-2xl p-8 shadow-soft relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-8 shadow-soft relative overflow-hidden flex flex-col md:flex-row items-center gap-6">
                         <div class="absolute top-0 right-0 w-48 h-48 bg-secondary/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
                         <div class="relative z-10 w-24 h-24 shrink-0 flex items-center justify-center rounded-full bg-secondary/10 text-secondary ring-8 ring-secondary/5">
-                            <x-lucide-icon name="hourglass" class="w-10 h-10 animate-[spin_8s_linear_infinite]" />
+                            <x-lucide-icon name="hourglass" class="w-9 h-9 animate-[spin_8s_linear_infinite]" />
                         </div>
                         <div class="relative z-10 flex-1 space-y-4 text-center md:text-left">
                             <div>
-                                <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Status Saat Ini</h3>
+                                <h3 class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Status Saat Ini</h3>
                                 <div class="flex flex-col md:flex-row md:items-center gap-4">
                                     <span class="text-3xl font-extrabold text-primary tracking-tight">Menunggu Verifikasi</span>
                                     <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-secondary text-white text-[10px] font-extrabold uppercase tracking-widest shadow-sm">
@@ -87,7 +87,7 @@
                     <div class="xl:col-span-2 space-y-6">
                         <div class="flex justify-between items-end">
                             <h3 class="text-xl font-bold text-primary tracking-tight">Riwayat Aktivitas</h3>
-                            <button class="text-xs font-bold text-primary hover:text-secondary group transition-colors flex items-center gap-1.5 px-2 py-1">
+                            <button class="text-[10px] font-bold text-primary hover:text-secondary group transition-colors flex items-center gap-1.5 px-2 py-1 uppercase tracking-widest">
                                 Lihat Detail <x-lucide-icon name="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
@@ -134,7 +134,7 @@
                                     </div>
                                     <h5 class="font-bold text-primary text-sm">Cek Email Berkala</h5>
                                 </div>
-                                <p class="text-xs text-slate-600 leading-relaxed">
+                                <p class="text-[10px] text-slate-600 leading-relaxed">
                                     Pengumuman hasil verifikasi akan dikirimkan melalui email resmi dan notifikasi portal ini secara otomatis.
                                 </p>
                             </div>
@@ -146,10 +146,10 @@
                                     </div>
                                     <h5 class="font-bold text-primary text-sm">Persiapan Materi Ujian</h5>
                                 </div>
-                                <p class="text-xs text-slate-600 leading-relaxed">
+                                <p class="text-[10px] text-slate-600 leading-relaxed">
                                     Sambil menunggu, pelajari materi Tes Potensi Akademik dan Bahasa Inggris untuk tahap seleksi mendatang.
                                 </p>
-                                <button class="text-[10px] font-black text-secondary uppercase tracking-widest hover:underline flex items-center gap-1">
+                                <button class="text-[10px] font-black text-secondary uppercase tracking-widest hover:underline flex items-center gap-1 hover:translate-x-0.5 transition-transform">
                                     Unduh Kisi-Kisi <x-lucide-icon name="arrow-right" class="w-3 h-3" />
                                 </button>
                             </div>
@@ -160,8 +160,8 @@
                                 </div>
                                 <div class="relative z-10">
                                     <h5 class="font-bold text-base mb-2">Punya Pertanyaan?</h5>
-                                    <p class="text-xs text-slate-300 mb-6 leading-relaxed">Tim Customer Service kami siap membantu Anda selama jam operasional kerja.</p>
-                                    <button class="w-full py-3 bg-secondary hover:bg-secondary/90 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-secondary/20 transition-all active:scale-[0.98]">
+                                    <p class="text-[10px] text-slate-300 mb-6 leading-relaxed">Tim Customer Service kami siap membantu Anda selama jam operasional kerja.</p>
+                                    <button class="w-full py-3 bg-secondary hover:bg-secondary/90 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-secondary/20 transition-all active:scale-[0.98] hover:brightness-110">
                                         Chat via WhatsApp
                                     </button>
                                 </div>

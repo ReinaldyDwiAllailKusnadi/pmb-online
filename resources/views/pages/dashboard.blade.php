@@ -28,7 +28,7 @@
                         <p class="text-blue-100/70 text-lg max-w-md">
                             Lengkapi administrasi Anda untuk menjadi bagian dari generasi unggul di institusi kami.
                         </p>
-                        <a href="{{ route('form.step1') }}" class="mt-8 inline-flex px-8 py-3 bg-secondary-container text-white rounded-lg font-bold shadow-lg shadow-secondary-container/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        <a href="{{ route('form.step1') }}" class="mt-8 inline-flex px-8 py-3 bg-secondary-container text-white rounded-xl font-bold shadow-lg shadow-secondary-container/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
                             Lengkapi Profil
                         </a>
                     </div>
@@ -40,7 +40,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-2xl shadow-subtle">
                         <div class="flex items-center justify-between mb-8">
-                            <h3 class="text-lg font-bold text-primary">Tahap Pendaftaran</h3>
+                            <h3 class="text-lg font-bold text-primary tracking-tight">Tahap Pendaftaran</h3>
                             <span class="text-sm font-medium text-on-surface-variant">25% Selesai</span>
                         </div>
                         <div class="flex items-center justify-between relative px-2">
@@ -98,7 +98,7 @@
                         ['label' => 'Cek Tagihan', 'icon' => 'wallet'],
                         ['label' => 'Jadwal', 'icon' => 'calendar-days'],
                     ] as $action)
-                        <button class="bg-white p-6 rounded-xl shadow-sm flex flex-col items-center justify-center text-center gap-3 border border-transparent hover:border-primary/20 hover:shadow-md transition-all">
+                        <button class="bg-white p-6 rounded-xl shadow-sm flex flex-col items-center justify-center text-center gap-3 border border-transparent hover:border-primary/20 hover:shadow-md hover:-translate-y-0.5 transition-all">
                             <div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary">
                                 <x-lucide-icon :name="$action['icon']" class="w-6 h-6" />
                             </div>

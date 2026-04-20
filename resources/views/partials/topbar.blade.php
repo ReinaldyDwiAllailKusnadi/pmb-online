@@ -5,7 +5,7 @@
     $userAvatar = $userAvatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($userName);
 @endphp
 
-<header class="sticky top-0 z-40 flex h-16 items-center border-b border-slate-200 bg-white/80 px-8 backdrop-blur-md">
+<header class="sticky top-0 z-40 flex h-16 items-center border-b border-slate-200 bg-white/80 px-8 backdrop-blur-md shadow-[0_2px_12px_rgba(30,58,95,0.08)]">
     <div class="flex items-center gap-2">
         <span class="text-sm font-bold tracking-widest text-secondary uppercase">{{ $pageLabel ?? 'E-SERTIFIKAT & BUKTI' }}</span>
     </div>
