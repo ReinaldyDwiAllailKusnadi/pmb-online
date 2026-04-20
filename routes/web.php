@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StatusPendaftaranController;
+use App\Http\Controllers\UnduhBuktiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RegistrationController::class, 'login'])->name('login');
@@ -18,5 +19,7 @@ Route::middleware('auth')->group(function () {
 	Route::get('/status', [RegistrationController::class, 'status'])->name('status');
 	Route::get('/status-pendaftaran', [StatusPendaftaranController::class, 'index'])->name('status.pendaftaran');
 	Route::get('/pdf', [RegistrationController::class, 'pdf'])->name('pdf');
+	Route::get('/unduh-bukti', [UnduhBuktiController::class, 'index'])->name('mahasiswa.unduh-bukti');
+	Route::get('/unduh-bukti/pdf', [UnduhBuktiController::class, 'downloadPdf'])->name('mahasiswa.unduh-bukti-pdf');
 	Route::post('/logout', [RegistrationController::class, 'logout'])->name('logout');
 });
