@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DataPendaftaranController;
 use App\Http\Controllers\Admin\KelolaUserController;
+use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\KonfirmasiPendaftaranController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StatusPendaftaranController;
@@ -16,8 +18,12 @@ Route::post('/register', [RegistrationController::class, 'registerStore'])->name
 Route::middleware('auth')->group(function () {
 	Route::middleware(['role:admin'])->prefix('admin')->group(function () {
 		Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-		Route::view('/laporan', 'admin.laporan')->name('admin.laporan');
-		Route::view('/pengaturan', 'admin.pengaturan')->name('admin.pengaturan');
+		Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
+		Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.export-pdf');
+		Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('admin.laporan.export-excel');
+		Route::post('/laporan/kirim-email', [LaporanController::class, 'sendEmail'])->name('admin.laporan.kirim-email');
+		Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('admin.pengaturan');
+		Route::put('/pengaturan/profil', [PengaturanController::class, 'updateProfil'])->name('admin.pengaturan.profil.update');
 		Route::get('/data-pendaftaran', [DataPendaftaranController::class, 'index'])->name('admin.data-pendaftaran');
 		Route::get('/data-pendaftaran/export/excel', [DataPendaftaranController::class, 'exportExcel'])->name('admin.data-pendaftaran.export.excel');
 		Route::get('/data-pendaftaran/export/pdf', [DataPendaftaranController::class, 'exportPdf'])->name('admin.data-pendaftaran.export.pdf');

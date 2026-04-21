@@ -1,60 +1,56 @@
-<aside style="background-color:#1a2744 !important; width:260px; min-height:100vh;"
-             class="fixed left-0 top-0 flex flex-col py-6 z-50 shadow-2xl overflow-y-auto">
+@php
+    $adminProfile = $adminProfile ?? ($admin ?? null);
+    $profileName = $adminProfile['name'] ?? 'Admin Utama';
+    $profileRole = $adminProfile['role'] ?? 'SUPERADMIN';
+    $profileAvatar = $adminProfile['avatar'] ?? 'https://ui-avatars.com/api/?name='.urlencode($profileName).'&background=1E3A5F&color=fff&bold=true';
 
-    <div class="px-6 mb-10 flex items-center gap-3">
-        <div style="background-color:#c98a00; width:40px; height:40px; border-radius:8px;"
-            class="flex items-center justify-center shrink-0">
-            <i class="bi bi-building text-white" style="font-size:18px;"></i>
+    $navItems = [
+        ['icon' => 'bi-grid-1x2-fill', 'label' => 'Dashboard', 'key' => 'dashboard', 'route' => 'admin.dashboard'],
+        ['icon' => 'bi-clipboard-check-fill', 'label' => 'Data Pendaftaran', 'key' => 'data-pendaftaran', 'route' => 'admin.data-pendaftaran'],
+        ['icon' => 'bi-people-fill', 'label' => 'Kelola User', 'key' => 'kelola-user', 'route' => 'admin.kelola-user'],
+        ['icon' => 'bi-bar-chart-line-fill', 'label' => 'Laporan', 'key' => 'laporan', 'route' => 'admin.laporan'],
+        ['icon' => 'bi-gear-fill', 'label' => 'Pengaturan', 'key' => 'pengaturan', 'route' => 'admin.pengaturan'],
+    ];
+@endphp
+
+<aside class="fixed left-0 top-0 z-50 flex h-screen w-[260px] flex-col bg-primary-dark py-8 shadow-2xl">
+    <div class="mb-12 flex items-center gap-4 px-6">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-lg">
+            <i class="bi bi-bank2 text-[21px] text-primary"></i>
         </div>
         <div>
-            <h1 style="color:white; font-size:18px; font-weight:800; letter-spacing:-0.02em; line-height:1.2;">
-                PMB Gateway
-            </h1>
-            <p style="color:#94a3b8; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-top:2px;">
-                Admin Portal
-            </p>
+            <h1 class="text-xl font-extrabold leading-tight tracking-tight text-white">PMB Gateway</h1>
+            <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Admin Portal</p>
         </div>
     </div>
 
-    <nav class="flex-1 flex flex-col gap-1 px-3">
-        @php
-            $navItems = [
-                ['icon'=>'bi-grid-1x2-fill',      'label'=>'Dashboard',        'key'=>'dashboard'],
-                ['icon'=>'bi-person-check-fill',  'label'=>'Data Pendaftaran', 'key'=>'data-pendaftaran'],
-                ['icon'=>'bi-people-fill',        'label'=>'Kelola User',      'key'=>'kelola-user'],
-                ['icon'=>'bi-bar-chart-line-fill','label'=>'Laporan',          'key'=>'laporan'],
-                ['icon'=>'bi-gear-fill',          'label'=>'Pengaturan',       'key'=>'pengaturan'],
-            ];
-        @endphp
-
-        @foreach($navItems as $item)
+    <nav class="flex-1 space-y-2 px-4">
+        @foreach ($navItems as $item)
             @php $isActive = ($activePage ?? '') === $item['key']; @endphp
-            <a href="{{ route('admin.'.$item['key']) }}"
-                 style="{{ $isActive
-                     ? 'background-color:#F0A500; color:white; font-weight:700; box-shadow:0 4px 12px rgba(240,165,0,0.25);'
-                     : 'color:#94a3b8;' }}"
-                 class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm tracking-wide transition-all duration-200 hover:text-white"
-                 onmouseover="{{ !$isActive ? 'this.style.backgroundColor=\'rgba(255,255,255,0.07)\'' : '' }}"
-                 onmouseout="{{ !$isActive ? 'this.style.backgroundColor=\'transparent\'' : '' }}">
-                <i class="bi {{ $item['icon'] }}" style="font-size:18px; width:20px; text-align:center;"></i>
+            <a href="{{ Route::has($item['route']) ? route($item['route']) : '#' }}"
+               class="{{ $isActive ? 'bg-secondary text-white shadow-lg shadow-secondary/25' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-[12px] font-bold uppercase tracking-wider transition-all duration-200">
+                <i class="bi {{ $item['icon'] }} w-5 text-center text-xl leading-none"></i>
                 <span>{{ $item['label'] }}</span>
-                @if($isActive)
-                    <span style="margin-left:auto; width:6px; height:6px; background:white; border-radius:50%; display:block;"></span>
-                @endif
             </a>
         @endforeach
     </nav>
 
-    <div class="px-6 pt-6 mt-auto" style="border-top:1px solid rgba(255,255,255,0.1);">
+    <div class="mt-auto border-t border-white/10 px-6 pt-6">
         <div class="flex items-center gap-3">
-            <img src="{{ Auth::user()->foto
-                        ? asset('storage/'.Auth::user()->foto)
-                        : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=1E3A5F&color=fff&bold=true' }}"
-                     alt="Admin"
-                       style="width:40px; height:40px; border-radius:50%; border:2px solid #F0A500; object-fit:cover;">
-            <div class="overflow-hidden">
-                <p style="color:white; font-size:14px; font-weight:700;" class="truncate">{{ Auth::user()->name }}</p>
-                <p style="color:#94a3b8; font-size:11px;" class="truncate">{{ Auth::user()->email }}</p>
+            <div class="relative">
+                <img src="{{ $profileAvatar }}" alt="Admin Avatar" class="h-11 w-11 rounded-full border-2 border-secondary object-cover" referrerpolicy="no-referrer">
+                <span class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-primary-dark bg-green-500"></span>
+            </div>
+            <div class="min-w-0">
+                <p class="truncate text-sm font-bold text-white">{{ ($activePage ?? '') === 'pengaturan' ? 'Admin Utama' : $profileName }}</p>
+                @if (($activePage ?? '') === 'pengaturan')
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="text-xs text-slate-400 transition-colors hover:text-white">Sign Out</button>
+                    </form>
+                @else
+                    <p class="truncate text-xs text-slate-400">{{ $profileRole }}</p>
+                @endif
             </div>
         </div>
     </div>
