@@ -1,41 +1,35 @@
 @php
-    $showSearch = $showSearch ?? true;
-    $userLabel = $userLabel ?? 'Administrator';
+        $showSearch = $showSearch ?? true;
+        $placeholder = $placeholder ?? 'Cari data user, email, atau role...';
+        $showLangDropdown = $showLangDropdown ?? true;
 @endphp
 
-<header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 flex items-center justify-between px-8 z-40">
-    <div class="flex-1 max-w-lg">
+<header style="position:fixed; top:0; left:260px; right:0; height:64px; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); border-bottom:1px solid #e2e8f0; z-index:40;"
+                class="flex justify-between items-center px-8 shadow-sm">
+
+    <div style="flex:1; max-width:480px; position:relative;">
         @if ($showSearch)
-            <div class="relative group">
-                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-accent transition-colors"></i>
-                <input
-                    type="text"
-                    placeholder="Cari nomor pendaftaran atau nama..."
-                    class="w-full h-11 pl-11 pr-4 bg-slate-100 rounded-xl border-none focus:ring-2 focus:ring-accent/20 placeholder:text-slate-400 text-sm font-medium transition-all"
-                />
-            </div>
+            <i class="bi bi-search"
+                 style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:14px;"></i>
+            <input type="text"
+                         style="width:100%; background:#f1f5f9; border:none; border-radius:12px; padding:8px 16px 8px 36px; font-size:14px; outline:none;"
+                         placeholder="{{ $placeholder }}">
         @endif
     </div>
 
-    <div class="flex items-center gap-6">
-        <div class="flex items-center gap-2">
-            <button class="relative p-2.5 text-slate-500 hover:bg-slate-100 rounded-xl transition-all">
-                <i class="bi bi-bell-fill"></i>
-                <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white shadow-sm"></span>
+    <div class="flex items-center gap-4 ml-6">
+        <button style="position:relative; padding:8px; border-radius:8px; color:#64748b; background:none; border:none; cursor:pointer;">
+            <i class="bi bi-bell-fill" style="font-size:18px;"></i>
+            <span style="position:absolute; top:8px; right:8px; width:8px; height:8px; background:#ef4444; border-radius:50%; border:2px solid white;"></span>
+        </button>
+        <button style="padding:8px; border-radius:8px; color:#64748b; background:none; border:none; cursor:pointer;">
+            <i class="bi bi-question-circle" style="font-size:18px;"></i>
+        </button>
+        <div style="width:1px; height:24px; background:#e2e8f0; margin:0 4px;"></div>
+        @if ($showLangDropdown)
+            <button style="display:flex; align-items:center; gap:4px; padding:6px 12px; border-radius:8px; color:#1E3A5F; font-weight:600; font-size:14px; background:none; border:none; cursor:pointer;">
+                ID <i class="bi bi-chevron-down" style="font-size:11px;"></i>
             </button>
-            <button class="p-2.5 text-slate-500 hover:bg-slate-100 rounded-xl transition-all">
-                <i class="bi bi-question-circle"></i>
-            </button>
-        </div>
-        <div class="w-px h-8 bg-slate-200"></div>
-        <div class="flex items-center gap-3">
-            <img
-                src="https://picsum.photos/seed/admin/100/100"
-                alt="Profile"
-                class="w-10 h-10 rounded-xl object-cover ring-2 ring-slate-100"
-                referrerpolicy="no-referrer"
-            />
-            <span class="font-headline font-bold text-primary text-sm">{{ $userLabel }}</span>
-        </div>
+        @endif
     </div>
 </header>

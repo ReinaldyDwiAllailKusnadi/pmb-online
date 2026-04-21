@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DataPendaftaranController;
+use App\Http\Controllers\Admin\KelolaUserController;
 use App\Http\Controllers\KonfirmasiPendaftaranController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StatusPendaftaranController;
@@ -15,9 +16,15 @@ Route::post('/register', [RegistrationController::class, 'registerStore'])->name
 Route::middleware('auth')->group(function () {
 	Route::middleware(['role:admin'])->prefix('admin')->group(function () {
 		Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+		Route::view('/laporan', 'admin.laporan')->name('admin.laporan');
+		Route::view('/pengaturan', 'admin.pengaturan')->name('admin.pengaturan');
 		Route::get('/data-pendaftaran', [DataPendaftaranController::class, 'index'])->name('admin.data-pendaftaran');
 		Route::get('/data-pendaftaran/export/excel', [DataPendaftaranController::class, 'exportExcel'])->name('admin.data-pendaftaran.export.excel');
 		Route::get('/data-pendaftaran/export/pdf', [DataPendaftaranController::class, 'exportPdf'])->name('admin.data-pendaftaran.export.pdf');
+		Route::get('/kelola-user', [KelolaUserController::class, 'index'])->name('admin.kelola-user');
+		Route::post('/kelola-user', [KelolaUserController::class, 'store'])->name('admin.kelola-user.store');
+		Route::patch('/kelola-user/{user}/toggle', [KelolaUserController::class, 'toggleStatus'])->name('admin.kelola-user.toggle');
+		Route::delete('/kelola-user/{user}', [KelolaUserController::class, 'destroy'])->name('admin.kelola-user.destroy');
 	});
 	Route::get('/dashboard', [RegistrationController::class, 'dashboard'])->name('dashboard');
 	Route::get('/form/step-1', [RegistrationController::class, 'formStep1'])->name('form.step1');

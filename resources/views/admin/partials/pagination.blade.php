@@ -3,7 +3,7 @@
 @endphp
 
 @if ($paginator && $paginator->hasPages())
-    <div class="bg-primary px-8 py-5 flex items-center justify-between">
+    <div style="background-color:#1E3A5F;" class="px-8 py-5 flex items-center justify-between">
         <p class="text-slate-300 text-xs font-medium">
             Menampilkan <span class="text-white font-bold">{{ $paginator->firstItem() }}</span>-<span class="text-white font-bold">{{ $paginator->lastItem() }}</span>
             dari <span class="text-white font-bold">{{ number_format($paginator->total()) }}</span> data pendaftaran
@@ -28,7 +28,7 @@
                     @if (is_array($element))
                         @foreach ($element as $page => $url)
                             @if ($page == $paginator->currentPage())
-                                <span class="w-8 h-8 flex items-center justify-center bg-accent text-white rounded-lg font-bold text-xs shadow-lg shadow-accent/20">
+                                <span style="background-color:#F0A500;" class="w-8 h-8 flex items-center justify-center text-white rounded-lg font-bold text-xs shadow-lg">
                                     {{ $page }}
                                 </span>
                             @else
