@@ -35,6 +35,12 @@
                 color: #1E3A5F;
             }
             input, textarea, button { font: inherit; }
+            button:not(:disabled), a[href], label[for], select { cursor: pointer; }
+            button:disabled, [aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; transform: none !important; }
+            a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+                outline: 2px solid rgba(240, 165, 0, 0.65);
+                outline-offset: 2px;
+            }
             ::-webkit-scrollbar { width: 6px; }
             ::-webkit-scrollbar-track { background: transparent; }
             ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
@@ -56,6 +62,30 @@
     </head>
     <body>
         @yield('content')
+        <script>
+            document.addEventListener('submit', function (event) {
+                const form = event.target;
+
+                if (!(form instanceof HTMLFormElement) || form.dataset.allowResubmit === 'true') {
+                    return;
+                }
+
+                if (form.dataset.submitted === 'true') {
+                    event.preventDefault();
+                    return;
+                }
+
+                form.dataset.submitted = 'true';
+
+                requestAnimationFrame(function () {
+                    form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(function (button) {
+                        button.setAttribute('aria-disabled', 'true');
+                        button.classList.add('opacity-50', 'cursor-not-allowed');
+                        button.disabled = true;
+                    });
+                });
+            });
+        </script>
         @stack('scripts')
     </body>
 </html>

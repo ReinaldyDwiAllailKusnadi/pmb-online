@@ -28,7 +28,7 @@
                                 <span>{{ $stats['trend_persen'] }} dari bulan lalu</span>
                             </div>
                         </div>
-                        <i class="bi bi-people-fill absolute -right-4 -bottom-4 w-28 h-28 text-white/20 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"></i>
+                        <i class="bi bi-people-fill pointer-events-none absolute -right-4 -bottom-4 w-28 h-28 text-white/20 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"></i>
                     </div>
 
                     <div class="p-6 rounded-2xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-300" style="background-color:#F0A500; color:#1a2744;">
@@ -40,7 +40,7 @@
                                 <span>Update: {{ $stats['last_update'] }}</span>
                             </div>
                         </div>
-                        <i class="bi bi-clock absolute -right-4 -bottom-4 w-28 h-28 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" style="color:rgba(26,39,68,0.1);"></i>
+                        <i class="bi bi-clock pointer-events-none absolute -right-4 -bottom-4 w-28 h-28 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" style="color:rgba(26,39,68,0.1);"></i>
                     </div>
 
                     <div class="bg-white border border-green-100 text-slate-800 shadow-sm p-6 rounded-2xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
@@ -52,7 +52,7 @@
                                 <span>{{ $stats['persen_diverifikasi'] }} dari total pendaftar</span>
                             </div>
                         </div>
-                        <i class="bi bi-check-circle-fill absolute -right-4 -bottom-4 w-28 h-28 text-green-500/10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"></i>
+                        <i class="bi bi-check-circle-fill pointer-events-none absolute -right-4 -bottom-4 w-28 h-28 text-green-500/10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"></i>
                     </div>
 
                     <div class="bg-white border border-red-100 text-slate-800 shadow-sm p-6 rounded-2xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
@@ -64,7 +64,7 @@
                                 <span>Memerlukan tindak lanjut</span>
                             </div>
                         </div>
-                        <i class="bi bi-x-circle-fill absolute -right-4 -bottom-4 w-28 h-28 text-red-500/10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"></i>
+                        <i class="bi bi-x-circle-fill pointer-events-none absolute -right-4 -bottom-4 w-28 h-28 text-red-500/10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"></i>
                     </div>
                 </div>
 
@@ -86,7 +86,7 @@
                                         style="--bar-height: {{ $height }}%; height: 0; animation-delay: calc(var(--bar-index) * 0.1s); background-color:#1E3A5F;"
                                         title="{{ $height }}%"
                                     >
-                                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity" style="background-color:#1a2744;">
+                                        <div class="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100" style="background-color:#1a2744;">
                                             {{ $height }}
                                         </div>
                                     </div>
@@ -105,12 +105,12 @@
                             <p class="text-blue-100/60 text-xs leading-relaxed font-medium">
                                 Terdapat 18 berkas pendaftaran baru yang memerlukan validasi manual segera hari ini.
                             </p>
-                            <button class="font-bold py-3.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2 w-full shadow-lg group" style="background-color:#F0A500; color:#1a2744;">
+                            <a href="{{ route('admin.data-pendaftaran') }}" class="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-bold shadow-lg transition-all hover:-translate-y-0.5 hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background-color:#F0A500; color:#1a2744;">
                                 Mulai Verifikasi
                                 <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                            </button>
+                            </a>
                         </div>
-                        <div class="absolute -right-8 -top-8 opacity-5">
+                        <div class="pointer-events-none absolute -right-8 -top-8 opacity-5">
                             <i class="bi bi-file-text" style="font-size: 200px;"></i>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                             <h4 class="text-xl font-headline font-bold" style="color:#1E3A5F;">Pendaftaran Terbaru</h4>
                             <p class="text-slate-400 text-xs font-medium mt-1">Data 5 pendaftar terakhir masuk ke sistem</p>
                         </div>
-                        <a href="#" class="hover:text-yellow-500 font-extrabold text-xs uppercase tracking-widest flex items-center gap-2 group whitespace-nowrap" style="color:#1E3A5F;">
+                        <a href="{{ route('admin.data-pendaftaran') }}" class="group flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-extrabold uppercase tracking-widest transition-all hover:text-yellow-500 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="color:#1E3A5F;">
                             Lihat Semua
                             <div class="p-1.5 bg-slate-100 rounded-lg transition-colors" style="color:#1E3A5F;">
                                 <i class="bi bi-arrow-right text-sm"></i>
@@ -180,7 +180,7 @@
                                             @endswitch
                                         </td>
                                         <td class="px-8 py-5 text-right">
-                                            <button class="p-2 text-slate-300 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all">
+                                            <button type="button" class="cursor-pointer rounded-lg p-2 text-slate-300 transition-all hover:bg-slate-100 hover:text-slate-900 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </button>
                                         </td>

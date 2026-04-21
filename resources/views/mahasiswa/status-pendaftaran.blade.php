@@ -40,25 +40,38 @@
             @include('partials.topbar', ['user' => $user])
 
             <div class="p-8 max-w-7xl mx-auto space-y-10">
+                @if (session('success'))
+                    <div class="rounded-2xl border border-green-100 bg-green-50 px-6 py-4 text-sm font-semibold text-green-800 shadow-sm">
+                        <i class="bi bi-check-circle-fill mr-2"></i>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in-up">
                     <div class="lg:col-span-2 bg-white rounded-2xl p-8 shadow-soft relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
                         <div class="absolute top-0 right-0 w-48 h-48 bg-secondary/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
                         <div class="relative z-10 w-24 h-24 flex-shrink-0 flex items-center justify-center rounded-full bg-secondary/10 text-secondary ring-8 ring-secondary/5">
-                            <i class="bi bi-hourglass-split w-10 h-10 animate-[spin_8s_linear_infinite]"></i>
+                            <i class="bi {{ $currentStatus['icon'] }} text-4xl"></i>
                         </div>
                         <div class="relative z-10 flex-1 space-y-4 text-center md:text-left">
                             <div>
                                 <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Status Saat Ini</h3>
                                 <div class="flex flex-col md:flex-row md:items-center gap-4">
-                                    <span class="text-3xl font-extrabold text-primary tracking-tight">Menunggu Verifikasi</span>
+                                    <span class="text-3xl font-extrabold text-primary tracking-tight">{{ $currentStatus['label'] }}</span>
                                     <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-secondary text-white text-[10px] font-extrabold uppercase tracking-widest shadow-sm">
-                                        In Review
+                                        {{ $currentStatus['badge'] }}
                                     </span>
                                 </div>
                             </div>
                             <p class="text-slate-600 leading-relaxed max-w-md text-sm">
-                                Tim admisi kami sedang meninjau dokumen pendaftaran Anda. Proses ini biasanya memakan waktu 2-3 hari kerja.
+                                {{ $currentStatus['description'] }}
                             </p>
+                            <div class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-left">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Catatan Admin</p>
+                                <p class="mt-2 text-sm font-medium leading-relaxed text-slate-700">
+                                    {{ $catatanAdmin ?: 'Belum ada catatan dari admin.' }}
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -66,12 +79,12 @@
                         <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-8 -mt-8 pointer-events-none"></div>
                         <div>
                             <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-4">Program Pilihan</p>
-                            <h4 class="text-xl font-bold mb-1 tracking-tight">S1 Teknik Informatika</h4>
-                            <p class="text-slate-300 text-sm">Fakultas Teknologi Informasi</p>
+                            <h4 class="text-xl font-bold mb-1 tracking-tight">{{ $programInfo['program'] }}</h4>
+                            <p class="text-slate-300 text-sm">{{ $programInfo['fakultas'] }}</p>
                         </div>
                         <div class="mt-8 pt-6 border-t border-white/10 flex justify-between items-center text-sm">
                             <span class="text-slate-400">Gelombang</span>
-                            <span class="font-bold text-secondary">Gelombang 2 (Mei - Juli)</span>
+                            <span class="font-bold text-secondary">{{ $programInfo['gelombang'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -82,7 +95,7 @@
                         <div class="h-px flex-1 bg-slate-200"></div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        @foreach ($timelineSteps as $step)
+                        @forelse ($timelineSteps as $step)
                             <div
                                 class="p-6 rounded-2xl relative transition-all duration-300 border-b-4 animate-scale-in @if ($step['status'] === 'completed') bg-white border-primary @elseif ($step['status'] === 'current') bg-white border-secondary shadow-lg shadow-secondary/5 @else bg-slate-100 border-slate-300 opacity-60 @endif"
                                 style="animation-delay: {{ $loop->index * 0.1 }}s;"
@@ -114,7 +127,12 @@
                                     @endif
                                 </p>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="md:col-span-4 rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center shadow-soft">
+                                <p class="text-sm font-bold text-primary">Belum ada riwayat status.</p>
+                                <p class="mt-2 text-sm text-slate-500">Timeline akan muncul setelah ada perubahan status pendaftaran.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </section>
 
@@ -122,7 +140,7 @@
                     <div class="xl:col-span-2 space-y-6">
                         <div class="flex justify-between items-end">
                             <h3 class="text-xl font-bold text-primary tracking-tight">Riwayat Aktivitas</h3>
-                            <button class="text-xs font-bold text-primary hover:text-secondary group transition-colors flex items-center gap-1.5 px-2 py-1">
+                            <button type="button" class="group flex cursor-pointer items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-bold text-primary transition-colors hover:text-secondary active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                                 Lihat Detail <i class="bi bi-arrow-right w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
                             </button>
                         </div>
@@ -137,7 +155,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-100">
-                                        @foreach ($activityLog as $item)
+                                        @forelse ($activityLog as $item)
                                             <tr class="hover:bg-slate-50/50 transition-colors group">
                                                 <td class="px-6 py-5 text-sm font-medium text-slate-700">{{ $item['date'] }}</td>
                                                 <td class="px-6 py-5">
@@ -148,7 +166,13 @@
                                                 </td>
                                                 <td class="px-6 py-5 text-sm text-slate-600 leading-relaxed">{{ $item['description'] }}</td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="px-6 py-8 text-center text-sm font-medium text-slate-500">
+                                                    Belum ada riwayat aktivitas status.
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -180,19 +204,19 @@
                                 <p class="text-xs text-slate-600 leading-relaxed">
                                     Sambil menunggu, pelajari materi Tes Potensi Akademik dan Bahasa Inggris untuk tahap seleksi mendatang.
                                 </p>
-                                <button class="text-[10px] font-black text-secondary uppercase tracking-widest hover:underline flex items-center gap-1">
+                                <button type="button" class="flex cursor-pointer items-center gap-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-secondary transition-all hover:translate-x-0.5 hover:underline active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                                     Unduh Kisi-Kisi <i class="bi bi-arrow-right w-3 h-3"></i>
                                 </button>
                             </div>
 
                             <div class="relative bg-gradient-to-br from-primary to-[#0f2a4a] rounded-2xl p-8 text-white overflow-hidden shadow-xl">
-                                <div class="absolute -bottom-6 -right-6 opacity-10">
+                                <div class="pointer-events-none absolute -bottom-6 -right-6 opacity-10">
                                     <i class="bi bi-chat-dots w-32 h-32"></i>
                                 </div>
                                 <div class="relative z-10">
                                     <h5 class="font-bold text-base mb-2">Punya Pertanyaan?</h5>
                                     <p class="text-xs text-slate-300 mb-6 leading-relaxed">Tim Customer Service kami siap membantu Anda selama jam operasional kerja.</p>
-                                    <button class="w-full py-3 bg-secondary hover:bg-secondary/90 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-secondary/20 transition-all active:scale-[0.98]">
+                                    <button type="button" class="w-full cursor-pointer rounded-xl bg-secondary py-3 text-xs font-bold uppercase tracking-widest text-white shadow-lg shadow-secondary/20 transition-all hover:bg-secondary/90 hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                                         Chat via WhatsApp
                                     </button>
                                 </div>

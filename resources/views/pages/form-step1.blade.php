@@ -1,9 +1,19 @@
 @php
-    $provinces = ['DKI Jakarta', 'Jawa Barat', 'Jawa Tengah'];
     $religions = ['Pilih Agama', 'Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha'];
     $citizens = ['WNI', 'WNA'];
     $genders = ['Laki-laki', 'Perempuan'];
     $maritals = ['Belum Menikah', 'Menikah'];
+    $isReadonly = $isReadonly ?? false;
+    $regions = $regions ?? [];
+    $provinces = $provinces ?? array_keys($regions);
+    $selectedProvince = old('province', $applicant->province);
+    $selectedCity = old('city', $applicant->city);
+    $selectedCities = $regions[$selectedProvince] ?? [];
+    $photoExists = filled($applicant->photo_path)
+        && (
+            \Illuminate\Support\Facades\Storage::disk('local')->exists($applicant->photo_path)
+            || \Illuminate\Support\Facades\Storage::disk('public')->exists($applicant->photo_path)
+        );
 @endphp
 
 <x-app-layout title="Formulir Pendaftaran">
@@ -19,21 +29,23 @@
             ])
 
             <div class="max-w-5xl mx-auto p-10 pb-24">
-                <div class="fixed top-20 right-8 z-50 flex items-center gap-4 bg-white p-4 rounded-xl shadow-xl border-l-4 border-secondary">
-                    <div class="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center text-secondary">
-                        <x-lucide-icon name="info" class="w-4.5 h-4.5" />
+                @if (session('draft_saved'))
+                    <div id="draft-saved-toast" class="fixed top-20 right-8 z-50 flex items-center gap-4 bg-white p-4 rounded-xl shadow-xl border-l-4 border-secondary">
+                        <div class="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center text-secondary">
+                            <x-lucide-icon name="info" class="w-4.5 h-4.5" />
+                        </div>
+                        <div class="flex-1 min-w-50">
+                            <h4 class="font-bold text-sm">Draft Saved</h4>
+                            <p class="text-xs text-on-surface-variant">{{ session('draft_saved') }}</p>
+                        </div>
+                        <button type="button" data-dismiss="#draft-saved-toast" class="cursor-pointer rounded-lg p-1 text-on-surface-variant transition-colors hover:bg-primary/5 hover:text-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
+                            <x-lucide-icon name="x" class="w-3.5 h-3.5" />
+                        </button>
                     </div>
-                    <div class="flex-1 min-w-50">
-                        <h4 class="font-bold text-sm">Draft Saved</h4>
-                        <p class="text-xs text-on-surface-variant">Your progress is automatically saved.</p>
-                    </div>
-                    <button class="text-on-surface-variant hover:text-primary transition-colors">
-                        <x-lucide-icon name="x" class="w-3.5 h-3.5" />
-                    </button>
-                </div>
+                @endif
 
                 <div class="flex items-center justify-between mb-12 relative px-4">
-                    <div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-high -translate-y-1/2 -z-10"></div>
+                    <div class="pointer-events-none absolute left-0 top-1/2 -z-10 h-0.5 w-full -translate-y-1/2 bg-surface-container-high"></div>
                     <div class="flex flex-col items-center gap-3 bg-background px-4">
                         <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-secondary text-white shadow-lg shadow-secondary/30">1</div>
                         <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Data Pribadi</span>
@@ -55,28 +67,50 @@
                             <div class="h-1 w-1/2 bg-primary mt-1 rounded-full"></div>
                         </div>
 
-                        <form id="form-step1" class="space-y-8" method="POST" action="{{ route('form.step1.store') }}">
+                        @if ($isReadonly)
+                            <div class="mb-6 rounded-xl border border-amber-100 bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+                                Formulir sudah dikirim dan sedang menunggu review admin. Data dapat dilihat, tetapi tidak dapat diubah kecuali admin meminta revisi.
+                            </div>
+                        @endif
+
+                        <form id="form-step1" class="space-y-8" method="POST" action="{{ route('form.step1.store') }}" enctype="multipart/form-data">
                             @csrf
+                            <fieldset @disabled($isReadonly)>
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                                 <div class="lg:col-span-1">
                                     <div class="flex flex-col items-center p-6 bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/50">
                                         <div class="w-40 h-52 bg-white rounded-lg mb-4 shadow-inner overflow-hidden relative group">
-                                            <img
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5jCo7jDM0a6C6YagsVkp_MGZe53QJbFpO_nRu1PL2nNArvAPiYUXfq5-0LRZPwrEVUW-MqWPd6_QcCQS7KMwRyXHA5gNTZnAVDOenGeAiu-8Uj-dzmC31JzmaszbQ-gZlQ7_VvH-qFYRo1_C-MS5xIOPCkYSBSlJVBr08AHdu0GXdgoWJFAVMlUwFafxk7iPt8ZX6ya7dNiZ5PHk0_p3JoBjINMkaJDIZarCkoFudWWS831MIuCp-kcFGMQQZ_gMPxdmD2L9MaSA"
-                                                alt="Placeholder"
-                                                referrerpolicy="no-referrer"
-                                                class="w-full h-full object-cover grayscale opacity-40"
-                                            />
-                                            <div class="absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                            @if ($photoExists)
+                                                <img
+                                                    id="photo-preview"
+                                                    src="{{ route('mahasiswa.dokumen.show', 'photo') }}"
+                                                    alt="Pas Foto Formal"
+                                                    class="h-full w-full object-cover"
+                                                />
+                                            @else
+                                                <img
+                                                    id="photo-preview"
+                                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5jCo7jDM0a6C6YagsVkp_MGZe53QJbFpO_nRu1PL2nNArvAPiYUXfq5-0LRZPwrEVUW-MqWPd6_QcCQS7KMwRyXHA5gNTZnAVDOenGeAiu-8Uj-dzmC31JzmaszbQ-gZlQ7_VvH-qFYRo1_C-MS5xIOPCkYSBSlJVBr08AHdu0GXdgoWJFAVMlUwFafxk7iPt8ZX6ya7dNiZ5PHk0_p3JoBjINMkaJDIZarCkoFudWWS831MIuCp-kcFGMQQZ_gMPxdmD2L9MaSA"
+                                                    alt="Placeholder"
+                                                    referrerpolicy="no-referrer"
+                                                    class="h-full w-full object-cover grayscale opacity-40"
+                                                />
+                                            @endif
+                                            <div class="pointer-events-none absolute inset-0 flex cursor-pointer items-center justify-center bg-primary/40 opacity-0 transition-opacity group-hover:opacity-100">
                                                 <x-lucide-icon name="camera" class="text-white w-5 h-5" />
                                             </div>
                                         </div>
                                         <p class="text-[10px] text-center text-on-surface-variant leading-relaxed mb-4 font-medium uppercase tracking-tight">
                                             Upload Pas Foto Formal (3x4)<br />Max size 2MB, format JPG/PNG
                                         </p>
-                                        <button type="button" class="px-4 py-2 bg-surface-container-highest text-primary text-xs font-bold rounded-lg hover:bg-primary hover:text-white transition-all shadow-sm">
+                                        <label for="photo-upload" class="{{ $isReadonly ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-primary hover:text-white active:scale-[0.98]' }} rounded-lg bg-surface-container-highest px-4 py-2 text-xs font-bold text-primary shadow-sm transition-all focus-within:outline-none focus-within:ring-2 focus-within:ring-secondary/60">
                                             Pilih Foto
-                                        </button>
+                                            <input id="photo-upload" type="file" name="photo" accept=".jpg,.jpeg,.png" class="sr-only" />
+                                        </label>
+                                        @error('photo')
+                                            <p class="mt-3 text-center text-xs font-semibold text-error">{{ $message }}</p>
+                                        @enderror
+                                        <p id="photo-file-name" class="mt-3 text-center text-[10px] font-semibold text-on-surface-variant"></p>
                                     </div>
                                 </div>
 
@@ -124,30 +158,56 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Kabupaten / Kota</label>
-                                    <input name="city" value="{{ old('city', $applicant->city) }}" placeholder="Kabupaten / Kota" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    <div class="relative">
+                                        <select id="city-select" name="city" data-selected-city="{{ $selectedCity }}" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                            <option value="">Pilih Kabupaten / Kota</option>
+                                            @foreach ($selectedCities as $city)
+                                                <option value="{{ $city }}" {{ $selectedCity === $city ? 'selected' : '' }}>{{ $city }}</option>
+                                            @endforeach
+                                            @if ($selectedCity && ! in_array($selectedCity, $selectedCities, true))
+                                                <option value="{{ $selectedCity }}" selected>{{ $selectedCity }}</option>
+                                            @endif
+                                        </select>
+                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
+                                            <x-lucide-icon name="chevron-down" class="w-3.5 h-3.5" />
+                                        </div>
+                                    </div>
+                                    @error('city')
+                                        <p class="text-xs font-semibold text-error">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div class="space-y-2 relative">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Provinsi</label>
                                     <div class="relative">
-                                        <select name="province" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                        <select id="province-select" name="province" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                            <option value="">Pilih Provinsi</option>
                                             @foreach ($provinces as $province)
-                                                <option value="{{ $province }}" {{ old('province', $applicant->province) === $province ? 'selected' : '' }}>{{ $province }}</option>
+                                                <option value="{{ $province }}" {{ $selectedProvince === $province ? 'selected' : '' }}>{{ $province }}</option>
                                             @endforeach
                                         </select>
                                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
                                             <x-lucide-icon name="chevron-down" class="w-3.5 h-3.5" />
                                         </div>
                                     </div>
+                                    @error('province')
+                                        <p class="text-xs font-semibold text-error">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Telepon Rumah</label>
-                                    <input name="home_phone" value="{{ old('home_phone', $applicant->home_phone) }}" placeholder="021-xxxxxx" type="tel" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    <input name="home_phone" value="{{ old('home_phone', $applicant->home_phone) }}" placeholder="021xxxxxx" type="tel" inputmode="numeric" pattern="[0-9]*" data-numeric-only class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    @error('home_phone')
+                                        <p class="text-xs font-semibold text-error">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Nomor Handphone</label>
-                                    <input name="phone" value="{{ old('phone', $applicant->phone) }}" placeholder="08xxxxxxx" type="tel" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    <input name="phone" value="{{ old('phone', $applicant->phone) }}" placeholder="08xxxxxxx" type="tel" inputmode="numeric" pattern="[0-9]*" data-numeric-only class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    @error('phone')
+                                        <p class="text-xs font-semibold text-error">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Alamat Email</label>
@@ -158,7 +218,7 @@
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider block">Kewarganegaraan</label>
                                     <div class="flex gap-6">
                                         @foreach ($citizens as $citizen)
-                                            <label class="flex items-center gap-3 cursor-pointer group">
+                                            <label class="group flex cursor-pointer items-center gap-3 rounded-lg transition-colors focus-within:text-secondary">
                                                 <input type="radio" name="citizen" value="{{ $citizen }}" class="w-5 h-5 text-secondary border-outline-variant focus:ring-secondary transition-all" {{ old('citizen', $applicant->citizen ?? 'WNI') === $citizen ? 'checked' : '' }} />
                                                 <span class="text-sm font-medium group-hover:text-secondary transition-colors">{{ $citizen }}</span>
                                             </label>
@@ -200,7 +260,7 @@
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider block">Jenis Kelamin</label>
                                     <div class="flex gap-6">
                                         @foreach ($genders as $gender)
-                                            <label class="flex items-center gap-3 cursor-pointer group">
+                                            <label class="group flex cursor-pointer items-center gap-3 rounded-lg transition-colors focus-within:text-secondary">
                                                 <input type="radio" name="gender" value="{{ $gender }}" class="w-5 h-5 text-secondary border-outline-variant focus:ring-secondary transition-all" {{ old('gender', $applicant->gender) === $gender ? 'checked' : '' }} />
                                                 <span class="text-sm font-medium group-hover:text-secondary transition-colors">{{ $gender }}</span>
                                             </label>
@@ -212,7 +272,7 @@
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider block">Status Menikah</label>
                                     <div class="flex gap-6">
                                         @foreach ($maritals as $marital)
-                                            <label class="flex items-center gap-3 cursor-pointer group">
+                                            <label class="group flex cursor-pointer items-center gap-3 rounded-lg transition-colors focus-within:text-secondary">
                                                 <input type="radio" name="marital" value="{{ $marital }}" class="w-5 h-5 text-secondary border-outline-variant focus:ring-secondary transition-all" {{ old('marital', $applicant->marital ?? 'Belum Menikah') === $marital ? 'checked' : '' }} />
                                                 <span class="text-sm font-medium group-hover:text-secondary transition-colors">{{ $marital }}</span>
                                             </label>
@@ -233,19 +293,61 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="space-y-2 relative">
+                                    <label class="text-xs font-bold text-primary uppercase tracking-wider">Program Studi Pilihan</label>
+                                    <div class="relative">
+                                        <select name="program_studi_id" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                            <option value="">Pilih Program Studi</option>
+                                            @foreach ($programStudi as $program)
+                                                <option value="{{ $program->id }}" {{ (string) old('program_studi_id', $applicant->program_studi_id) === (string) $program->id ? 'selected' : '' }}>
+                                                    {{ trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
+                                            <x-lucide-icon name="chevron-down" class="w-4 h-4" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2 relative">
+                                    <label class="text-xs font-bold text-primary uppercase tracking-wider">Gelombang Pendaftaran</label>
+                                    <div class="relative">
+                                        <select name="gelombang_pendaftaran_id" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                            <option value="">Pilih Gelombang</option>
+                                            @foreach ($gelombangPendaftaran as $gelombang)
+                                                <option value="{{ $gelombang->id }}" {{ (string) old('gelombang_pendaftaran_id', $applicant->gelombang_pendaftaran_id) === (string) $gelombang->id ? 'selected' : '' }}>
+                                                    {{ $gelombang->nama }} - {{ $gelombang->tahun_akademik }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
+                                            <x-lucide-icon name="chevron-down" class="w-4 h-4" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            </fieldset>
                         </form>
                     </div>
 
                     <div class="bg-surface-container-low p-8 flex items-center justify-between gap-4">
-                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary font-bold rounded-xl hover:bg-primary/5 transition-all">
+                        <a href="{{ route('dashboard') }}" class="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-primary px-8 py-4 font-bold text-primary transition-all hover:bg-primary/5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                             <x-lucide-icon name="arrow-left" class="w-5 h-5" />
                             Kembali
                         </a>
-                        <button type="submit" form="form-step1" class="flex items-center gap-2 px-10 py-4 bg-secondary text-white font-bold rounded-xl shadow-lg shadow-secondary/20 hover:scale-[1.02] transition-all">
-                            Simpan & Lanjut
-                            <x-lucide-icon name="arrow-right" class="w-5 h-5" />
-                        </button>
+                        @if ($isReadonly)
+                            <a href="{{ route('form.step2') }}" class="flex cursor-pointer items-center gap-2 rounded-xl bg-secondary px-10 py-4 font-bold text-white shadow-lg shadow-secondary/20 transition-all hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
+                                Lanjut
+                                <x-lucide-icon name="arrow-right" class="w-5 h-5" />
+                            </a>
+                        @else
+                            <button type="submit" form="form-step1" class="flex cursor-pointer items-center gap-2 rounded-xl bg-secondary px-10 py-4 font-bold text-white shadow-lg shadow-secondary/20 transition-all hover:scale-[1.02] hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
+                                Simpan & Lanjut
+                                <x-lucide-icon name="arrow-right" class="w-5 h-5" />
+                            </button>
+                        @endif
                     </div>
                 </div>
 
@@ -283,4 +385,59 @@
             </div>
         </main>
     </div>
+
+    <script>
+        document.querySelectorAll('[data-dismiss]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                document.querySelector(button.dataset.dismiss)?.remove();
+            });
+        });
+
+        const indonesiaRegions = @json($regions);
+        const provinceSelect = document.getElementById('province-select');
+        const citySelect = document.getElementById('city-select');
+
+        function renderCityOptions(province, selectedCity = '') {
+            if (!citySelect) {
+                return;
+            }
+
+            const cities = indonesiaRegions[province] || [];
+            citySelect.innerHTML = '';
+            citySelect.append(new Option('Pilih Kabupaten / Kota', ''));
+
+            cities.forEach(function (city) {
+                citySelect.append(new Option(city, city, false, city === selectedCity));
+            });
+        }
+
+        provinceSelect?.addEventListener('change', function () {
+            renderCityOptions(provinceSelect.value);
+        });
+
+        document.querySelectorAll('[data-numeric-only]').forEach(function (input) {
+            input.addEventListener('input', function () {
+                input.value = input.value.replace(/\D/g, '');
+            });
+        });
+
+        @if (! $isReadonly)
+        document.getElementById('photo-upload')?.addEventListener('change', function (event) {
+            const file = event.target.files?.[0];
+            const preview = document.getElementById('photo-preview');
+            const fileName = document.getElementById('photo-file-name');
+
+            if (!file || !preview) {
+                return;
+            }
+
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('grayscale', 'opacity-40');
+
+            if (fileName) {
+                fileName.textContent = file.name;
+            }
+        });
+        @endif
+    </script>
 </x-app-layout>

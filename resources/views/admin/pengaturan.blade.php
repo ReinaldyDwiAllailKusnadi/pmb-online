@@ -31,7 +31,7 @@
                             @foreach ($settingCategories['utama'] as $item)
                                 @php $isActive = $item['active'] ?? false; @endphp
                                 <a href="#{{ $item['key'] }}"
-                                   class="{{ $isActive ? 'bg-white shadow-xl shadow-slate-200/70 ring-1 ring-slate-100' : 'text-slate-500 hover:bg-white hover:shadow-lg hover:shadow-slate-200/50' }} group flex items-center justify-between rounded-2xl px-5 py-5 transition-all">
+                                   class="{{ $isActive ? 'bg-white shadow-xl shadow-slate-200/70 ring-1 ring-slate-100' : 'text-slate-500 hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 active:scale-[0.98]' }} group flex cursor-pointer items-center justify-between rounded-2xl px-5 py-5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                     <span class="flex items-center gap-4">
                                         <span class="{{ $isActive ? 'bg-secondary/10 text-secondary' : 'text-slate-600 group-hover:bg-slate-100 group-hover:text-primary' }} flex h-8 w-8 items-center justify-center rounded-lg transition-colors">
                                             <i class="bi {{ $item['icon'] }} text-xl leading-none"></i>
@@ -51,7 +51,7 @@
                         <div class="space-y-1">
                             @foreach ($settingCategories['integrasi'] as $item)
                                 <a href="#{{ $item['key'] }}"
-                                   class="group flex items-center justify-between rounded-2xl px-5 py-5 text-slate-500 transition-all hover:bg-white hover:shadow-lg hover:shadow-slate-200/50">
+                                   class="group flex cursor-pointer items-center justify-between rounded-2xl px-5 py-5 text-slate-500 transition-all hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                     <span class="flex items-center gap-4">
                                         <span class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 transition-colors group-hover:bg-slate-100 group-hover:text-primary">
                                             <i class="bi {{ $item['icon'] }} text-xl leading-none"></i>
@@ -71,8 +71,8 @@
                         @method('PUT')
 
                         <div class="relative overflow-hidden bg-primary px-12 py-10 text-white">
-                            <div class="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/5 blur-3xl"></div>
-                            <div class="absolute right-16 top-8 h-32 w-32 rounded-full bg-secondary/10 blur-2xl"></div>
+                            <div class="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/5 blur-3xl"></div>
+                            <div class="pointer-events-none absolute right-16 top-8 h-32 w-32 rounded-full bg-secondary/10 blur-2xl"></div>
                             <h3 class="relative mb-2 text-3xl font-black tracking-tight">Profil Institusi</h3>
                             <p class="relative max-w-lg text-sm font-medium leading-relaxed text-white/65">
                                 Informasi dasar yang akan ditampilkan pada portal calon mahasiswa dan dokumen resmi pendaftaran.
@@ -82,7 +82,7 @@
                         <div class="space-y-12 p-12">
                             <div class="flex items-start gap-10 border-b border-slate-100 pb-12">
                                 <label for="logo" class="group relative block cursor-pointer overflow-hidden rounded-3xl shadow-inner">
-                                    <span class="flex h-40 w-40 items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50 transition-all group-hover:border-primary/20">
+                                    <span class="flex h-40 w-40 items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50 transition-all group-hover:border-primary/20 group-focus-within:border-primary/40">
                                         @if ($institution['logo'])
                                             <img src="{{ $institution['logo'] }}" alt="Logo Institusi" class="h-24 w-24 rounded-2xl object-contain transition-transform group-hover:scale-105">
                                         @else
@@ -90,7 +90,7 @@
                                                 <i class="bi bi-bank2 text-5xl leading-none"></i>
                                             </span>
                                         @endif
-                                        <span class="absolute inset-0 flex flex-col items-center justify-center bg-primary/40 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                                        <span class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-primary/40 text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
                                             <i class="bi bi-camera-fill mb-2 text-3xl leading-none"></i>
                                             <span class="text-[10px] font-black uppercase tracking-widest">Ganti Logo</span>
                                         </span>
@@ -104,7 +104,7 @@
                                     <p class="mb-6 max-w-md text-sm leading-relaxed text-slate-500">
                                         Gunakan file format PNG atau SVG dengan resolusi minimal 512x512px dan background transparan.
                                     </p>
-                                    <button type="button" class="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-6 py-3 text-xs font-black text-primary transition-all hover:bg-slate-200 active:scale-95">
+                                    <button type="button" class="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-slate-100 px-6 py-3 text-xs font-black text-primary transition-all hover:bg-slate-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                         <i class="bi bi-download text-base leading-none"></i>
                                         UNDUH TEMPLATE LOGO
                                     </button>
@@ -166,10 +166,10 @@
                             </div>
 
                             <div class="flex items-center justify-end gap-6 border-t border-slate-100 pt-8">
-                                <button type="reset" class="rounded-xl px-8 py-4 text-sm font-black text-slate-500 transition-all hover:bg-slate-50 hover:text-primary">
+                                <button type="reset" class="cursor-pointer rounded-xl px-8 py-4 text-sm font-black text-slate-500 transition-all hover:bg-slate-50 hover:text-primary active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                     BATALKAN PERUBAHAN
                                 </button>
-                                <button type="submit" class="rounded-xl bg-primary px-12 py-4 text-sm font-black text-white shadow-2xl shadow-primary/30 transition-all hover:bg-primary-dark active:scale-95">
+                                <button type="submit" class="cursor-pointer rounded-xl bg-primary px-12 py-4 text-sm font-black text-white shadow-2xl shadow-primary/30 transition-all hover:bg-primary-dark active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                     SIMPAN PROFIL
                                 </button>
                             </div>

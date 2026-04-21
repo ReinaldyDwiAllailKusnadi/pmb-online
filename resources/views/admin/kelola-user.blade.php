@@ -10,7 +10,7 @@
                         <h2 class="text-3xl font-extrabold tracking-tight font-headline" style="color:#1E3A5F;">Kelola User</h2>
                         <p class="mt-1 font-medium" style="color:#64748B;">Manajemen hak akses dan profil pengguna sistem.</p>
                     </div>
-                    <button style="background-color:#F0A500;" class="flex items-center gap-2 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all scale-98-on-click hover:opacity-90">
+                    <button type="button" style="background-color:#F0A500;" class="flex cursor-pointer items-center gap-2 rounded-xl px-6 py-3 font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                         <i class="bi bi-person-plus-fill w-5 h-5"></i>
                         <span>Tambah User Baru</span>
                     </button>
@@ -24,21 +24,21 @@
                     <div class="flex gap-1 w-full md:w-auto">
                         <a
                             href="{{ route('admin.kelola-user', ['tab' => 'semua']) }}"
-                            class="px-6 py-2.5 rounded-xl font-semibold text-sm transition-all whitespace-nowrap hover:bg-slate-100"
+                            class="whitespace-nowrap rounded-xl px-6 py-2.5 text-sm font-semibold transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="{{ $activeTab === 'semua' ? 'background-color:#1a2744; color:white;' : 'color:#64748B;' }}"
                         >
                             Semua User
                         </a>
                         <a
                             href="{{ route('admin.kelola-user', ['tab' => 'admin']) }}"
-                            class="px-6 py-2.5 rounded-xl font-semibold text-sm transition-all whitespace-nowrap hover:bg-slate-100"
+                            class="whitespace-nowrap rounded-xl px-6 py-2.5 text-sm font-semibold transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="{{ $activeTab === 'admin' ? 'background-color:#1a2744; color:white;' : 'color:#64748B;' }}"
                         >
                             Admin
                         </a>
                         <a
                             href="{{ route('admin.kelola-user', ['tab' => 'calon-mahasiswa']) }}"
-                            class="px-6 py-2.5 rounded-xl font-semibold text-sm transition-all whitespace-nowrap hover:bg-slate-100"
+                            class="whitespace-nowrap rounded-xl px-6 py-2.5 text-sm font-semibold transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="{{ $activeTab === 'calon-mahasiswa' ? 'background-color:#1a2744; color:white;' : 'color:#64748B;' }}"
                         >
                             Calon Mahasiswa
@@ -46,11 +46,11 @@
                     </div>
 
                     <div class="flex items-center gap-3 pr-2 mt-4 md:mt-0">
-                        <button class="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 transition-all hover:bg-slate-100" style="color:#64748B;">
+                        <button type="button" class="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="color:#64748B;">
                             <i class="bi bi-funnel w-4 h-4"></i>
                             <span class="text-sm font-bold">Filters</span>
                         </button>
-                        <button class="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 transition-all hover:bg-slate-100" style="color:#64748B;">
+                        <button type="button" class="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="color:#64748B;">
                             <i class="bi bi-download w-4 h-4"></i>
                             <span class="text-sm font-bold">Export</span>
                         </button>
@@ -62,7 +62,7 @@
                         <thead style="background-color: rgba(241,245,249,0.6);">
                             <tr class="border-b border-slate-200/60">
                                 <th class="py-5 px-6 w-12">
-                                    <input type="checkbox" class="rounded border-slate-300" style="accent-color:#1E3A5F;" />
+                                    <input type="checkbox" class="cursor-pointer rounded border-slate-300 focus:ring-2 focus:ring-secondary/50" style="accent-color:#1E3A5F;" />
                                 </th>
                                 <th class="py-5 px-4 font-headline text-[10px] font-extrabold uppercase tracking-widest" style="color:#94a3b8;">Info Pengguna</th>
                                 <th class="py-5 px-4 font-headline text-[10px] font-extrabold uppercase tracking-widest" style="color:#94a3b8;">Role</th>
@@ -87,7 +87,7 @@
                                 @endphp
                                 <tr class="group hover:bg-slate-50/60 transition-colors">
                                     <td class="py-4 px-6">
-                                        <input type="checkbox" class="rounded border-slate-300" style="accent-color:#1E3A5F;" />
+                                        <input type="checkbox" class="cursor-pointer rounded border-slate-300 focus:ring-2 focus:ring-secondary/50" style="accent-color:#1E3A5F;" />
                                     </td>
                                     <td class="py-4 px-4">
                                         <div class="flex items-center gap-4">
@@ -114,11 +114,11 @@
                                                 @csrf
                                                 @method('PATCH')
                                                 @if($user->is_active)
-                                                    <button type="submit" style="background-color:#1E3A5F; width:40px; height:20px; border-radius:9999px; position:relative; cursor:pointer; border:none;">
+                                                    <button type="submit" class="transition-all hover:brightness-110 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" aria-label="Nonaktifkan user" style="background-color:#1E3A5F; width:40px; height:20px; border-radius:9999px; position:relative; cursor:pointer; border:none;">
                                                         <span style="position:absolute; top:3px; right:3px; width:14px; height:14px; background:white; border-radius:9999px; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
                                                     </button>
                                                 @else
-                                                    <button type="submit" style="background-color:#CBD5E1; width:40px; height:20px; border-radius:9999px; position:relative; cursor:pointer; border:none;">
+                                                    <button type="submit" class="transition-all hover:brightness-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" aria-label="Aktifkan user" style="background-color:#CBD5E1; width:40px; height:20px; border-radius:9999px; position:relative; cursor:pointer; border:none;">
                                                         <span style="position:absolute; top:3px; left:3px; width:14px; height:14px; background:white; border-radius:9999px; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></span>
                                                     </button>
                                                 @endif
@@ -133,7 +133,7 @@
                                         <p class="text-[10px]" style="color:#64748B;">IP: {{ $user->last_login_ip ?? '-' }}</p>
                                     </td>
                                     <td class="py-4 px-6 text-right">
-                                        <button class="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-all">
+                                        <button type="button" class="cursor-pointer rounded-lg p-2 text-slate-500 transition-all hover:bg-slate-100 hover:text-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                             <i class="bi bi-three-dots-vertical w-5 h-5"></i>
                                         </button>
                                     </td>
@@ -161,7 +161,7 @@
                                 </div>
                             </div>
                         </div>
-                        <i class="bi bi-people-fill absolute -right-6 -bottom-6 text-white/5 w-32 h-32"></i>
+                        <i class="bi bi-people-fill pointer-events-none absolute -right-6 -bottom-6 text-white/5 w-32 h-32"></i>
                     </div>
 
                     <div class="col-span-12 md:col-span-8 bg-white p-6 rounded-3xl flex flex-col sm:flex-row items-center justify-between shadow-sm border border-slate-200/60">

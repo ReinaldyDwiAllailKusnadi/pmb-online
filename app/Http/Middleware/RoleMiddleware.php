@@ -16,10 +16,28 @@ class RoleMiddleware
             abort(403);
         }
 
-        if (property_exists($user, 'role') && $user->role && $user->role !== $role) {
+        if (! $this->roleMatches((string) $user->role, $role)) {
             abort(403);
         }
 
         return $next($request);
+    }
+
+    private function roleMatches(string $actualRole, string $expectedRole): bool
+    {
+        $actual = $this->normalize($actualRole);
+        $expected = $this->normalize($expectedRole);
+
+        $allowedRoles = [
+            'admin' => ['admin', 'system-admin', 'super-admin', 'administrator'],
+            'calon-mahasiswa' => ['calon-mahasiswa', 'mahasiswa', 'student', 'applicant'],
+        ];
+
+        return in_array($actual, $allowedRoles[$expected] ?? [$expected], true);
+    }
+
+    private function normalize(string $role): string
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($role)), '-');
     }
 }

@@ -28,7 +28,7 @@
         @foreach ($navItems as $item)
             @php $isActive = ($activePage ?? '') === $item['key']; @endphp
             <a href="{{ Route::has($item['route']) ? route($item['route']) : '#' }}"
-               class="{{ $isActive ? 'bg-secondary text-white shadow-lg shadow-secondary/25' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-[12px] font-bold uppercase tracking-wider transition-all duration-200">
+               class="{{ $isActive ? 'bg-secondary text-white shadow-lg shadow-secondary/25' : 'text-slate-300 hover:bg-white/5 hover:text-white active:scale-[0.98]' }} flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-[12px] font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-dark">
                 <i class="bi {{ $item['icon'] }} w-5 text-center text-xl leading-none"></i>
                 <span>{{ $item['label'] }}</span>
             </a>
@@ -43,14 +43,14 @@
             </div>
             <div class="min-w-0">
                 <p class="truncate text-sm font-bold text-white">{{ ($activePage ?? '') === 'pengaturan' ? 'Admin Utama' : $profileName }}</p>
-                @if (($activePage ?? '') === 'pengaturan')
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-xs text-slate-400 transition-colors hover:text-white">Sign Out</button>
-                    </form>
-                @else
-                    <p class="truncate text-xs text-slate-400">{{ $profileRole }}</p>
-                @endif
+                <p class="truncate text-xs text-slate-400">{{ ($activePage ?? '') === 'pengaturan' ? 'SUPERADMIN' : $profileRole }}</p>
+                <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Apakah Anda yakin ingin keluar?')" class="mt-1">
+                    @csrf
+                    <button type="submit" class="inline-flex cursor-pointer items-center gap-1.5 text-xs font-semibold text-slate-400 transition-colors hover:text-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
+                        <i class="bi bi-box-arrow-right text-sm"></i>
+                        <span>Sign Out</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

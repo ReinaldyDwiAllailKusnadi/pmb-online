@@ -13,7 +13,7 @@
                     <div class="flex items-center gap-3">
                         <a
                             href="{{ route('admin.data-pendaftaran.export.excel', request()->query()) }}"
-                            class="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-xl font-headline font-bold text-sm hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
+                            class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="color:#1E3A5F;"
                         >
                             <i class="bi bi-file-earmark-spreadsheet" style="color:#F0A500;"></i>
@@ -21,7 +21,7 @@
                         </a>
                         <a
                             href="{{ route('admin.data-pendaftaran.export.pdf', request()->query()) }}"
-                            class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-headline font-bold text-sm text-white hover:opacity-90 hover:shadow-lg transition-all shadow-md"
+                            class="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="background-color:#1E3A5F;"
                         >
                             <i class="bi bi-file-earmark-pdf"></i>
@@ -31,39 +31,64 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/50">
+                    @if (session('success'))
+                        <div class="mb-5 rounded-xl border border-green-100 bg-green-50 px-4 py-3 text-sm font-bold text-green-700">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="mb-5 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+                            {{ $errors->first() }}
+                        </div>
+                    @endif
+
                     <form method="GET" action="{{ route('admin.data-pendaftaran') }}" class="grid grid-cols-4 gap-6">
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Status Pendaftaran</label>
-                            <select name="status" class="w-full h-11 bg-slate-50 border-none rounded-xl text-sm font-semibold text-slate-700 transition-all cursor-pointer">
-                                @foreach (['Semua Status', 'Diverifikasi', 'Menunggu', 'Ditolak'] as $option)
-                                    <option value="{{ $option === 'Semua Status' ? '' : $option }}" {{ request('status') === ($option === 'Semua Status' ? '' : $option) ? 'selected' : '' }}>
-                                        {{ $option }}
+                            <select name="status" class="h-11 w-full cursor-pointer rounded-xl border-none bg-slate-50 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-secondary/50">
+                                @foreach ([
+                                    '' => 'Semua Status',
+                                    'draft' => 'Draft',
+                                    'in_progress' => 'Sedang Dilengkapi',
+                                    'documents_uploaded' => 'Dokumen Terunggah',
+                                    'submitted' => 'Terkirim',
+                                    'under_review' => 'Menunggu Verifikasi',
+                                    'revision_required' => 'Perlu Revisi',
+                                    'verified' => 'Diverifikasi',
+                                    'rejected' => 'Ditolak',
+                                    'accepted' => 'Diterima',
+                                ] as $value => $label)
+                                    <option value="{{ $value }}" {{ request('status') === $value ? 'selected' : '' }}>
+                                        {{ $label }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Program Studi</label>
-                            <select name="prodi" class="w-full h-11 bg-slate-50 border-none rounded-xl text-sm font-semibold text-slate-700 transition-all cursor-pointer">
-                                @foreach (['Semua Prodi', 'Teknik Informatika', 'Sistem Informasi', 'Manajemen'] as $option)
-                                    <option value="{{ $option === 'Semua Prodi' ? '' : $option }}" {{ request('prodi') === ($option === 'Semua Prodi' ? '' : $option) ? 'selected' : '' }}>
-                                        {{ $option }}
+                            <select name="prodi" class="h-11 w-full cursor-pointer rounded-xl border-none bg-slate-50 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-secondary/50">
+                                <option value="">Semua Prodi</option>
+                                @foreach ($programStudi as $program)
+                                    <option value="{{ $program->id }}" {{ (string) request('prodi') === (string) $program->id ? 'selected' : '' }}>
+                                        {{ trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Gelombang</label>
-                            <select name="gelombang" class="w-full h-11 bg-slate-50 border-none rounded-xl text-sm font-semibold text-slate-700 transition-all cursor-pointer">
-                                @foreach (['Semua Gelombang', 'Gelombang 1', 'Gelombang 2', 'Gelombang 3'] as $option)
-                                    <option value="{{ $option === 'Semua Gelombang' ? '' : $option }}" {{ request('gelombang') === ($option === 'Semua Gelombang' ? '' : $option) ? 'selected' : '' }}>
-                                        {{ $option }}
+                            <select name="gelombang" class="h-11 w-full cursor-pointer rounded-xl border-none bg-slate-50 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-secondary/50">
+                                <option value="">Semua Gelombang</option>
+                                @foreach ($gelombangPendaftaran as $gelombang)
+                                    <option value="{{ $gelombang->id }}" {{ (string) request('gelombang') === (string) $gelombang->id ? 'selected' : '' }}>
+                                        {{ $gelombang->nama }} - {{ $gelombang->tahun_akademik }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="flex items-end">
-                            <button type="submit" class="w-full h-11 text-white font-headline font-extrabold text-sm rounded-xl hover:opacity-90 transition-all shadow-lg active:scale-[0.98]" style="background-color:#F0A500;">
+                            <button type="submit" class="h-11 w-full cursor-pointer rounded-xl text-sm font-extrabold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background-color:#F0A500;">
                                 Terapkan Filter
                             </button>
                         </div>
@@ -75,7 +100,7 @@
                         <table class="w-full">
                             <thead>
                                 <tr class="bg-slate-50/50 border-b border-slate-100">
-                                    @foreach (['ID', 'Nama Mahasiswa', 'Program Studi', 'Gelombang', 'Status', 'Aksi'] as $header)
+                                    @foreach (['Nomor Pendaftaran', 'Nama Mahasiswa', 'Program Studi', 'Gelombang', 'Status', 'Aksi'] as $header)
                                         <th class="px-6 py-5 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $header }}</th>
                                     @endforeach
                                 </tr>
@@ -83,44 +108,64 @@
                             <tbody class="divide-y divide-slate-50">
                                 @foreach ($pendaftaran as $row)
                                     @php
+                                        $displayName = $row->full_name ?: $row->user?->name ?: 'Calon Mahasiswa';
+                                        $displayEmail = $row->email ?: $row->user?->email;
+                                        $program = $row->relationLoaded('programStudi') ? $row->getRelation('programStudi') : $row->programStudi()->first();
+                                        $gelombang = $row->relationLoaded('gelombangPendaftaran') ? $row->getRelation('gelombangPendaftaran') : $row->gelombangPendaftaran()->first();
                                         $avatar = $row->user && $row->user->foto
                                             ? asset('storage/' . $row->user->foto)
-                                            : 'https://ui-avatars.com/api/?name=' . urlencode($row->user?->nama_lengkap ?? $row->nama_lengkap) . '&background=random';
+                                            : 'https://ui-avatars.com/api/?name=' . urlencode($displayName) . '&background=1E3A5F&color=fff&bold=true';
                                         $badgeClass = match($row->status) {
-                                            'Diverifikasi' => 'bg-green-50 text-green-600 border border-green-100',
-                                            'Menunggu' => 'bg-amber-50 text-amber-600 border border-amber-100',
-                                            'Ditolak' => 'bg-red-50 text-red-600 border border-red-100',
+                                            'verified', 'accepted' => 'bg-green-50 text-green-600 border border-green-100',
+                                            'submitted', 'under_review' => 'bg-amber-50 text-amber-600 border border-amber-100',
+                                            'documents_uploaded' => 'bg-blue-50 text-blue-600 border border-blue-100',
+                                            'revision_required' => 'bg-orange-50 text-orange-600 border border-orange-100',
+                                            'rejected' => 'bg-red-50 text-red-600 border border-red-100',
                                             default => 'bg-slate-50 text-slate-600 border border-slate-100',
                                         };
+                                        $statusLabel = [
+                                            'draft' => 'Draft',
+                                            'in_progress' => 'Sedang Dilengkapi',
+                                            'documents_uploaded' => 'Dokumen Terunggah',
+                                            'submitted' => 'Terkirim',
+                                            'under_review' => 'Menunggu Verifikasi',
+                                            'revision_required' => 'Perlu Revisi',
+                                            'verified' => 'Diverifikasi',
+                                            'rejected' => 'Ditolak',
+                                            'accepted' => 'Diterima',
+                                        ][$row->status] ?? ucfirst((string) $row->status);
                                     @endphp
                                     <tr class="group hover:bg-slate-50/30 transition-colors">
                                         <td class="px-6 py-5">
-                                            <span class="font-headline font-bold" style="color:#1E3A5F;">{{ $row->no_pendaftaran ?? ('#PMB' . str_pad($row->id, 4, '0', STR_PAD_LEFT)) }}</span>
+                                            <span class="font-headline font-bold" style="color:#1E3A5F;">{{ $row->nomor_pendaftaran ?? ('PMB-' . str_pad($row->id, 5, '0', STR_PAD_LEFT)) }}</span>
                                         </td>
                                         <td class="px-6 py-5">
                                             <div class="flex items-center gap-3">
                                                 <img
                                                     src="{{ $avatar }}"
-                                                    alt="{{ $row->user?->nama_lengkap ?? $row->nama_lengkap }}"
+                                                    alt="{{ $displayName }}"
                                                     class="w-10 h-10 rounded-full border-2 border-white shadow-sm"
                                                 />
                                                 <div>
-                                                    <p class="font-headline font-bold text-slate-800 text-sm">{{ $row->user?->nama_lengkap ?? $row->nama_lengkap }}</p>
-                                                    <p class="text-slate-400 text-xs font-medium">{{ $row->user?->email ?? $row->email }}</p>
+                                                    <p class="font-headline font-bold text-slate-800 text-sm">{{ $displayName }}</p>
+                                                    <p class="text-slate-400 text-xs font-medium">{{ $displayEmail ?: '-' }}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-5 text-sm font-semibold text-slate-600">{{ $row->prodi->nama_prodi }}</td>
-                                        <td class="px-6 py-5 text-sm font-semibold text-slate-600">{{ $row->gelombang->nama_gelombang }}</td>
+                                        <td class="px-6 py-5 text-sm font-semibold text-slate-600">
+                                            {{ $program ? trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) : '-' }}
+                                        </td>
+                                        <td class="px-6 py-5 text-sm font-semibold text-slate-600">{{ $gelombang?->nama ?? '-' }}</td>
                                         <td class="px-6 py-5">
                                             <span class="px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm inline-block {{ $badgeClass }}">
-                                                {{ $row->status }}
+                                                {{ $statusLabel }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-5">
-                                            <button class="p-2 text-slate-400 transition-colors hover:bg-slate-100 rounded-lg active:scale-[0.9]" style="color:#94a3b8;">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
+                                            <a href="{{ route('admin.data-pendaftaran.show', $row) }}" class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-black uppercase tracking-wider text-white transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
+                                                <i class="bi bi-eye-fill"></i>
+                                                Lihat Detail
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

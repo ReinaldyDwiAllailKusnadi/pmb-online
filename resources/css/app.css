@@ -35,6 +35,20 @@
         body {
             @apply bg-background text-primary font-body;
         }
+
+        button:not(:disabled),
+        a[href],
+        label[for],
+        select {
+            cursor: pointer;
+        }
+
+        button:disabled,
+        [aria-disabled="true"] {
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none !important;
+        }
 }
 
     .ghost-border {

@@ -4,7 +4,7 @@
     @include('admin.partials.sidebar', ['activePage' => 'laporan'])
     @include('admin.partials.topbar', [
         'placeholder' => 'Cari laporan atau data...',
-        'academicYear' => 'Tahun Akademik 2024/2025',
+        'academicYear' => 'Tahun Laporan ' . $selectedYear,
     ])
 
     <main style="margin-left:260px; padding-top:64px; background:#F1F5F9;" class="p-8 pb-12">
@@ -16,14 +16,14 @@
                 </p>
             </div>
             <div class="flex flex-wrap gap-3">
-                <button class="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-slate-200 shadow-sm lift-hover" style="color:#1E3A5F;">
+                <button type="button" class="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm lift-hover active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="color:#1E3A5F;">
                     <i class="bi bi-funnel-fill"></i>
                     <span class="font-bold text-sm">Filter Data</span>
                 </button>
-                <button class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-bold shadow-lg lift-hover" style="background-color:#1E3A5F;">
+                <a href="{{ route('admin.laporan', ['year' => $selectedYear]) }}" class="flex cursor-pointer items-center gap-2 rounded-xl px-5 py-2.5 font-bold text-white shadow-lg lift-hover active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background-color:#1E3A5F;">
                     <i class="bi bi-arrow-clockwise"></i>
                     <span>Perbarui Data</span>
-                </button>
+                </a>
             </div>
         </div>
 
@@ -88,7 +88,7 @@
                         {{ $stats['menunggu_trend'] }}
                     </span>
                 </div>
-                <p class="text-[11px] font-bold uppercase tracking-widest" style="color:#94a3b8;">Menunggu Berkas</p>
+                <p class="text-[11px] font-bold uppercase tracking-widest" style="color:#94a3b8;">Menunggu Review</p>
                 <h3 class="text-3xl font-black mt-1" style="color:#1E3A5F;">{{ number_format($stats['menunggu_berkas']) }}</h3>
                 <div class="mt-5 pt-4 border-t border-slate-100 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest" style="color:#94a3b8;">
                     <i class="bi bi-clock-fill"></i>
@@ -104,10 +104,13 @@
                         <h3 class="text-xl font-bold" style="color:#1E3A5F;">Tren Pendaftaran Bulanan</h3>
                         <p class="text-xs font-medium" style="color:#64748B;">Perbandingan jumlah pendaftar per bulan berjalan</p>
                     </div>
-                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg" style="background:#F8FAFC; color:#1E3A5F; font-weight:700; font-size:12px;">
-                        <span>2024</span>
-                        <i class="bi bi-chevron-down" style="font-size:11px;"></i>
-                    </div>
+                    <form method="GET" action="{{ route('admin.laporan') }}">
+                        <select name="year" onchange="this.form.submit()" class="cursor-pointer rounded-lg border-none px-3 py-1.5 text-xs font-bold focus:ring-2 focus:ring-secondary/50" style="background:#F8FAFC; color:#1E3A5F;">
+                            @foreach ($availableYears as $year)
+                                <option value="{{ $year }}" @selected((int) $year === (int) $selectedYear)>{{ $year }}</option>
+                            @endforeach
+                        </select>
+                    </form>
                 </div>
                 <div style="height:320px;">
                     <canvas id="laporanBarChart"></canvas>
@@ -120,24 +123,27 @@
 
                 <div class="relative flex items-center justify-center" style="height:220px;">
                     <canvas id="laporanPieChart"></canvas>
-                    <div class="absolute flex flex-col items-center justify-center">
-                        <span class="text-3xl font-extrabold" style="color:#1E3A5F;">12</span>
+                    <div class="pointer-events-none absolute flex flex-col items-center justify-center">
+                        <span class="text-3xl font-extrabold" style="color:#1E3A5F;">{{ $programCount }}</span>
                         <span class="text-[10px] uppercase font-bold tracking-widest" style="color:#94a3b8;">Jurusan</span>
                     </div>
                 </div>
 
                 <div class="mt-6 space-y-4">
                     @foreach($pieData as $item)
-                        @if($item['name'] !== 'Lainnya')
+                        @if(($item['count'] ?? 0) > 0)
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
                                     <span class="w-2.5 h-2.5 rounded-full" style="background-color: {{ $item['color'] }};"></span>
                                     <span class="text-sm font-medium" style="color:#64748B;">{{ $item['name'] }}</span>
                                 </div>
-                                <span class="text-sm font-bold" style="color:#1E3A5F;">{{ $item['value'] }}%</span>
+                                <span class="text-sm font-bold" style="color:#1E3A5F;">{{ $item['count'] }} / {{ $item['value'] }}%</span>
                             </div>
                         @endif
                     @endforeach
+                    @if($pieData->where('count', '>', 0)->isEmpty())
+                        <p class="rounded-2xl bg-slate-50 p-4 text-sm font-semibold" style="color:#64748B;">Belum ada data peminat program studi.</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -148,14 +154,14 @@
                     <h3 class="text-xl font-bold" style="color:#1E3A5F;">Peringkat Asal Sekolah</h3>
                     <p class="text-xs font-medium" style="color:#64748B;">Sekolah dengan kontribusi pendaftar terbanyak</p>
                 </div>
-                <button class="flex items-center gap-2 text-sm font-bold" style="color:#F0A500;">
+                <button type="button" class="flex cursor-pointer items-center gap-2 text-sm font-bold transition-all hover:translate-x-0.5 hover:brightness-95 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="color:#F0A500;">
                     Lihat Semua Sekolah
                     <i class="bi bi-arrow-up-right"></i>
                 </button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                @foreach($schools as $school)
+                @forelse($schools as $school)
                     <div class="group flex items-center justify-between p-4 rounded-2xl bg-slate-50 lift-hover">
                         <div class="flex items-center gap-4">
                             <span class="w-10 h-10 flex items-center justify-center rounded-xl font-bold" style="background:#fff; color:#1E3A5F;">
@@ -171,13 +177,17 @@
                             <p class="text-[9px] uppercase font-bold" style="color:#94a3b8;">Siswa</p>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="md:col-span-2 rounded-2xl bg-slate-50 p-6 text-sm font-semibold" style="color:#64748B;">
+                        Belum ada data asal sekolah pada tahun laporan ini.
+                    </div>
+                @endforelse
             </div>
         </div>
 
         <div class="mt-12 p-8 rounded-[32px] text-white relative overflow-hidden" style="background:#1A2744;">
-            <div class="absolute -bottom-24 -right-24 w-64 h-64 rounded-full" style="background:rgba(240,165,0,0.2); filter: blur(100px);"></div>
-            <div class="absolute -top-12 -left-12 w-48 h-48 rounded-full" style="background:rgba(30,58,95,0.4); filter: blur(80px);"></div>
+            <div class="pointer-events-none absolute -bottom-24 -right-24 w-64 h-64 rounded-full" style="background:rgba(240,165,0,0.2); filter: blur(100px);"></div>
+            <div class="pointer-events-none absolute -top-12 -left-12 w-48 h-48 rounded-full" style="background:rgba(30,58,95,0.4); filter: blur(80px);"></div>
 
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
                 <div class="max-w-md">
@@ -187,17 +197,17 @@
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('admin.laporan.export-pdf') }}" class="flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm" style="background:#fff; color:#1E3A5F;">
+                    <a href="{{ route('admin.laporan.export-pdf') }}" class="flex cursor-pointer items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold transition-all hover:-translate-y-0.5 hover:brightness-95 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background:#fff; color:#1E3A5F;">
                         <i class="bi bi-file-earmark-text-fill"></i>
                         Export PDF
                     </a>
-                    <a href="{{ route('admin.laporan.export-excel') }}" class="flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm" style="background:#F0A500; color:#1A2744;">
+                    <a href="{{ route('admin.laporan.export-excel') }}" class="flex cursor-pointer items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold transition-all hover:-translate-y-0.5 hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background:#F0A500; color:#1A2744;">
                         <i class="bi bi-file-earmark-spreadsheet-fill"></i>
                         Export Excel
                     </a>
                     <form method="POST" action="{{ route('admin.laporan.kirim-email') }}">
                         @csrf
-                        <button type="submit" class="flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm" style="background:rgba(30,58,95,0.5); border:1px solid rgba(255,255,255,0.2);">
+                        <button type="submit" class="flex cursor-pointer items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold transition-all hover:-translate-y-0.5 hover:bg-white/10 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background:rgba(30,58,95,0.5); border:1px solid rgba(255,255,255,0.2);">
                             <i class="bi bi-envelope-fill"></i>
                             Kirim Email
                         </button>

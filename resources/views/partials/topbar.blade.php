@@ -14,16 +14,16 @@
     <div class="flex items-center gap-6">
         <div class="hidden md:flex relative">
             <input
-                class="pl-10 pr-4 py-2 bg-surface-container border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-secondary transition-all outline-none"
+                class="w-64 rounded-full border-none bg-surface-container py-2 pl-10 pr-4 text-sm outline-none transition-all focus:bg-white focus:ring-2 focus:ring-secondary"
                 placeholder="Cari info pendaftaran..."
                 type="text"
             />
-            <i class="bi bi-search absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+            <i class="bi bi-search pointer-events-none absolute left-3 top-2.5 text-sm text-slate-400"></i>
         </div>
         <div class="flex items-center gap-4">
-            <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors relative">
+            <button type="button" class="relative cursor-pointer rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                 <i class="bi bi-bell text-lg"></i>
-                <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                <span class="pointer-events-none absolute right-2 top-2 h-2 w-2 rounded-full border-2 border-white bg-red-500"></span>
             </button>
             <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
                 <div class="text-right">

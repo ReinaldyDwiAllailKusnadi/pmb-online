@@ -32,8 +32,9 @@
                         </div>
                         <div class="relative">
                             <x-forms.input name="password" label="" type="password" placeholder="••••••••" icon="lock" required class="pl-11 pr-12" />
-                            <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary">
-                                <x-lucide-icon name="eye" class="w-5 h-5" />
+                            <button type="button" data-password-toggle="password" aria-label="Tampilkan password" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary">
+                                <i class="bi bi-eye text-xl" data-password-icon-show></i>
+                                <i class="bi bi-eye-slash hidden text-xl" data-password-icon-hide></i>
                             </button>
                         </div>
                     </div>
@@ -64,4 +65,21 @@
             </footer>
         </main>
     </div>
+    <script>
+        document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const input = document.getElementById(button.dataset.passwordToggle);
+
+                if (!input) {
+                    return;
+                }
+
+                const shouldShow = input.type === 'password';
+                input.type = shouldShow ? 'text' : 'password';
+                button.setAttribute('aria-label', shouldShow ? 'Sembunyikan password' : 'Tampilkan password');
+                button.querySelector('[data-password-icon-show]')?.classList.toggle('hidden', shouldShow);
+                button.querySelector('[data-password-icon-hide]')?.classList.toggle('hidden', !shouldShow);
+            });
+        });
+    </script>
 </x-app-layout>

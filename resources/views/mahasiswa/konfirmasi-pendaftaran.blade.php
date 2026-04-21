@@ -94,7 +94,7 @@
                                     </div>
                                     <h3 class="text-xl font-bold text-primary font-plus-jakarta">Data Pribadi</h3>
                                 </div>
-                                <button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline transition-all">
+                                <button type="button" class="flex cursor-pointer items-center gap-1 rounded-lg text-sm font-bold text-primary transition-all hover:translate-x-0.5 hover:underline active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                                     <i class="bi bi-pencil text-xs"></i>
                                     Ubah
                                 </button>
@@ -131,7 +131,7 @@
                                     </div>
                                     <h3 class="text-xl font-bold text-primary font-plus-jakarta">Akademi</h3>
                                 </div>
-                                <button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline transition-all">
+                                <button type="button" class="flex cursor-pointer items-center gap-1 rounded-lg text-sm font-bold text-primary transition-all hover:translate-x-0.5 hover:underline active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                                     <i class="bi bi-pencil text-xs"></i>
                                     Ubah
                                 </button>
@@ -175,11 +175,11 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <button class="w-full mt-6 py-2 text-primary font-bold text-sm hover:underline transition-all">Lihat Semua Dokumen</button>
+                            <button type="button" class="mt-6 w-full cursor-pointer rounded-lg py-2 text-sm font-bold text-primary transition-all hover:underline active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">Lihat Semua Dokumen</button>
                         </div>
 
                         <div class="bg-primary rounded-xl p-8 text-white shadow-2xl relative overflow-hidden anim-fade-right-delay">
-                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary blur-3xl opacity-20"></div>
+                            <div class="pointer-events-none absolute -right-10 -top-10 h-32 w-32 bg-secondary opacity-20 blur-3xl"></div>
                             <h3 class="text-lg font-extrabold mb-4 relative z-10 font-plus-jakarta">Pernyataan Keaslian Data</h3>
                             <form method="POST" action="{{ route('mahasiswa.konfirmasi.kirim') }}">
                                 @csrf
@@ -197,7 +197,7 @@
                                         Saya menyatakan bahwa seluruh data yang saya masukkan adalah benar dan dapat dipertanggungjawabkan sesuai dengan hukum yang berlaku di Indonesia.
                                     </label>
                                 </div>
-                                <button type="submit" class="w-full py-4 bg-secondary text-primary font-black text-lg rounded-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative z-10 group">
+                                <button type="submit" class="group relative z-10 flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg bg-secondary py-4 text-lg font-black text-primary shadow-lg transition-all hover:scale-[1.02] hover:brightness-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                                     Kirim Pendaftaran
                                     <i class="bi bi-send-fill group-hover:translate-x-1 transition-transform text-lg"></i>
                                 </button>
@@ -208,7 +208,7 @@
                 </div>
 
                 <div class="mt-12 flex flex-col md:flex-row items-center justify-between gap-6 pb-20">
-                    <a href="{{ route('form.step2') }}" class="flex items-center gap-2 text-slate-500 font-bold hover:text-primary transition-all group">
+                    <a href="{{ route('form.step2') }}" class="group flex cursor-pointer items-center gap-2 font-bold text-slate-500 transition-all hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                         <i class="bi bi-arrow-left group-hover:-translate-x-1 transition-transform text-lg"></i>
                         Kembali ke Langkah 2
                     </a>

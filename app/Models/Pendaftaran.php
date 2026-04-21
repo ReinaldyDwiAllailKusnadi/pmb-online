@@ -13,37 +13,76 @@ class Pendaftaran extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'email', 'email');
+        return $this->belongsTo(User::class);
+    }
+
+    public function programStudi(): BelongsTo
+    {
+        return $this->belongsTo(ProgramStudi::class);
+    }
+
+    public function gelombangPendaftaran(): BelongsTo
+    {
+        return $this->belongsTo(GelombangPendaftaran::class);
     }
 
     public function getProdiAttribute(): \stdClass
     {
         $prodi = new \stdClass();
-        $prodi->nama_prodi = $this->attributes['program_studi'] ?? 'Teknik Informatika';
+        $programStudi = $this->programStudiModel();
+        $prodi->nama_prodi = $programStudi
+            ? trim(($programStudi->jenjang ? $programStudi->jenjang . ' ' : '') . $programStudi->nama)
+            : null;
 
         return $prodi;
     }
 
     public function getGelombangAttribute(): \stdClass
     {
+        $gelombangPendaftaran = $this->gelombangPendaftaranModel();
         $gelombang = new \stdClass();
-        $gelombang->nama_gelombang = $this->attributes['gelombang'] ?? 'Gelombang 1';
+        $gelombang->nama_gelombang = $gelombangPendaftaran?->nama;
+        $gelombang->tahun_akademik = $gelombangPendaftaran?->tahun_akademik;
 
         return $gelombang;
     }
 
     public function getNamaLengkapAttribute(): string
     {
-        return $this->full_name ?? 'Calon Mahasiswa';
+        return $this->full_name ?? '';
     }
 
-    public function getProgramStudiAttribute(): string
+    public function getProgramStudiAttribute(): ?string
     {
-        return $this->attributes['program_studi'] ?? 'Teknik Informatika';
+        $programStudi = $this->programStudiModel();
+
+        if (! $programStudi) {
+            return null;
+        }
+
+        return trim(($programStudi->jenjang ? $programStudi->jenjang . ' ' : '') . $programStudi->nama);
     }
 
-    public function getAsalSekolahAttribute(): string
+    public function getAsalSekolahAttribute(): ?string
     {
-        return $this->attributes['asal_sekolah'] ?? 'SMAN 1 Jakarta';
+        return $this->attributes['asal_sekolah'] ?? null;
+    }
+
+    private function programStudiModel(): ?ProgramStudi
+    {
+        if ($this->relationLoaded('programStudi')) {
+            return $this->getRelation('programStudi');
+        }
+
+        return $this->programStudi()->first();
+    }
+
+    private function gelombangPendaftaranModel(): ?GelombangPendaftaran
+    {
+        if ($this->relationLoaded('gelombangPendaftaran')) {
+            return $this->getRelation('gelombangPendaftaran');
+        }
+
+        return $this->gelombangPendaftaran()->first();
     }
 }

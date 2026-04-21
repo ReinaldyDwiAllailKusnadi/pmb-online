@@ -54,7 +54,7 @@
         @foreach ($navItems as $link)
             <a
                 href="{{ $link['href'] ?? '#' }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium text-sm group {{ $link['active'] ? 'bg-secondary text-white font-bold shadow-lg relative after:absolute after:left-0 after:top-1/2 after:-translate-y-1/2 after:h-8 after:w-1 after:bg-white after:rounded-r-full' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}"
+                class="group flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-primary {{ $link['active'] ? 'relative bg-secondary text-white font-bold shadow-lg after:absolute after:left-0 after:top-1/2 after:h-8 after:w-1 after:-translate-y-1/2 after:rounded-r-full after:bg-white after:pointer-events-none' : 'text-slate-300 hover:bg-white/5 hover:text-white active:scale-[0.98]' }}"
             >
                 <i class="{{ $link['icon'] }} w-5 h-5 {{ $link['active'] ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
                 <span>{{ $link['label'] }}</span>
@@ -63,13 +63,16 @@
     </nav>
 
     <div class="px-4 mt-auto space-y-3">
-        <button class="w-full py-3 px-4 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all flex items-center justify-center gap-2 text-sm font-semibold">
+        <button type="button" class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
             <i class="bi bi-headset w-4 h-4"></i>
             <span>Hubungi Bantuan</span>
         </button>
-        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/5 hover:text-white transition-all text-sm font-medium">
-            <i class="bi bi-box-arrow-right w-5 h-5"></i>
-            <span>Keluar</span>
-        </a>
+        <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Apakah Anda yakin ingin keluar?')">
+            @csrf
+            <button type="submit" class="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-300 transition-all hover:bg-white/5 hover:text-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
+                <i class="bi bi-box-arrow-right w-5 h-5"></i>
+                <span>Keluar</span>
+            </button>
+        </form>
     </div>
 </aside>

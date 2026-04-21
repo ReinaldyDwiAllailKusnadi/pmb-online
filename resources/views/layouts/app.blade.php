@@ -17,5 +17,29 @@
                 @yield('content')
             @endif
         </div>
+        <script>
+            document.addEventListener('submit', function (event) {
+                const form = event.target;
+
+                if (!(form instanceof HTMLFormElement) || form.dataset.allowResubmit === 'true') {
+                    return;
+                }
+
+                if (form.dataset.submitted === 'true') {
+                    event.preventDefault();
+                    return;
+                }
+
+                form.dataset.submitted = 'true';
+
+                requestAnimationFrame(function () {
+                    form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(function (button) {
+                        button.setAttribute('aria-disabled', 'true');
+                        button.classList.add('opacity-50', 'cursor-not-allowed');
+                        button.disabled = true;
+                    });
+                });
+            });
+        </script>
     </body>
 </html>
