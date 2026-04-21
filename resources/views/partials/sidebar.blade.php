@@ -41,8 +41,8 @@
 
 <aside class="fixed left-0 top-0 h-full w-65 bg-primary shadow-xl flex flex-col py-8 z-50 overflow-y-auto">
     <div class="px-6 mb-12 flex items-center gap-3">
-    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden shrink-0">
-            <i class="bi bi-building text-primary text-xl"></i>
+        <div class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-white shadow-lg shadow-secondary/20">
+            <i class="bi bi-mortarboard-fill text-xl"></i>
         </div>
         <div>
             <h1 class="text-white text-lg font-extrabold leading-none tracking-tight">Akademi PMB</h1>
@@ -54,9 +54,9 @@
         @foreach ($navItems as $link)
             <a
                 href="{{ $link['href'] ?? '#' }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium text-sm group {{ $link['active'] ? 'bg-secondary text-primary font-bold shadow-md relative after:absolute after:left-0 after:top-1/2 after:-translate-y-1/2 after:h-8 after:w-1 after:bg-white after:rounded-r-full' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium text-sm group {{ $link['active'] ? 'bg-secondary text-white font-bold shadow-lg relative after:absolute after:left-0 after:top-1/2 after:-translate-y-1/2 after:h-8 after:w-1 after:bg-white after:rounded-r-full' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}"
             >
-                <i class="{{ $link['icon'] }} w-5 h-5 {{ $link['active'] ? 'text-primary' : 'text-slate-400 group-hover:text-white' }}"></i>
+                <i class="{{ $link['icon'] }} w-5 h-5 {{ $link['active'] ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
                 <span>{{ $link['label'] }}</span>
             </a>
         @endforeach

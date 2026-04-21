@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RegistrationController extends Controller
 {
@@ -153,18 +154,45 @@ class RegistrationController extends Controller
         $applicant = $this->getApplicant($request);
 
         $validated = $request->validate([
-            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'id_card' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
-            'family_card' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
-            'diploma' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
-            'transcript' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
+            'photo' => [
+                Rule::requiredIf(! $applicant->photo_path),
+                'file',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
+            'id_card' => [
+                Rule::requiredIf(! $applicant->id_card_path),
+                'file',
+                'mimes:jpg,jpeg,png,pdf',
+                'max:4096',
+            ],
+            'family_card' => [
+                Rule::requiredIf(! $applicant->family_card_path),
+                'file',
+                'mimes:jpg,jpeg,png,pdf',
+                'max:4096',
+            ],
+            'diploma' => [
+                Rule::requiredIf(! $applicant->diploma_path),
+                'file',
+                'mimes:jpg,jpeg,png,pdf',
+                'max:4096',
+            ],
+            'transcript' => [
+                Rule::requiredIf(! $applicant->transcript_path),
+                'file',
+                'mimes:jpg,jpeg,png,pdf',
+                'max:4096',
+            ],
         ]);
 
         $paths = [];
         $storagePath = 'applicants/' . $applicant->id;
 
         foreach (['photo', 'id_card', 'family_card', 'diploma', 'transcript'] as $field) {
-            $paths[$field] = $request->file($field)->store($storagePath, 'public');
+            if ($request->hasFile($field)) {
+                $paths[$field] = $request->file($field)->store($storagePath, 'public');
+            }
         }
 
         $applicant->update([
