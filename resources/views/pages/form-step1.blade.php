@@ -21,14 +21,14 @@
             <div class="max-w-5xl mx-auto p-10 pb-24">
                 <div class="fixed top-20 right-8 z-50 flex items-center gap-4 bg-white p-4 rounded-xl shadow-xl border-l-4 border-secondary">
                     <div class="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center text-secondary">
-                        <x-lucide-icon name="info" class="w-5 h-5" />
+                        <x-lucide-icon name="info" class="w-4.5 h-4.5" />
                     </div>
                     <div class="flex-1 min-w-50">
                         <h4 class="font-bold text-sm">Draft Saved</h4>
                         <p class="text-xs text-on-surface-variant">Your progress is automatically saved.</p>
                     </div>
                     <button class="text-on-surface-variant hover:text-primary transition-colors">
-                        <x-lucide-icon name="x" class="w-4 h-4" />
+                        <x-lucide-icon name="x" class="w-3.5 h-3.5" />
                     </button>
                 </div>
 
@@ -68,7 +68,7 @@
                                                 class="w-full h-full object-cover grayscale opacity-40"
                                             />
                                             <div class="absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                                <x-lucide-icon name="camera" class="text-white" />
+                                                <x-lucide-icon name="camera" class="text-white w-5 h-5" />
                                             </div>
                                         </div>
                                         <p class="text-[10px] text-center text-on-surface-variant leading-relaxed mb-4 font-medium uppercase tracking-tight">
@@ -91,7 +91,7 @@
                                             class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary"
                                         />
                                         <span class="text-[10px] text-error font-medium flex items-center gap-1">
-                                            <x-lucide-icon name="alert-circle" class="w-3 h-3" />
+                                            <x-lucide-icon name="alert-circle" class="w-3.5 h-3.5" />
                                             Wajib diisi sesuai identitas resmi
                                         </span>
                                     </div>
@@ -136,7 +136,7 @@
                                             @endforeach
                                         </select>
                                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
-                                            <x-lucide-icon name="chevron-down" class="w-4 h-4" />
+                                            <x-lucide-icon name="chevron-down" class="w-3.5 h-3.5" />
                                         </div>
                                     </div>
                                 </div>

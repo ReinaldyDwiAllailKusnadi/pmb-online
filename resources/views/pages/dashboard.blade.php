@@ -49,19 +49,19 @@
                             </div>
                             <div class="relative z-10 flex flex-col items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
-                                    <x-lucide-icon name="check" class="w-5 h-5" />
+                                    <x-lucide-icon name="check" class="w-4.5 h-4.5" />
                                 </div>
                                 <span class="text-sm font-bold text-primary">Data Pribadi</span>
                             </div>
                             <div class="relative z-10 flex flex-col items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-secondary-container text-white flex items-center justify-center shadow-md animate-pulse">
-                                    <x-lucide-icon name="upload" class="w-5 h-5" />
+                                    <x-lucide-icon name="upload" class="w-4.5 h-4.5" />
                                 </div>
                                 <span class="text-sm font-bold text-secondary-container">Unggah Dokumen</span>
                             </div>
                             <div class="relative z-10 flex flex-col items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant/40 flex items-center justify-center">
-                                    <x-lucide-icon name="check" class="w-5 h-5" />
+                                    <x-lucide-icon name="check" class="w-4.5 h-4.5" />
                                 </div>
                                 <span class="text-sm font-medium text-on-surface-variant">Selesai</span>
                             </div>
@@ -71,7 +71,7 @@
                         <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-subtle group hover:bg-primary transition-all duration-300">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="p-2 bg-primary/5 rounded-lg group-hover:bg-white/20">
-                                    <x-lucide-icon name="calendar" class="w-5 h-5 text-primary group-hover:text-white" />
+                                    <x-lucide-icon name="calendar" class="w-4.5 h-4.5 text-primary group-hover:text-white" />
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant group-hover:text-white/60">Tenggat Waktu</span>
                             </div>
@@ -81,7 +81,7 @@
                         <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-subtle">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="p-2 bg-secondary-container/5 rounded-lg">
-                                    <x-lucide-icon name="shield-check" class="w-5 h-5 text-secondary-container" />
+                                    <x-lucide-icon name="shield-check" class="w-4.5 h-4.5 text-secondary-container" />
                                 </div>
                                 <span class="px-3 py-1 bg-secondary-container/10 text-secondary-container rounded-full text-[10px] font-bold uppercase">Pending</span>
                             </div>
@@ -100,7 +100,7 @@
                     ] as $action)
                         <button class="bg-white p-6 rounded-xl shadow-sm flex flex-col items-center justify-center text-center gap-3 border border-transparent hover:border-primary/20 hover:shadow-md hover:-translate-y-0.5 transition-all">
                             <div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary">
-                                <x-lucide-icon :name="$action['icon']" class="w-6 h-6" />
+                                <x-lucide-icon :name="$action['icon']" class="w-5 h-5" />
                             </div>
                             <span class="text-xs font-bold text-primary uppercase tracking-wider">{{ $action['label'] }}</span>
                         </button>

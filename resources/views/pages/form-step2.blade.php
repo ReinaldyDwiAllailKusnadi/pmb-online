@@ -96,12 +96,12 @@
                                         </div>
                                         <label class="mt-4 flex items-center justify-between gap-4 p-4 border-2 border-dashed rounded-lg cursor-pointer hover:border-primary transition-colors">
                                             <span class="text-xs font-semibold text-on-surface-variant">Pilih file</span>
-                                            <x-lucide-icon name="upload" class="w-5 h-5 text-primary" />
+                                            <x-lucide-icon name="upload" class="w-4.5 h-4.5 text-primary" />
                                             <input type="file" name="{{ $document['name'] }}" accept="{{ $document['accept'] }}" class="hidden" />
                                         </label>
                                         @if ($document['current'])
                                             <a href="{{ asset('storage/' . $document['current']) }}" target="_blank" class="mt-3 inline-flex items-center gap-2 text-xs font-bold text-primary">
-                                                <x-lucide-icon name="file-text" class="w-4 h-4" />
+                                                <x-lucide-icon name="file-text" class="w-3.5 h-3.5" />
                                                 Lihat dokumen terakhir
                                             </a>
                                         @endif
@@ -113,12 +113,12 @@
 
                     <div class="bg-surface-container-low p-8 flex items-center justify-between gap-4">
                         <a href="{{ route('form.step1') }}" class="flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary font-bold rounded-xl hover:bg-primary/5 transition-all">
-                            <x-lucide-icon name="arrow-left" class="w-5 h-5" />
+                            <x-lucide-icon name="arrow-left" class="w-4.5 h-4.5" />
                             Kembali
                         </a>
                         <button type="submit" form="form-step2" class="flex items-center gap-2 px-10 py-4 bg-secondary text-white font-bold rounded-xl shadow-lg shadow-secondary/20 hover:scale-[1.02] transition-all">
                             Simpan Dokumen
-                            <x-lucide-icon name="arrow-right" class="w-5 h-5" />
+                            <x-lucide-icon name="arrow-right" class="w-4.5 h-4.5" />
                         </button>
                     </div>
                 </div>

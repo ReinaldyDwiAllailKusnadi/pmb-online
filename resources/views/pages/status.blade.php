@@ -96,9 +96,9 @@
                                 <table class="w-full text-left border-collapse">
                                     <thead>
                                         <tr class="bg-slate-50/50 border-b border-slate-100">
-                                            <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Tanggal & Waktu</th>
-                                            <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Aktivitas</th>
-                                            <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Keterangan</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Tanggal & Waktu</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Aktivitas</th>
+                                            <th class="px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Keterangan</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-100">
@@ -108,14 +108,14 @@
                                             ['date' => '12 Mei 2024, 11:05', 'activity' => 'Registrasi Akun', 'description' => 'Akun portal PMB berhasil diaktifkan.', 'color' => 'bg-green-500'],
                                         ] as $item)
                                             <tr class="hover:bg-slate-50/50 transition-colors group">
-                                                <td class="px-6 py-5 text-sm font-medium text-slate-700">{{ $item['date'] }}</td>
-                                                <td class="px-6 py-5">
-                                                    <div class="flex items-center gap-2.5">
+                                                <td class="px-5 py-4 text-sm font-medium text-slate-700">{{ $item['date'] }}</td>
+                                                <td class="px-5 py-4">
+                                                    <div class="flex items-center gap-2">
                                                         <span class="w-2 h-2 rounded-full {{ $item['color'] }} group-hover:scale-125 transition-transform"></span>
                                                         <span class="text-sm font-bold text-primary">{{ $item['activity'] }}</span>
                                                     </div>
                                                 </td>
-                                                <td class="px-6 py-5 text-sm text-slate-600 leading-relaxed">{{ $item['description'] }}</td>
+                                                <td class="px-5 py-4 text-sm text-slate-600 leading-relaxed">{{ $item['description'] }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

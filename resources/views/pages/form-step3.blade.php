@@ -21,7 +21,7 @@
                             <div class="flex flex-col items-center gap-2">
                                 <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg {{ ($step['done'] ?? false) ? 'bg-primary text-white' : (($step['active'] ?? false) ? 'bg-secondary text-white ring-4 ring-secondary/20' : 'bg-surface-container text-on-surface-variant') }}">
                                     @if ($step['done'] ?? false)
-                                        <x-lucide-icon name="check-circle" class="w-5 h-5" />
+                                        <x-lucide-icon name="check-circle" class="w-4.5 h-4.5" />
                                     @else
                                         <span class="font-bold text-sm">3</span>
                                     @endif
@@ -46,12 +46,12 @@
                             <div class="flex items-center justify-between mb-8">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
-                                        <x-lucide-icon name="user" class="w-5 h-5" />
+                                        <x-lucide-icon name="user" class="w-4.5 h-4.5" />
                                     </div>
                                     <h3 class="text-xl font-bold text-primary">Data Pribadi</h3>
                                 </div>
                                 <a href="{{ route('form.step1') }}" class="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
-                                    <x-lucide-icon name="file-text" class="w-4 h-4" /> Ubah
+                                    <x-lucide-icon name="file-text" class="w-3.5 h-3.5" /> Ubah
                                 </a>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
@@ -77,12 +77,12 @@
                             <div class="flex items-center justify-between mb-8">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
-                                        <x-lucide-icon name="school" class="w-5 h-5" />
+                                        <x-lucide-icon name="school" class="w-4.5 h-4.5" />
                                     </div>
                                     <h3 class="text-xl font-bold text-primary">Akademik</h3>
                                 </div>
                                 <a href="{{ route('form.step2') }}" class="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
-                                    <x-lucide-icon name="file-text" class="w-4 h-4" /> Ubah
+                                    <x-lucide-icon name="file-text" class="w-3.5 h-3.5" /> Ubah
                                 </a>
                             </div>
                             <div class="space-y-6">
@@ -110,7 +110,7 @@
                             <div class="flex items-center justify-between mb-6">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
-                                        <x-lucide-icon name="file-text" class="w-5 h-5" />
+                                        <x-lucide-icon name="file-text" class="w-4.5 h-4.5" />
                                     </div>
                                     <h3 class="text-xl font-bold text-primary">Dokumen</h3>
                                 </div>
@@ -123,7 +123,7 @@
                                     ['name' => 'Transkrip Nilai', 'info' => $applicant->transcript_path ? basename($applicant->transcript_path) : 'Belum ada file'],
                                 ] as $doc)
                                     <div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg">
-                                        <x-lucide-icon name="check-circle" class="text-green-600 w-5 h-5" />
+                                        <x-lucide-icon name="check-circle" class="text-green-600 w-4.5 h-4.5" />
                                         <div class="flex-1">
                                             <p class="text-xs font-bold text-primary">{{ $doc['name'] }}</p>
                                             <p class="text-[10px] text-on-surface-variant font-medium">{{ $doc['info'] }}</p>
@@ -147,7 +147,7 @@
                             </div>
                             <button class="w-full py-4 bg-secondary text-white font-black text-lg rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative z-10 group">
                                 Kirim Pendaftaran
-                                <x-lucide-icon name="send" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                <x-lucide-icon name="send" class="w-4.5 h-4.5 group-hover:translate-x-1 transition-transform" />
                             </button>
                             <p class="text-center text-[10px] text-slate-400 mt-4 italic">Pendaftaran tidak dapat diubah setelah dikirim.</p>
                         </section>
@@ -156,11 +156,11 @@
 
                 <div class="mt-12 flex flex-col md:flex-row items-center justify-between gap-6 pb-20">
                     <a href="{{ route('form.step2') }}" class="flex items-center gap-2 text-slate-500 font-bold hover:text-primary transition-colors">
-                        <x-lucide-icon name="arrow-left" class="w-5 h-5" /> Kembali ke Langkah 2
+                        <x-lucide-icon name="arrow-left" class="w-4.5 h-4.5" /> Kembali ke Langkah 2
                     </a>
                     <div class="flex items-center gap-4 p-4 bg-surface-container rounded-xl">
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary shadow-sm">
-                            <x-lucide-icon name="message-circle" class="w-5 h-5" />
+                            <x-lucide-icon name="message-circle" class="w-4.5 h-4.5" />
                         </div>
                         <div>
                             <p class="text-sm font-bold text-primary leading-none">Butuh Bantuan?</p>
