@@ -1,4 +1,4 @@
-<x-app-layout title="Register">
+﻿<x-app-layout title="Register">
     <div class="bg-primary-container min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
         <div class="absolute inset-0 geometric-pattern opacity-40"></div>
         <div class="absolute top-[-10%] right-[-10%] w-125 h-125 bg-secondary-container/10 rounded-full blur-[120px]"></div>
@@ -23,12 +23,7 @@
                     @endif
                     <x-forms.input name="full_name" label="Nama Lengkap" placeholder="Masukkan nama sesuai ijazah" icon="user" required />
                     <x-forms.input name="email" label="Alamat Email" type="email" placeholder="contoh@domain.com" icon="mail" required />
-                    <div class="relative">
-                        <x-forms.input name="password" label="Kata Sandi" type="password" placeholder="Min. 8 karakter" icon="lock" required class="pl-11 pr-12" />
-                        <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 hover:text-primary">
-                            <x-lucide-icon name="eye" class="w-5 h-5" />
-                        </button>
-                    </div>
+                    <x-forms.input name="password" label="Kata Sandi" type="password" placeholder="Min. 8 karakter" icon="lock" required />
                     <x-forms.button class="w-full py-4">
                         Daftar Sekarang
                         <x-lucide-icon name="arrow-right" class="w-5 h-5" />

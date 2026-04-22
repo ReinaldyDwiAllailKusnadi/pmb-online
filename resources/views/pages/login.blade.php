@@ -1,4 +1,4 @@
-<x-app-layout title="Login">
+﻿<x-app-layout title="Login">
     <div class="bg-primary-container min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
         <div class="absolute inset-0 geometric-pattern opacity-40"></div>
         <div class="absolute top-[-10%] right-[-10%] w-125 h-125 bg-secondary-container/10 rounded-full blur-[120px]"></div>
@@ -30,13 +30,7 @@
                             <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Password</label>
                             <a href="#" class="text-xs font-bold text-primary hover:text-secondary-container transition-colors">Forgot Password?</a>
                         </div>
-                        <div class="relative">
-                            <x-forms.input name="password" label="" type="password" placeholder="••••••••" icon="lock" required class="pl-11 pr-12" />
-                            <button type="button" data-password-toggle="password" aria-label="Tampilkan password" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary">
-                                <i class="bi bi-eye text-xl" data-password-icon-show></i>
-                                <i class="bi bi-eye-slash hidden text-xl" data-password-icon-hide></i>
-                            </button>
-                        </div>
+                        <x-forms.input name="password" label="" type="password" placeholder="••••••••" icon="lock" required />
                     </div>
 
                     <x-forms.button class="w-full py-4">
@@ -65,21 +59,5 @@
             </footer>
         </main>
     </div>
-    <script>
-        document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
-            button.addEventListener('click', function () {
-                const input = document.getElementById(button.dataset.passwordToggle);
 
-                if (!input) {
-                    return;
-                }
-
-                const shouldShow = input.type === 'password';
-                input.type = shouldShow ? 'text' : 'password';
-                button.setAttribute('aria-label', shouldShow ? 'Sembunyikan password' : 'Tampilkan password');
-                button.querySelector('[data-password-icon-show]')?.classList.toggle('hidden', shouldShow);
-                button.querySelector('[data-password-icon-hide]')?.classList.toggle('hidden', !shouldShow);
-            });
-        });
-    </script>
 </x-app-layout>

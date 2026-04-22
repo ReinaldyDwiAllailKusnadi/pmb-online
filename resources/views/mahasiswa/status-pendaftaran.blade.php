@@ -50,7 +50,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in-up">
                     <div class="lg:col-span-2 bg-white rounded-2xl p-8 shadow-soft relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
                         <div class="absolute top-0 right-0 w-48 h-48 bg-secondary/5 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
-                        <div class="relative z-10 w-24 h-24 flex-shrink-0 flex items-center justify-center rounded-full bg-secondary/10 text-secondary ring-8 ring-secondary/5">
+                        <div class="relative z-10 w-24 h-24 shrink-0 flex items-center justify-center rounded-full bg-secondary/10 text-secondary ring-8 ring-secondary/5">
                             <i class="bi {{ $currentStatus['icon'] }} text-4xl"></i>
                         </div>
                         <div class="relative z-10 flex-1 space-y-4 text-center md:text-left">
