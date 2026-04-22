@@ -1,5 +1,6 @@
 @php
     $isReadonly = $isReadonly ?? false;
+    $stepperCompleted = in_array($applicant->status, ['submitted', 'under_review', 'verified', 'accepted'], true);
 @endphp
 
 <x-app-layout title="Konfirmasi Pendaftaran">
@@ -20,7 +21,7 @@
                         @foreach ([
                             ['label' => 'Data Pribadi', 'done' => true],
                             ['label' => 'Dokumen', 'done' => true],
-                            ['label' => 'Konfirmasi', 'active' => true],
+                            ['label' => 'Konfirmasi', 'done' => $stepperCompleted, 'active' => ! $stepperCompleted],
                         ] as $index => $step)
                             <div class="flex flex-col items-center gap-2">
                                 <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg {{ ($step['done'] ?? false) ? 'bg-primary text-white' : (($step['active'] ?? false) ? 'bg-secondary text-white ring-4 ring-secondary/20' : 'bg-surface-container text-on-surface-variant') }}">
@@ -33,7 +34,7 @@
                                 <span class="text-xs font-bold {{ ($step['active'] ?? false) ? 'text-secondary' : 'text-primary' }}">{{ $step['label'] }}</span>
                             </div>
                             @if ($index < 2)
-                                <div class="flex-1 h-1 mx-4 rounded-full opacity-20 {{ $index === 0 ? 'bg-primary' : 'bg-secondary' }}"></div>
+                                <div class="flex-1 h-1 mx-4 rounded-full opacity-20 {{ $stepperCompleted || $index === 0 ? 'bg-primary' : 'bg-secondary' }}"></div>
                             @endif
                         @endforeach
                     </div>

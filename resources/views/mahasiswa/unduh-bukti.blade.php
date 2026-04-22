@@ -108,15 +108,15 @@
                             <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-primary shadow-lg shadow-secondary/30">
                                 <i class="bi bi-file-text text-xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold">{{ $student->nomor_resmi ? 'Siap untuk diunduh' : 'PDF belum tersedia' }}</h3>
+                            <h3 class="text-xl font-bold">{{ $student->pdf_available ? 'Siap untuk diunduh' : 'PDF belum tersedia' }}</h3>
                             <p class="mb-8 mt-2 text-sm text-white/70">
-                                @if ($student->nomor_resmi)
+                                @if ($student->pdf_available)
                                     Format file PDF (2.4 MB). Dokumen ini telah ditandatangani secara elektronik oleh Bagian Admisi.
                                 @else
-                                    Bukti pendaftaran PDF dapat diunduh setelah pendaftaran dikirim dan nomor pendaftaran resmi terbit.
+                                    {{ $student->pdf_unavailable_message }}
                                 @endif
                             </p>
-                            @if ($student->nomor_resmi)
+                            @if ($student->pdf_available)
                                 <a href="{{ route('mahasiswa.unduh-bukti-pdf') }}" class="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-secondary py-4 font-bold text-primary shadow-lg shadow-secondary/20 transition-all hover:-translate-y-0.5 hover:brightness-110 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                                     <i class="bi bi-download text-lg"></i>
                                     Unduh Bukti Pendaftaran (PDF)

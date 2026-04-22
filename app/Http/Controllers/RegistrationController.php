@@ -28,6 +28,13 @@ class RegistrationController extends Controller
         'transcript' => 'transcript_path',
     ];
 
+    private const SUPPORTING_DOCUMENT_COLUMNS = [
+        'id_card' => 'id_card_path',
+        'family_card' => 'family_card_path',
+        'diploma' => 'diploma_path',
+        'transcript' => 'transcript_path',
+    ];
+
     public function login(Request $request)
     {
         if ($request->user()) {
@@ -147,6 +154,7 @@ class RegistrationController extends Controller
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
+            'asal_sekolah' => ['required', 'string', 'max:255'],
             'photo' => [
                 'nullable',
                 'file',
@@ -188,6 +196,7 @@ class RegistrationController extends Controller
         $updates = [
             'full_name' => $validated['full_name'],
             'email' => $validated['email'],
+            'asal_sekolah' => $validated['asal_sekolah'],
             'address' => $validated['address'] ?? null,
             'current_address' => $validated['current_address'] ?? null,
             'district' => $validated['district'] ?? null,
@@ -265,13 +274,6 @@ class RegistrationController extends Controller
         $this->assertStudentCanEdit($applicant);
 
         $request->validate([
-            'photo' => [
-                'nullable',
-                'file',
-                'mimes:jpg,jpeg,png',
-                'mimetypes:image/jpeg,image/png',
-                'max:2048',
-            ],
             'id_card' => [
                 'nullable',
                 'file',
@@ -304,7 +306,6 @@ class RegistrationController extends Controller
 
         $paths = [];
         $oldPaths = [
-            'photo_path' => $applicant->photo_path,
             'id_card_path' => $applicant->id_card_path,
             'family_card_path' => $applicant->family_card_path,
             'diploma_path' => $applicant->diploma_path,
@@ -312,20 +313,19 @@ class RegistrationController extends Controller
         ];
         $storagePath = 'applicants/' . $applicant->id;
 
-        foreach (['photo', 'id_card', 'family_card', 'diploma', 'transcript'] as $field) {
+        foreach (array_keys(self::SUPPORTING_DOCUMENT_COLUMNS) as $field) {
             if ($request->hasFile($field)) {
                 $paths[$field] = $request->file($field)->store($storagePath, self::DOCUMENT_DISK);
             }
         }
 
-        if ($paths === [] && ! $this->documentsComplete($oldPaths)) {
+        if ($paths === [] && ! $this->supportingDocumentsComplete($applicant)) {
             throw ValidationException::withMessages([
                 'documents' => 'Pilih minimal satu dokumen untuk diunggah.',
             ]);
         }
 
         $updates = [
-            'photo_path' => $paths['photo'] ?? $applicant->photo_path,
             'id_card_path' => $paths['id_card'] ?? $applicant->id_card_path,
             'family_card_path' => $paths['family_card'] ?? $applicant->family_card_path,
             'diploma_path' => $paths['diploma'] ?? $applicant->diploma_path,
@@ -342,7 +342,6 @@ class RegistrationController extends Controller
 
         $applicant->refresh();
         $this->deleteReplacedFiles($oldPaths, [
-            'photo_path' => $applicant->photo_path,
             'id_card_path' => $applicant->id_card_path,
             'family_card_path' => $applicant->family_card_path,
             'diploma_path' => $applicant->diploma_path,
@@ -371,7 +370,13 @@ class RegistrationController extends Controller
 
     private function redirectIfDocumentsIncomplete(Pendaftaran $applicant)
     {
-        $missing = collect(self::DOCUMENT_COLUMNS)
+        if (! $this->documentExists($applicant->photo_path)) {
+            return redirect()
+                ->route('form.step1')
+                ->withErrors(['photo' => 'Unggah pas foto pada langkah Data Pribadi sebelum melanjutkan.']);
+        }
+
+        $missing = collect(self::SUPPORTING_DOCUMENT_COLUMNS)
             ->contains(fn (string $column) => ! $this->documentExists($applicant->{$column}));
 
         if ($missing) {
@@ -411,7 +416,7 @@ class RegistrationController extends Controller
         }
 
         if (in_array($applicant->status, ['in_progress', 'revision_required'], true)) {
-            if ($this->documentsComplete($updates)) {
+            if ($this->documentsComplete($updates, $applicant)) {
                 app(PendaftaranStatusService::class)->transition(
                     pendaftaran: $applicant,
                     statusTo: 'documents_uploaded',
@@ -466,7 +471,6 @@ class RegistrationController extends Controller
     private function deleteUnreferencedUploads(array $paths, Pendaftaran $applicant): void
     {
         $columns = [
-            'photo' => 'photo_path',
             'id_card' => 'id_card_path',
             'family_card' => 'family_card_path',
             'diploma' => 'diploma_path',
@@ -482,10 +486,21 @@ class RegistrationController extends Controller
         }
     }
 
-    private function documentsComplete(array $updates): bool
+    private function documentsComplete(array $updates, ?Pendaftaran $applicant = null): bool
     {
         foreach (['photo_path', 'id_card_path', 'family_card_path', 'diploma_path', 'transcript_path'] as $field) {
-            if (! $this->documentExists($updates[$field] ?? null)) {
+            if (! $this->documentExists($updates[$field] ?? $applicant?->{$field})) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function supportingDocumentsComplete(Pendaftaran $applicant): bool
+    {
+        foreach (self::SUPPORTING_DOCUMENT_COLUMNS as $column) {
+            if (! $this->documentExists($applicant->{$column})) {
                 return false;
             }
         }

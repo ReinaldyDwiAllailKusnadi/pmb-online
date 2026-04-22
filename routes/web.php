@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\KonfirmasiPendaftaranController;
 use App\Http\Controllers\LegacyRouteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StatusPendaftaranController;
 use App\Http\Controllers\StudentDocumentController;
@@ -61,6 +62,8 @@ Route::middleware(['auth', 'active', 'role:calon-mahasiswa'])
         Route::get('/formulir/konfirmasi', [KonfirmasiPendaftaranController::class, 'index'])->name('mahasiswa.konfirmasi');
         Route::post('/formulir/konfirmasi/kirim', [KonfirmasiPendaftaranController::class, 'kirim'])->name('mahasiswa.konfirmasi.kirim');
         Route::get('/status-pendaftaran', [StatusPendaftaranController::class, 'index'])->name('status.pendaftaran');
+        Route::patch('/notifikasi/{notification}/read', [NotificationController::class, 'markAsRead'])->name('mahasiswa.notifikasi.read');
+        Route::patch('/notifikasi/read-all', [NotificationController::class, 'markAllAsRead'])->name('mahasiswa.notifikasi.read-all');
         Route::get('/dokumen/{document}', [StudentDocumentController::class, 'show'])->name('mahasiswa.dokumen.show');
         Route::get('/unduh-bukti', [UnduhBuktiController::class, 'index'])->name('mahasiswa.unduh-bukti');
         Route::get('/unduh-bukti/pdf', [UnduhBuktiController::class, 'downloadPdf'])->name('mahasiswa.unduh-bukti-pdf');

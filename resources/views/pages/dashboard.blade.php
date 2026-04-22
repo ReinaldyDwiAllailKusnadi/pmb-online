@@ -82,7 +82,7 @@
                                 <span class="text-sm {{ $progress['steps']['submission'] === 'current' ? 'font-bold text-secondary-container' : ($progress['steps']['submission'] === 'completed' ? 'font-bold text-primary' : 'font-medium text-on-surface-variant') }}">Selesai</span>
                             </div>
                         </div>
-                        @if ($progress['missing_steps'])
+                        @if (($progress['show_missing_steps'] ?? true) && $progress['missing_steps'])
                             <div class="mt-8 rounded-xl bg-slate-50 p-4">
                                 <p class="text-xs font-black uppercase tracking-widest text-on-surface-variant">Yang perlu dilengkapi</p>
                                 <ul class="mt-3 space-y-2">
@@ -93,6 +93,20 @@
                                         </li>
                                     @endforeach
                                 </ul>
+                            </div>
+                        @elseif ($progress['dashboard_notice'] ?? null)
+                            @php
+                                $noticeTone = $progress['dashboard_notice']['tone'] ?? 'info';
+                                $noticeClasses = [
+                                    'info' => 'bg-amber-50 text-amber-800 border-amber-100',
+                                    'success' => 'bg-green-50 text-green-800 border-green-100',
+                                    'warning' => 'bg-amber-50 text-amber-800 border-amber-100',
+                                    'danger' => 'bg-red-50 text-red-800 border-red-100',
+                                ][$noticeTone] ?? 'bg-slate-50 text-primary border-slate-100';
+                            @endphp
+                            <div class="mt-8 rounded-xl border p-4 {{ $noticeClasses }}">
+                                <p class="text-xs font-black uppercase tracking-widest">{{ $progress['dashboard_notice']['title'] }}</p>
+                                <p class="mt-2 text-sm font-semibold leading-relaxed">{{ $progress['dashboard_notice']['message'] }}</p>
                             </div>
                         @endif
                     </div>

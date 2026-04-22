@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pendaftaran;
+use App\Support\StudentStatusPresenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -123,17 +124,7 @@ class StatusPendaftaranController extends Controller
 
     private function statusLabel(?string $status): string
     {
-        return [
-            'draft' => 'Draft',
-            'in_progress' => 'Sedang Dilengkapi',
-            'documents_uploaded' => 'Dokumen Terunggah',
-            'submitted' => 'Terkirim',
-            'under_review' => 'Menunggu Verifikasi',
-            'revision_required' => 'Perlu Revisi',
-            'verified' => 'Diverifikasi',
-            'rejected' => 'Ditolak',
-            'accepted' => 'Diterima',
-        ][$status] ?? ucfirst((string) $status);
+        return StudentStatusPresenter::label($status);
     }
 
     private function statusDescription(?string $status): string
@@ -153,17 +144,7 @@ class StatusPendaftaranController extends Controller
 
     private function statusBadge(?string $status): string
     {
-        return [
-            'draft' => 'Draft',
-            'in_progress' => 'In Progress',
-            'documents_uploaded' => 'Documents',
-            'submitted' => 'Submitted',
-            'under_review' => 'In Review',
-            'revision_required' => 'Revision',
-            'verified' => 'Verified',
-            'rejected' => 'Rejected',
-            'accepted' => 'Accepted',
-        ][$status] ?? 'Status';
+        return StudentStatusPresenter::badge($status);
     }
 
     private function statusIcon(?string $status): string

@@ -1,5 +1,11 @@
 @php
     $isReadonly = $isReadonly ?? false;
+    $photoExists = filled($applicant->photo_path)
+        && (
+            \Illuminate\Support\Facades\Storage::disk('local')->exists($applicant->photo_path)
+            || \Illuminate\Support\Facades\Storage::disk('public')->exists($applicant->photo_path)
+        );
+    $stepperCompleted = in_array($applicant->status, ['submitted', 'under_review', 'verified', 'accepted'], true);
 @endphp
 
 <x-app-layout title="Unggah Dokumen">
@@ -18,16 +24,16 @@
                 <div class="flex items-center justify-between mb-12 relative px-4">
                     <div class="pointer-events-none absolute left-0 top-1/2 -z-10 h-0.5 w-full -translate-y-1/2 bg-surface-container-high"></div>
                     <div class="flex flex-col items-center gap-3 bg-background px-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-secondary text-white shadow-lg shadow-secondary/30">1</div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Data Pribadi</span>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm {{ $stepperCompleted ? 'bg-primary text-white shadow-lg' : 'bg-secondary text-white shadow-lg shadow-secondary/30' }}">1</div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest {{ $stepperCompleted ? 'text-primary' : 'text-on-surface-variant' }}">Data Pribadi</span>
                     </div>
                     <div class="flex flex-col items-center gap-3 bg-background px-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-secondary text-white shadow-lg shadow-secondary/30">2</div>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm {{ $stepperCompleted ? 'bg-primary text-white shadow-lg' : 'bg-secondary text-white shadow-lg shadow-secondary/30' }}">2</div>
                         <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Unggah Dokumen</span>
                     </div>
                     <div class="flex flex-col items-center gap-3 bg-background px-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-outline-variant/40 text-on-surface-variant">3</div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Konfirmasi</span>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm {{ $stepperCompleted ? 'bg-primary text-white shadow-lg' : 'bg-outline-variant/40 text-on-surface-variant' }}">3</div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest {{ $stepperCompleted ? 'text-primary' : 'text-on-surface-variant' }}">Konfirmasi</span>
                     </div>
                 </div>
 
@@ -72,13 +78,6 @@
                                 @php
                                     $documents = [
                                         [
-                                            'label' => 'Pas Foto Formal',
-                                            'name' => 'photo',
-                                            'accept' => '.jpg,.jpeg,.png',
-                                            'current' => $applicant->photo_path,
-                                            'note' => 'Format JPG/PNG, maksimal 2 MB',
-                                        ],
-                                        [
                                             'label' => 'KTP / Identitas',
                                             'name' => 'id_card',
                                             'accept' => '.jpg,.jpeg,.png,.pdf',
@@ -113,11 +112,32 @@
                                             || (
                                                 ! \Illuminate\Support\Facades\Storage::disk('local')->exists($document['current'])
                                                 && ! \Illuminate\Support\Facades\Storage::disk('public')->exists($document['current'])
-                                            ))
+                                        ))
                                         ->values();
+                                    $canContinue = $photoExists && $missingDocuments->isEmpty();
                                 @endphp
 
-                                @if ($missingDocuments->isNotEmpty())
+                                <div class="md:col-span-2 rounded-xl border border-outline-variant/20 bg-white p-5 shadow-sm">
+                                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                        <div>
+                                            <h4 class="font-bold text-sm text-primary">Pas Foto Formal</h4>
+                                            <p class="mt-1 text-xs text-on-surface-variant">
+                                                Pas foto hanya diunggah pada langkah Data Pribadi.
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-wrap items-center gap-3">
+                                            <span class="rounded-full px-3 py-1 text-[10px] font-bold {{ $photoExists ? 'bg-secondary/10 text-secondary' : 'bg-error/10 text-error' }}">
+                                                {{ $photoExists ? 'Sudah diunggah dari Step 1' : 'Belum diunggah' }}
+                                            </span>
+                                            <a href="{{ route('form.step1') }}" class="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-surface-container-high px-3 py-2 text-xs font-bold text-primary transition-all hover:bg-primary hover:text-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
+                                                {{ $photoExists ? 'Ubah di Step 1' : 'Unggah di Step 1' }}
+                                                <x-lucide-icon name="arrow-right" class="w-3.5 h-3.5" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if ($missingDocuments->isNotEmpty() || ! $photoExists)
                                     <div class="md:col-span-2 rounded-xl border border-amber-100 bg-amber-50 p-5 text-sm text-amber-800">
                                         <div class="flex items-start gap-3">
                                             <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-white">
@@ -129,6 +149,11 @@
                                                     Lengkapi dokumen berikut sebelum mengirim pendaftaran:
                                                 </p>
                                                 <div class="mt-3 flex flex-wrap gap-2">
+                                                    @if (! $photoExists)
+                                                        <span class="rounded-full bg-white px-3 py-1 text-xs font-bold text-amber-800 shadow-sm">
+                                                            Pas Foto Formal (unggah di Step 1)
+                                                        </span>
+                                                    @endif
                                                     @foreach ($missingDocuments as $document)
                                                         <span class="rounded-full bg-white px-3 py-1 text-xs font-bold text-amber-800 shadow-sm">
                                                             {{ $document['label'] }}
@@ -148,7 +173,6 @@
                                                 || \Illuminate\Support\Facades\Storage::disk('public')->exists($document['current'])
                                             );
                                         $documentRoutes = [
-                                            'photo' => 'photo',
                                             'id_card' => 'id-card',
                                             'family_card' => 'family-card',
                                             'diploma' => 'diploma',
@@ -203,7 +227,7 @@
                                 </button>
                             @endif
 
-                            @if ($missingDocuments->isEmpty())
+                            @if ($canContinue)
                                 <a href="{{ route('form.step3') }}" class="flex cursor-pointer items-center gap-2 rounded-xl bg-primary px-10 py-4 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
                                     Lanjut ke Konfirmasi
                                     <x-lucide-icon name="arrow-right" class="w-4.5 h-4.5" />

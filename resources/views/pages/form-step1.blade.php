@@ -9,6 +9,7 @@
     $selectedProvince = old('province', $applicant->province);
     $selectedCity = old('city', $applicant->city);
     $selectedCities = $regions[$selectedProvince] ?? [];
+    $stepperCompleted = in_array($applicant->status, ['submitted', 'under_review', 'verified', 'accepted'], true);
     $photoExists = filled($applicant->photo_path)
         && (
             \Illuminate\Support\Facades\Storage::disk('local')->exists($applicant->photo_path)
@@ -47,16 +48,16 @@
                 <div class="flex items-center justify-between mb-12 relative px-4">
                     <div class="pointer-events-none absolute left-0 top-1/2 -z-10 h-0.5 w-full -translate-y-1/2 bg-surface-container-high"></div>
                     <div class="flex flex-col items-center gap-3 bg-background px-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-secondary text-white shadow-lg shadow-secondary/30">1</div>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm {{ $stepperCompleted ? 'bg-primary text-white shadow-lg' : 'bg-secondary text-white shadow-lg shadow-secondary/30' }}">1</div>
                         <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Data Pribadi</span>
                     </div>
                     <div class="flex flex-col items-center gap-3 bg-background px-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-outline-variant/40 text-on-surface-variant">2</div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Akademik</span>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm {{ $stepperCompleted ? 'bg-primary text-white shadow-lg' : 'bg-outline-variant/40 text-on-surface-variant' }}">2</div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest {{ $stepperCompleted ? 'text-primary' : 'text-on-surface-variant' }}">Akademik</span>
                     </div>
                     <div class="flex flex-col items-center gap-3 bg-background px-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-outline-variant/40 text-on-surface-variant">3</div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Konfirmasi</span>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm {{ $stepperCompleted ? 'bg-primary text-white shadow-lg' : 'bg-outline-variant/40 text-on-surface-variant' }}">3</div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest {{ $stepperCompleted ? 'text-primary' : 'text-on-surface-variant' }}">Konfirmasi</span>
                     </div>
                 </div>
 
@@ -212,6 +213,14 @@
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Alamat Email</label>
                                     <input name="email" type="email" value="{{ old('email', $applicant->email) }}" placeholder="contoh@mail.com" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold text-primary uppercase tracking-wider">Asal Sekolah</label>
+                                    <input name="asal_sekolah" value="{{ old('asal_sekolah', $applicant->asal_sekolah) }}" placeholder="Nama SMA/SMK/MA asal" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    @error('asal_sekolah')
+                                        <p class="text-xs font-semibold text-error">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div class="space-y-4">

@@ -79,18 +79,18 @@
                         </div>
 
                         <div class="flex items-end justify-between h-56 px-2 border-b border-slate-100 relative">
-                            @foreach ($chartData as $index => $height)
+                            @foreach ($chartData as $index => $day)
                                 <div class="flex flex-col items-center gap-3 w-full group" style="--bar-index: {{ $index }};">
                                     <div
                                         class="w-10 rounded-t-lg transition-colors relative bar-animate"
-                                        style="--bar-height: {{ $height }}%; height: 0; animation-delay: calc(var(--bar-index) * 0.1s); background-color:#1E3A5F;"
-                                        title="{{ $height }}%"
+                                        style="--bar-height: {{ max($day['height'], $day['count'] > 0 ? 8 : 0) }}%; height: 0; animation-delay: calc(var(--bar-index) * 0.1s); background-color:#1E3A5F;"
+                                        title="{{ $day['count'] }} pendaftar pada {{ $day['date'] }}"
                                     >
                                         <div class="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100" style="background-color:#1a2744;">
-                                            {{ $height }}
+                                            {{ $day['count'] }}
                                         </div>
                                     </div>
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase">{{ ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'][$index] }}</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase">{{ $day['label'] }}</span>
                                 </div>
                             @endforeach
                         </div>
@@ -103,7 +103,7 @@
                             </span>
                             <h4 class="text-2xl font-headline font-bold leading-tight">Verifikasi Berkas Masuk</h4>
                             <p class="text-blue-100/60 text-xs leading-relaxed font-medium">
-                                Terdapat 18 berkas pendaftaran baru yang memerlukan validasi manual segera hari ini.
+                                Terdapat {{ number_format($stats['menunggu_review']) }} berkas pendaftaran yang memerlukan validasi admin.
                             </p>
                             <a href="{{ route('admin.data-pendaftaran') }}" class="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-bold shadow-lg transition-all hover:-translate-y-0.5 hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background-color:#F0A500; color:#1a2744;">
                                 Mulai Verifikasi
@@ -143,13 +143,15 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-50">
-                                @foreach ($pendaftaranTerbaru as $row)
+                                @forelse ($pendaftaranTerbaru as $row)
                                     <tr class="hover:bg-slate-50/50 transition-colors group">
-                                        <td class="px-8 py-5 text-sm font-bold" style="color:#1E3A5F;">{{ $row->id_pendaftaran ?? ('#PMB' . str_pad($row->id, 5, '0', STR_PAD_LEFT)) }}</td>
+                                        <td class="px-8 py-5 text-sm font-bold" style="color:#1E3A5F;">{{ $row->nomor_pendaftaran ?? ('#PMB' . str_pad($row->id, 5, '0', STR_PAD_LEFT)) }}</td>
                                         <td class="px-8 py-5">
                                             <div class="flex items-center gap-3">
                                                 @php
-                                                    $initials = strtoupper(substr($row->nama_lengkap, 0, 1)) . strtoupper(substr(strrchr($row->nama_lengkap, ' ') ?: $row->nama_lengkap, 1, 1));
+                                                    $displayName = $row->nama_lengkap ?: ($row->user?->name ?? 'Pendaftar');
+                                                    $nameParts = preg_split('/\s+/', trim($displayName));
+                                                    $initials = strtoupper(substr($nameParts[0] ?? 'P', 0, 1) . substr($nameParts[1] ?? ($nameParts[0] ?? 'P'), 0, 1));
                                                     $avatarClasses = match($loop->index % 3) {
                                                         0 => 'bg-blue-100 text-blue-600',
                                                         1 => 'bg-yellow-100 text-yellow-600',
@@ -159,33 +161,32 @@
                                                 <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-[10px] {{ $avatarClasses }}">
                                                     {{ $initials }}
                                                 </div>
-                                                <span class="text-sm font-bold text-slate-700">{{ $row->nama_lengkap }}</span>
+                                                <span class="text-sm font-bold text-slate-700">{{ $displayName }}</span>
                                             </div>
                                         </td>
                                         <td class="px-8 py-5 text-[13px] text-slate-500 font-medium">{{ $row->program_studi ?? '-' }}</td>
                                         <td class="px-8 py-5 text-[13px] text-slate-500 font-medium">{{ $row->asal_sekolah ?? '-' }}</td>
                                         <td class="px-8 py-5">
-                                            @switch($row->status)
-                                                @case('Menunggu')
-                                                    <span class="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider border bg-yellow-50 text-yellow-600 border-yellow-100">Menunggu</span>
-                                                @break
-                                                @case('Diverifikasi')
-                                                    <span class="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider border bg-green-50 text-green-600 border-green-100">Diverifikasi</span>
-                                                @break
-                                                @case('Ditolak')
-                                                    <span class="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider border bg-red-50 text-red-600 border-red-100">Ditolak</span>
-                                                @break
-                                                @default
-                                                    <span class="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider border bg-yellow-50 text-yellow-600 border-yellow-100">Menunggu</span>
-                                            @endswitch
+                                            @php
+                                                $status = $row->status ?: 'draft';
+                                                $badgeClass = $statusBadgeClasses[$status] ?? 'bg-slate-50 text-slate-600 border-slate-200';
+                                                $statusLabel = $statusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status));
+                                            @endphp
+                                            <span class="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider border {{ $badgeClass }}">{{ $statusLabel }}</span>
                                         </td>
                                         <td class="px-8 py-5 text-right">
-                                            <button type="button" class="cursor-pointer rounded-lg p-2 text-slate-300 transition-all hover:bg-slate-100 hover:text-slate-900 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
+                                            <a href="{{ route('admin.data-pendaftaran.show', $row) }}" class="inline-flex cursor-pointer rounded-lg p-2 text-slate-300 transition-all hover:bg-slate-100 hover:text-slate-900 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" aria-label="Lihat detail pendaftaran">
                                                 <i class="bi bi-three-dots-vertical"></i>
-                                            </button>
+                                            </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-8 py-10 text-center text-sm font-medium text-slate-400">
+                                            Belum ada data pendaftaran terbaru.
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

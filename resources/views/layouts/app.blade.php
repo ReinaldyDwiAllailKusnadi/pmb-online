@@ -40,6 +40,43 @@
                     });
                 });
             });
+
+            document.addEventListener('click', function (event) {
+                const trigger = event.target.closest('[data-dropdown-trigger]');
+
+                document.querySelectorAll('[data-dropdown]').forEach(function (dropdown) {
+                    const menu = dropdown.querySelector('[data-dropdown-menu]');
+                    const button = dropdown.querySelector('[data-dropdown-trigger]');
+                    const isCurrent = trigger && dropdown.contains(trigger);
+
+                    if (!menu || !button) {
+                        return;
+                    }
+
+                    if (isCurrent) {
+                        const willOpen = menu.classList.contains('hidden');
+                        menu.classList.toggle('hidden', !willOpen);
+                        button.setAttribute('aria-expanded', String(willOpen));
+                        return;
+                    }
+
+                    if (!dropdown.contains(event.target)) {
+                        menu.classList.add('hidden');
+                        button.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key !== 'Escape') {
+                    return;
+                }
+
+                document.querySelectorAll('[data-dropdown]').forEach(function (dropdown) {
+                    dropdown.querySelector('[data-dropdown-menu]')?.classList.add('hidden');
+                    dropdown.querySelector('[data-dropdown-trigger]')?.setAttribute('aria-expanded', 'false');
+                });
+            });
         </script>
     </body>
 </html>

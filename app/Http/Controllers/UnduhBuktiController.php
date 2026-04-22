@@ -10,6 +10,8 @@ use stdClass;
 
 class UnduhBuktiController extends Controller
 {
+    private const PDF_ALLOWED_STATUSES = ['verified', 'accepted'];
+
     public function index(Request $request)
     {
         $student = $this->buildStudent($request);
@@ -22,6 +24,10 @@ class UnduhBuktiController extends Controller
     {
         $student = $this->buildStudent($request);
         $institution = $this->institutionProfile();
+
+        if (! $student->pdf_available) {
+            return back()->withErrors(['pdf' => 'Bukti PDF baru dapat diunduh setelah pendaftaran Anda disetujui admin.']);
+        }
 
         if (! $student->nomor_resmi) {
             return back()->withErrors(['pdf' => 'Bukti pendaftaran belum dapat diunduh karena nomor pendaftaran belum tersedia.']);
@@ -47,6 +53,9 @@ class UnduhBuktiController extends Controller
         $student->tahun_akademik = $gelombang['tahun_akademik'];
         $student->asal_sekolah = $applicant->asal_sekolah;
         $student->lokasi_ujian = $applicant->lokasi_ujian;
+        $student->status = $applicant->status;
+        $student->pdf_available = in_array($applicant->status, self::PDF_ALLOWED_STATUSES, true);
+        $student->pdf_unavailable_message = 'Bukti PDF baru dapat diunduh setelah pendaftaran Anda disetujui admin.';
         $student->nomor_resmi = (bool) $applicant->nomor_pendaftaran;
         $student->no_pendaftaran = $applicant->nomor_pendaftaran ?: 'Belum tersedia';
         $student->tanggal_cetak = now()->translatedFormat('d F Y');

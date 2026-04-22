@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Pendaftaran;
+use App\Support\StudentStatusPresenter;
 use Illuminate\Support\Facades\Storage;
 
 class PendaftaranProgressService
@@ -10,6 +11,7 @@ class PendaftaranProgressService
     private const BIODATA_FIELDS = [
         'full_name',
         'email',
+        'asal_sekolah',
         'address',
         'current_address',
         'district',
@@ -24,12 +26,12 @@ class PendaftaranProgressService
         'gender',
         'marital',
         'religion',
+        'photo_path',
         'program_studi_id',
         'gelombang_pendaftaran_id',
     ];
 
     private const DOCUMENT_FIELDS = [
-        'photo_path',
         'id_card_path',
         'family_card_path',
         'diploma_path',
@@ -40,6 +42,7 @@ class PendaftaranProgressService
     {
         $biodata = $this->calculateGroup($pendaftaran, self::BIODATA_FIELDS);
         $documents = $this->calculateDocuments($pendaftaran);
+        $status = $pendaftaran->status;
         $submitted = in_array($pendaftaran->status, [
             'submitted',
             'under_review',
@@ -56,9 +59,11 @@ class PendaftaranProgressService
         );
 
         return [
-            'percentage' => min(100, $percentage),
+            'percentage' => $this->displayPercentage($status, min(100, $percentage)),
             'current_step' => $this->currentStep($biodata['complete'], $documents['complete'], $submitted),
             'missing_steps' => $this->missingSteps($biodata, $documents, $submitted),
+            'show_missing_steps' => $this->shouldShowMissingSteps($status),
+            'dashboard_notice' => $this->dashboardNotice($pendaftaran),
             'biodata' => $biodata,
             'documents' => $documents,
             'submitted' => $submitted,
@@ -66,18 +71,14 @@ class PendaftaranProgressService
                 'label' => $this->statusLabel($pendaftaran->status),
                 'badge' => $this->statusBadge($pendaftaran->status),
             ],
-            'steps' => [
-                'biodata' => $this->stepState($biodata['complete'], ! $biodata['complete']),
-                'documents' => $this->stepState($documents['complete'], $biodata['complete'] && ! $documents['complete']),
-                'submission' => $this->stepState($submitted, $biodata['complete'] && $documents['complete'] && ! $submitted),
-            ],
+            'steps' => $this->steps($pendaftaran->status, $biodata, $documents, $submitted),
         ];
     }
 
     private function calculateGroup(Pendaftaran $pendaftaran, array $fields): array
     {
         $missingFields = collect($fields)
-            ->filter(fn (string $field) => blank($pendaftaran->{$field}))
+            ->filter(fn (string $field) => $this->fieldMissing($pendaftaran, $field))
             ->values()
             ->all();
 
@@ -104,6 +105,15 @@ class PendaftaranProgressService
             'percentage' => (int) round(($filled / count(self::DOCUMENT_FIELDS)) * 100),
             'missing_fields' => $missingFields,
         ];
+    }
+
+    private function fieldMissing(Pendaftaran $pendaftaran, string $field): bool
+    {
+        if ($field === 'photo_path') {
+            return ! $this->documentExists($pendaftaran->photo_path);
+        }
+
+        return blank($pendaftaran->{$field});
     }
 
     private function documentExists(?string $path): bool
@@ -157,6 +167,48 @@ class PendaftaranProgressService
         return $missing;
     }
 
+    private function shouldShowMissingSteps(?string $status): bool
+    {
+        return in_array($status, ['draft', 'in_progress', 'documents_uploaded'], true);
+    }
+
+    private function dashboardNotice(Pendaftaran $pendaftaran): ?array
+    {
+        return match ($pendaftaran->status) {
+            'submitted', 'under_review' => [
+                'title' => 'Formulir sudah dikirim.',
+                'message' => 'Pendaftaran Anda telah dikirim dan sedang menunggu review admin.',
+                'tone' => 'info',
+            ],
+            'verified', 'accepted' => [
+                'title' => 'Pendaftaran disetujui.',
+                'message' => 'Pendaftaran Anda telah disetujui. Silakan ikuti instruksi berikutnya pada portal PMB.',
+                'tone' => 'success',
+            ],
+            'revision_required' => [
+                'title' => 'Perlu revisi data.',
+                'message' => $pendaftaran->catatan_admin ?: 'Admin meminta perbaikan data atau dokumen. Periksa kembali formulir pendaftaran Anda.',
+                'tone' => 'warning',
+            ],
+            'rejected' => [
+                'title' => 'Pendaftaran ditolak.',
+                'message' => $pendaftaran->catatan_admin ?: 'Pendaftaran Anda ditolak. Silakan hubungi admin PMB untuk informasi lebih lanjut.',
+                'tone' => 'danger',
+            ],
+            default => null,
+        };
+    }
+
+    private function displayPercentage(?string $status, int $calculatedPercentage): int
+    {
+        return match ($status) {
+            'submitted', 'under_review' => max($calculatedPercentage, 100),
+            'verified', 'accepted' => 100,
+            'rejected' => max($calculatedPercentage, 100),
+            default => $calculatedPercentage,
+        };
+    }
+
     private function stepState(bool $complete, bool $active): string
     {
         if ($complete) {
@@ -166,33 +218,30 @@ class PendaftaranProgressService
         return $active ? 'current' : 'upcoming';
     }
 
+    private function steps(?string $status, array $biodata, array $documents, bool $submitted): array
+    {
+        if (in_array($status, ['submitted', 'under_review', 'verified', 'accepted'], true)) {
+            return [
+                'biodata' => 'completed',
+                'documents' => 'completed',
+                'submission' => 'completed',
+            ];
+        }
+
+        return [
+            'biodata' => $this->stepState($biodata['complete'], ! $biodata['complete']),
+            'documents' => $this->stepState($documents['complete'], $biodata['complete'] && ! $documents['complete']),
+            'submission' => $this->stepState($submitted, $biodata['complete'] && $documents['complete'] && ! $submitted),
+        ];
+    }
+
     private function statusLabel(?string $status): string
     {
-        return [
-            'draft' => 'Draft',
-            'in_progress' => 'Sedang Dilengkapi',
-            'documents_uploaded' => 'Dokumen Terunggah',
-            'submitted' => 'Terkirim',
-            'under_review' => 'Menunggu Review',
-            'revision_required' => 'Perlu Revisi',
-            'verified' => 'Diverifikasi',
-            'rejected' => 'Ditolak',
-            'accepted' => 'Diterima',
-        ][$status] ?? ucfirst((string) $status);
+        return StudentStatusPresenter::label($status);
     }
 
     private function statusBadge(?string $status): string
     {
-        return [
-            'draft' => 'Draft',
-            'in_progress' => 'Progress',
-            'documents_uploaded' => 'Documents',
-            'submitted' => 'Submitted',
-            'under_review' => 'Review',
-            'revision_required' => 'Revision',
-            'verified' => 'Verified',
-            'rejected' => 'Rejected',
-            'accepted' => 'Accepted',
-        ][$status] ?? 'Status';
+        return StudentStatusPresenter::badge($status);
     }
 }

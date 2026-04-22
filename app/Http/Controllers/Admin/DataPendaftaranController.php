@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\PendaftaranExport;
 use App\Http\Controllers\Controller;
 use App\Models\GelombangPendaftaran;
+use App\Models\Notification;
 use App\Models\Pendaftaran;
 use App\Models\ProgramStudi;
 use App\Services\PendaftaranStatusService;
@@ -115,6 +116,7 @@ class DataPendaftaranController extends Controller
     public function verify(Request $request, Pendaftaran $pendaftaran)
     {
         $note = $request->input('catatan_admin') ?: 'Pendaftaran telah diverifikasi oleh admin.';
+        $shouldNotify = $pendaftaran->status !== 'verified';
 
         app(PendaftaranStatusService::class)->transition(
             pendaftaran: $pendaftaran,
@@ -128,6 +130,15 @@ class DataPendaftaranController extends Controller
             ]
         );
 
+        if ($shouldNotify) {
+            $this->notifyApplicant(
+                $pendaftaran,
+                'Pendaftaran Diterima',
+                'Selamat! Pendaftaran Anda telah disetujui.',
+                'success'
+            );
+        }
+
         return back()->with('success', 'Pendaftaran berhasil diverifikasi.');
     }
 
@@ -136,6 +147,7 @@ class DataPendaftaranController extends Controller
         $validated = $request->validate([
             'catatan_admin' => ['required', 'string', 'max:2000'],
         ]);
+        $shouldNotify = $pendaftaran->status !== 'rejected';
 
         app(PendaftaranStatusService::class)->transition(
             pendaftaran: $pendaftaran,
@@ -147,6 +159,15 @@ class DataPendaftaranController extends Controller
             ]
         );
 
+        if ($shouldNotify) {
+            $this->notifyApplicant(
+                $pendaftaran,
+                'Pendaftaran Ditolak',
+                'Maaf, pendaftaran Anda ditolak.',
+                'error'
+            );
+        }
+
         return back()->with('success', 'Pendaftaran berhasil ditolak.');
     }
 
@@ -155,6 +176,7 @@ class DataPendaftaranController extends Controller
         $validated = $request->validate([
             'catatan_admin' => ['required', 'string', 'max:2000'],
         ]);
+        $shouldNotify = $pendaftaran->status !== 'revision_required';
 
         app(PendaftaranStatusService::class)->transition(
             pendaftaran: $pendaftaran,
@@ -165,6 +187,15 @@ class DataPendaftaranController extends Controller
                 'catatan_admin' => $validated['catatan_admin'],
             ]
         );
+
+        if ($shouldNotify) {
+            $this->notifyApplicant(
+                $pendaftaran,
+                'Perlu Revisi',
+                'Silakan perbaiki data Anda sesuai catatan admin.',
+                'warning'
+            );
+        }
 
         return back()->with('success', 'Permintaan revisi berhasil dikirim.');
     }
@@ -252,6 +283,22 @@ class DataPendaftaranController extends Controller
         }
 
         return null;
+    }
+
+    private function notifyApplicant(Pendaftaran $pendaftaran, string $title, string $message, string $type): void
+    {
+        if (! $pendaftaran->user_id) {
+            return;
+        }
+
+        Notification::create([
+            'user_id' => $pendaftaran->user_id,
+            'title' => $title,
+            'message' => $message,
+            'type' => $type,
+            'is_read' => false,
+            'created_at' => now(),
+        ]);
     }
 
 }
