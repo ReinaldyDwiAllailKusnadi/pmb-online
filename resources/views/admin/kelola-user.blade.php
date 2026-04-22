@@ -4,11 +4,11 @@
     @include('admin.partials.sidebar', ['activePage' => 'kelola-user'])
     @include('admin.partials.topbar', ['placeholder' => 'Cari data user, email, atau role...'])
 
-    <main style="margin-left:260px; padding-top:64px;" class="pb-12 px-8">
+    <main class="admin-main-shell page-animate">
                 <div class="flex justify-between items-end mb-8">
-                    <div>
-                        <h2 class="text-3xl font-extrabold tracking-tight font-headline" style="color:#1E3A5F;">Kelola User</h2>
-                        <p class="mt-1 font-medium" style="color:#64748B;">Manajemen hak akses dan profil pengguna sistem.</p>
+                    <div class="space-y-1">
+                        <h2 class="text-4xl font-extrabold tracking-tight font-headline" style="color:#1E3A5F;">Kelola User</h2>
+                        <p class="font-medium" style="color:#64748B;">Manajemen hak akses dan profil pengguna sistem.</p>
                     </div>
                     <button type="button" style="background-color:#F0A500;" class="flex cursor-pointer items-center gap-2 rounded-xl px-6 py-3 font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                         <i class="bi bi-person-plus-fill w-5 h-5"></i>

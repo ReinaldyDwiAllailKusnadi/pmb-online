@@ -8,11 +8,10 @@
         'adminRole' => 'SUPERADMIN',
     ])
 
-    <div class="min-h-screen bg-background pl-[260px]">
-        <main class="mx-auto max-w-7xl px-12 pb-16 pt-32">
+    <main class="admin-main-shell page-animate">
             <section class="fade-up mb-12">
-                <h2 class="mb-4 text-5xl font-black tracking-tight text-primary">Pengaturan Sistem</h2>
-                <p class="max-w-3xl text-xl font-medium leading-relaxed text-slate-700">
+                <h2 class="text-4xl font-black tracking-tight text-primary">Pengaturan Sistem</h2>
+                <p class="mt-2 max-w-3xl font-medium leading-relaxed text-slate-500">
                     Konfigurasi identitas institusi, parameter pendaftaran, dan standarisasi operasional PMB Gateway.
                 </p>
             </section>
@@ -190,6 +189,5 @@
                     </div>
                 </section>
             </section>
-        </main>
-    </div>
+    </main>
 @endsection

@@ -4,18 +4,15 @@
     @include('admin.partials.sidebar', ['activePage' => 'dashboard'])
     @include('admin.partials.topbar')
 
-    <main style="margin-left:260px; padding-top:64px;">
-        <div class="p-8 max-w-7xl w-full mx-auto space-y-8">
+    <main class="admin-main-shell space-y-8 page-animate">
                 <script>
                     const chartData = @json($chartData);
                 </script>
-                <div class="flex flex-col gap-1">
-                    <div class="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                        <span>Admin</span>
-                        <i class="bi bi-chevron-right text-xs"></i>
-                        <span class="font-bold" style="color:#1E3A5F;">Dashboard</span>
+                <div class="flex items-end justify-between">
+                    <div class="space-y-1">
+                        <h2 class="text-4xl font-headline font-extrabold tracking-tight" style="color:#1E3A5F;">Dashboard Admin</h2>
+                        <p class="text-slate-500 font-medium">Ringkasan aktivitas pendaftaran mahasiswa baru.</p>
                     </div>
-                    <h2 class="text-3xl font-headline font-extrabold tracking-tight" style="color:#1E3A5F;">Dashboard Admin</h2>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -191,6 +188,5 @@
                         </table>
                     </div>
                 </div>
-        </div>
     </main>
 @endsection

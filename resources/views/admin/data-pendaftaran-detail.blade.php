@@ -25,7 +25,7 @@
     @include('admin.partials.sidebar', ['activePage' => 'data-pendaftaran'])
     @include('admin.partials.topbar', ['showSearch' => false])
 
-    <main style="margin-left:260px; padding-top:64px;" class="p-8 pb-12 space-y-8 page-animate">
+    <main class="admin-main-shell space-y-8 page-animate">
         <div class="flex items-center justify-between">
             <div>
                 <a href="{{ route('admin.data-pendaftaran') }}" class="mb-4 inline-flex items-center gap-2 text-sm font-bold text-slate-500 transition-all hover:text-primary">

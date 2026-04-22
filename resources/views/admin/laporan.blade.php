@@ -7,7 +7,7 @@
         'academicYear' => 'Tahun Laporan ' . $selectedYear,
     ])
 
-    <main style="margin-left:260px; padding-top:64px; background:#F1F5F9;" class="p-8 pb-12">
+    <main class="admin-main-shell page-animate">
         <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
             <div>
                 <h1 class="text-4xl font-extrabold font-headline" style="color:#1E3A5F;">Laporan & Statistik</h1>

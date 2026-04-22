@@ -4,7 +4,7 @@
     @include('admin.partials.sidebar', ['activePage' => 'data-pendaftaran'])
     @include('admin.partials.topbar', ['showSearch' => true])
 
-    <main style="margin-left:260px; padding-top:64px;" class="p-8 pb-12 space-y-8 page-animate">
+    <main class="admin-main-shell space-y-8 page-animate">
                 <div class="flex items-end justify-between">
                     <div class="space-y-1">
                         <h2 class="text-4xl font-headline font-extrabold tracking-tight" style="color:#1E3A5F;">Data Pendaftaran</h2>

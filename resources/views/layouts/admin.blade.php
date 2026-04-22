@@ -46,6 +46,11 @@
             ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
             tbody tr:hover { background-color: rgba(241,245,249,0.5); }
             a, button { transition: all 0.2s ease; }
+            .admin-main-shell {
+                margin-left: 260px;
+                min-width: 0;
+                padding: 112px 2rem 3rem;
+            }
             .card-shadow { box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06); }
             .lift-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
             .lift-hover:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(15, 23, 42, 0.12); }
@@ -71,6 +76,10 @@
                     padding-left: 1rem !important;
                     padding-right: 1rem !important;
                     padding-bottom: 6rem !important;
+                }
+                .admin-main-shell {
+                    margin-left: 0 !important;
+                    padding: 6rem 1rem 6rem !important;
                 }
             }
         </style>
