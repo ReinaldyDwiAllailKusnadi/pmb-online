@@ -45,7 +45,7 @@ class DataPendaftaranController extends Controller
         $pendaftaran = $query->latest()->paginate(15)->withQueryString();
 
         $totalPendaftar = Pendaftaran::count();
-        $totalDiverifikasi = Pendaftaran::where('status', 'verified')->count();
+        $totalDiverifikasi = Pendaftaran::whereIn('status', ['verified', 'accepted'])->count();
         $totalMenunggu = Pendaftaran::whereIn('status', ['submitted', 'under_review'])->count();
         $programStudi = ProgramStudi::where('is_active', true)->orderBy('nama')->get();
         $gelombangPendaftaran = GelombangPendaftaran::where('is_active', true)

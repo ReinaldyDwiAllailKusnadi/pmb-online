@@ -56,6 +56,23 @@
                 from { opacity: 0; transform: translateY(18px); }
                 to { opacity: 1; transform: translateY(0); }
             }
+            @media (max-width: 1023px) {
+                body { overflow-x: hidden; }
+                .admin-sidebar { display: none !important; }
+                .admin-topbar {
+                    left: 0 !important;
+                    right: 0 !important;
+                    width: 100% !important;
+                    padding-left: 1rem !important;
+                    padding-right: 1rem !important;
+                }
+                main {
+                    margin-left: 0 !important;
+                    padding-left: 1rem !important;
+                    padding-right: 1rem !important;
+                    padding-bottom: 6rem !important;
+                }
+            }
         </style>
 
         @stack('styles')

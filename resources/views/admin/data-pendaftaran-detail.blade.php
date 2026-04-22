@@ -6,17 +6,7 @@
     $displayName = $pendaftaran->full_name ?: $pendaftaran->user?->name ?: 'Calon Mahasiswa';
     $displayEmail = $pendaftaran->email ?: $pendaftaran->user?->email;
     $nomorPendaftaran = $pendaftaran->nomor_pendaftaran ?? ('PMB-' . str_pad((string) $pendaftaran->id, 5, '0', STR_PAD_LEFT));
-    $statusLabels = [
-        'draft' => 'Draft',
-        'in_progress' => 'Sedang Dilengkapi',
-        'documents_uploaded' => 'Dokumen Terunggah',
-        'submitted' => 'Terkirim',
-        'under_review' => 'Menunggu Verifikasi',
-        'revision_required' => 'Perlu Revisi',
-        'verified' => 'Diverifikasi',
-        'rejected' => 'Ditolak',
-        'accepted' => 'Diterima',
-    ];
+    $statusLabels = \App\Support\StudentStatusPresenter::labels();
     $badgeClass = match($pendaftaran->status) {
         'verified', 'accepted' => 'bg-green-50 text-green-600 border border-green-100',
         'submitted', 'under_review' => 'bg-amber-50 text-amber-600 border border-amber-100',
@@ -222,7 +212,7 @@
 
                     @if (! $canStartReview && ! $canDecide)
                         <p class="mt-5 rounded-xl bg-slate-50 p-4 text-xs font-semibold leading-relaxed text-slate-500">
-                            Aksi review aktif hanya untuk status Terkirim atau Menunggu Verifikasi.
+                            Aksi review aktif hanya untuk status Menunggu Review Admin atau Sedang Diverifikasi.
                         </p>
                     @endif
                 </div>

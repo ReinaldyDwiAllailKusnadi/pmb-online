@@ -13,7 +13,22 @@
     ];
 @endphp
 
-<aside class="fixed left-0 top-0 z-50 flex h-screen w-[260px] flex-col bg-primary-dark py-8 shadow-2xl">
+<nav class="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-primary-dark px-2 py-2 shadow-2xl lg:hidden">
+    <div class="grid grid-cols-5 gap-1">
+        @foreach ($navItems as $item)
+            @php $isActive = ($activePage ?? '') === $item['key']; @endphp
+            <a
+                href="{{ Route::has($item['route']) ? route($item['route']) : '#' }}"
+                class="flex flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 text-[9px] font-bold uppercase tracking-tight transition-colors {{ $isActive ? 'bg-secondary text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}"
+            >
+                <i class="bi {{ $item['icon'] }} text-base"></i>
+                <span class="truncate">{{ $item['label'] }}</span>
+            </a>
+        @endforeach
+    </div>
+</nav>
+
+<aside class="admin-sidebar fixed left-0 top-0 z-50 hidden h-screen w-[260px] flex-col bg-primary-dark py-8 shadow-2xl lg:flex">
     <div class="mb-12 flex items-center gap-4 px-6">
         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-lg">
             <i class="bi bi-bank2 text-[21px] text-primary"></i>

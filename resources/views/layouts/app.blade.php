@@ -8,6 +8,29 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            @media (max-width: 1023px) {
+                .student-sidebar {
+                    display: none !important;
+                }
+
+                .student-sidebar ~ main,
+                .student-sidebar ~ div,
+                .ml-65 {
+                    margin-left: 0 !important;
+                }
+
+                main,
+                .student-sidebar ~ div {
+                    min-width: 0;
+                    width: 100%;
+                }
+
+                body {
+                    overflow-x: hidden;
+                }
+            }
+        </style>
     </head>
     <body class="antialiased bg-[#f7f9fc] text-on-surface">
         <div class="min-h-screen">

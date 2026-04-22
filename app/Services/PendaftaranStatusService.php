@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Pendaftaran;
 use App\Models\User;
+use App\Support\StudentStatusPresenter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -92,17 +93,7 @@ class PendaftaranStatusService
 
     public function label(?string $status): string
     {
-        return [
-            'draft' => 'Draft',
-            'in_progress' => 'Sedang Dilengkapi',
-            'documents_uploaded' => 'Dokumen Terunggah',
-            'submitted' => 'Terkirim',
-            'under_review' => 'Menunggu Verifikasi',
-            'revision_required' => 'Perlu Revisi',
-            'verified' => 'Diverifikasi',
-            'rejected' => 'Ditolak',
-            'accepted' => 'Diterima',
-        ][$status] ?? ucfirst((string) $status);
+        return StudentStatusPresenter::label($status);
     }
 
     public function allowedTransitionsFor(?string $status): array

@@ -39,7 +39,21 @@
     ];
 @endphp
 
-<aside class="fixed left-0 top-0 h-full w-65 bg-primary shadow-xl flex flex-col py-8 z-50 overflow-y-auto">
+<nav class="student-mobile-nav fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-primary px-2 py-2 shadow-2xl lg:hidden">
+    <div class="grid grid-cols-4 gap-1">
+        @foreach ($navItems as $link)
+            <a
+                href="{{ $link['href'] ?? '#' }}"
+                class="flex flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 text-[10px] font-bold transition-colors {{ $link['active'] ? 'bg-secondary text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}"
+            >
+                <i class="{{ $link['icon'] }} text-base {{ $link['active'] ? 'text-white' : 'text-slate-400' }}"></i>
+                <span class="truncate">{{ $link['label'] }}</span>
+            </a>
+        @endforeach
+    </div>
+</nav>
+
+<aside class="student-sidebar fixed left-0 top-0 z-50 hidden h-full w-65 flex-col overflow-y-auto bg-primary py-8 shadow-xl lg:flex">
     <div class="px-6 mb-12 flex items-center gap-3">
         <div class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-white shadow-lg shadow-secondary/20">
             <i class="bi bi-mortarboard-fill text-xl"></i>

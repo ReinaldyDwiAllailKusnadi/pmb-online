@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pendaftaran;
+use App\Support\StudentStatusPresenter;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -103,17 +104,7 @@ class DashboardController extends Controller
 
     private function statusLabels(): array
     {
-        return [
-            'draft' => 'Draft',
-            'in_progress' => 'Sedang Dilengkapi',
-            'documents_uploaded' => 'Dokumen Terunggah',
-            'submitted' => 'Menunggu Review Admin',
-            'under_review' => 'Menunggu Review Admin',
-            'revision_required' => 'Perlu Revisi',
-            'verified' => 'Terverifikasi',
-            'accepted' => 'Diterima',
-            'rejected' => 'Ditolak',
-        ];
+        return StudentStatusPresenter::labels();
     }
 
     private function statusBadgeClasses(): array

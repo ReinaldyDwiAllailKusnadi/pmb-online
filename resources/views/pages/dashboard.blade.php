@@ -1,4 +1,4 @@
-<x-app-layout title="Dashboard">
+﻿<x-app-layout title="Dashboard">
     <div class="flex">
         @include('partials.sidebar', ['activePage' => 'beranda'])
 
@@ -141,11 +141,12 @@
                         ['label' => 'Cek Tagihan', 'icon' => 'wallet'],
                         ['label' => 'Jadwal', 'icon' => 'calendar-days'],
                     ] as $action)
-                        <button type="button" class="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-transparent bg-white p-6 text-center shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-container/70">
+                        <button type="button" disabled aria-disabled="true" class="flex cursor-not-allowed flex-col items-center justify-center gap-3 rounded-xl border border-transparent bg-white p-6 text-center opacity-60 shadow-sm">
                             <div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary">
                                 <x-lucide-icon :name="$action['icon']" class="w-5 h-5" />
                             </div>
                             <span class="text-xs font-bold text-primary uppercase tracking-wider">{{ $action['label'] }}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Segera tersedia</span>
                         </button>
                     @endforeach
                 </section>
@@ -153,3 +154,4 @@
         </div>
     </div>
 </x-app-layout>
+

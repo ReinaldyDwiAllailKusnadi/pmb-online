@@ -47,18 +47,7 @@
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Status Pendaftaran</label>
                             <select name="status" class="h-11 w-full cursor-pointer rounded-xl border-none bg-slate-50 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-secondary/50">
-                                @foreach ([
-                                    '' => 'Semua Status',
-                                    'draft' => 'Draft',
-                                    'in_progress' => 'Sedang Dilengkapi',
-                                    'documents_uploaded' => 'Dokumen Terunggah',
-                                    'submitted' => 'Terkirim',
-                                    'under_review' => 'Menunggu Verifikasi',
-                                    'revision_required' => 'Perlu Revisi',
-                                    'verified' => 'Diverifikasi',
-                                    'rejected' => 'Ditolak',
-                                    'accepted' => 'Diterima',
-                                ] as $value => $label)
+                                @foreach (['' => 'Semua Status'] + collect(\App\Support\StudentStatusPresenter::labels())->except('terkirim')->all() as $value => $label)
                                     <option value="{{ $value }}" {{ request('status') === $value ? 'selected' : '' }}>
                                         {{ $label }}
                                     </option>
@@ -123,17 +112,7 @@
                                             'rejected' => 'bg-red-50 text-red-600 border border-red-100',
                                             default => 'bg-slate-50 text-slate-600 border border-slate-100',
                                         };
-                                        $statusLabel = [
-                                            'draft' => 'Draft',
-                                            'in_progress' => 'Sedang Dilengkapi',
-                                            'documents_uploaded' => 'Dokumen Terunggah',
-                                            'submitted' => 'Terkirim',
-                                            'under_review' => 'Menunggu Verifikasi',
-                                            'revision_required' => 'Perlu Revisi',
-                                            'verified' => 'Diverifikasi',
-                                            'rejected' => 'Ditolak',
-                                            'accepted' => 'Diterima',
-                                        ][$row->status] ?? ucfirst((string) $row->status);
+                                        $statusLabel = \App\Support\StudentStatusPresenter::label($row->status);
                                     @endphp
                                     <tr class="group hover:bg-slate-50/30 transition-colors">
                                         <td class="px-6 py-5">
@@ -200,7 +179,7 @@
                             <i class="bi bi-clock-fill text-2xl"></i>
                         </div>
                         <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Menunggu Verifikasi</p>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Menunggu Review</p>
                             <h3 class="text-3xl font-headline font-black -mt-0.5" style="color:#1E3A5F;">{{ number_format($totalMenunggu) }}</h3>
                         </div>
                     </div>

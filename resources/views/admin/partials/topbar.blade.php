@@ -7,7 +7,7 @@
     $topbarHeight = $topbarHeight ?? 80;
 @endphp
 
-<header class="fixed right-0 top-0 z-40 flex h-20 w-[calc(100%-260px)] items-center justify-between border-b border-slate-100 bg-white/80 px-10 backdrop-blur-md">
+<header class="admin-topbar fixed right-0 top-0 z-40 flex h-20 w-[calc(100%-260px)] items-center justify-between border-b border-slate-100 bg-white/80 px-10 backdrop-blur-md">
     <div class="flex max-w-xl flex-1 items-center">
         @if ($showSearch)
             <div class="group relative w-full">

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
     <style>
@@ -204,8 +204,8 @@
                                 <p class="text-xs text-slate-600 leading-relaxed">
                                     Sambil menunggu, pelajari materi Tes Potensi Akademik dan Bahasa Inggris untuk tahap seleksi mendatang.
                                 </p>
-                                <button type="button" class="flex cursor-pointer items-center gap-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-secondary transition-all hover:translate-x-0.5 hover:underline active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
-                                    Unduh Kisi-Kisi <i class="bi bi-arrow-right w-3 h-3"></i>
+                                <button type="button" disabled aria-disabled="true" class="flex cursor-not-allowed items-center gap-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-400 opacity-70">
+                                    Kisi-Kisi Segera Tersedia <i class="bi bi-lock-fill w-3 h-3"></i>
                                 </button>
                             </div>
 
@@ -216,8 +216,8 @@
                                 <div class="relative z-10">
                                     <h5 class="font-bold text-base mb-2">Punya Pertanyaan?</h5>
                                     <p class="text-xs text-slate-300 mb-6 leading-relaxed">Tim Customer Service kami siap membantu Anda selama jam operasional kerja.</p>
-                                    <button type="button" class="w-full cursor-pointer rounded-xl bg-secondary py-3 text-xs font-bold uppercase tracking-widest text-white shadow-lg shadow-secondary/20 transition-all hover:bg-secondary/90 hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60">
-                                        Chat via WhatsApp
+                                    <button type="button" disabled aria-disabled="true" class="w-full cursor-not-allowed rounded-xl bg-white/10 py-3 text-xs font-bold uppercase tracking-widest text-white/60 shadow-lg">
+                                        WhatsApp Segera Tersedia
                                     </button>
                                 </div>
                             </div>
@@ -241,3 +241,4 @@
         </main>
     </div>
 @endsection
+

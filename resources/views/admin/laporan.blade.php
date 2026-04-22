@@ -16,9 +16,9 @@
                 </p>
             </div>
             <div class="flex flex-wrap gap-3">
-                <button type="button" class="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm lift-hover active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="color:#1E3A5F;">
+                <button type="button" disabled aria-disabled="true" class="flex cursor-not-allowed items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 opacity-60 shadow-sm" style="color:#1E3A5F;">
                     <i class="bi bi-funnel-fill"></i>
-                    <span class="font-bold text-sm">Filter Data</span>
+                    <span class="font-bold text-sm">Filter Segera Tersedia</span>
                 </button>
                 <a href="{{ route('admin.laporan', ['year' => $selectedYear]) }}" class="flex cursor-pointer items-center gap-2 rounded-xl px-5 py-2.5 font-bold text-white shadow-lg lift-hover active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background-color:#1E3A5F;">
                     <i class="bi bi-arrow-clockwise"></i>
@@ -197,21 +197,18 @@
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('admin.laporan.export-pdf') }}" class="flex cursor-pointer items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold transition-all hover:-translate-y-0.5 hover:brightness-95 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background:#fff; color:#1E3A5F;">
+                    <span aria-disabled="true" class="flex cursor-not-allowed items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold opacity-60" style="background:#fff; color:#1E3A5F;">
                         <i class="bi bi-file-earmark-text-fill"></i>
-                        Export PDF
-                    </a>
-                    <a href="{{ route('admin.laporan.export-excel') }}" class="flex cursor-pointer items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold transition-all hover:-translate-y-0.5 hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background:#F0A500; color:#1A2744;">
+                        PDF Segera Tersedia
+                    </span>
+                    <span aria-disabled="true" class="flex cursor-not-allowed items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold opacity-60" style="background:#F0A500; color:#1A2744;">
                         <i class="bi bi-file-earmark-spreadsheet-fill"></i>
-                        Export Excel
-                    </a>
-                    <form method="POST" action="{{ route('admin.laporan.kirim-email') }}">
-                        @csrf
-                        <button type="submit" class="flex cursor-pointer items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold transition-all hover:-translate-y-0.5 hover:bg-white/10 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70" style="background:rgba(30,58,95,0.5); border:1px solid rgba(255,255,255,0.2);">
-                            <i class="bi bi-envelope-fill"></i>
-                            Kirim Email
-                        </button>
-                    </form>
+                        Excel Segera Tersedia
+                    </span>
+                    <button type="button" disabled aria-disabled="true" class="flex cursor-not-allowed items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold opacity-60" style="background:rgba(30,58,95,0.5); border:1px solid rgba(255,255,255,0.2);">
+                        <i class="bi bi-envelope-fill"></i>
+                        Email Segera Tersedia
+                    </button>
                 </div>
             </div>
         </div>

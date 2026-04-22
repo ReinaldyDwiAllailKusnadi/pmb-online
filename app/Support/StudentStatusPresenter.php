@@ -4,20 +4,25 @@ namespace App\Support;
 
 class StudentStatusPresenter
 {
-    public static function label(?string $status): string
+    public static function labels(): array
     {
         return [
             'draft' => 'Draft',
-            'in_progress' => 'Sedang Dilengkapi',
-            'documents_uploaded' => 'Dokumen Terunggah',
+            'in_progress' => 'Sedang Diisi',
+            'documents_uploaded' => 'Dokumen Lengkap',
             'submitted' => 'Menunggu Review Admin',
             'terkirim' => 'Menunggu Review Admin',
-            'under_review' => 'Menunggu Verifikasi',
+            'under_review' => 'Sedang Diverifikasi',
             'revision_required' => 'Perlu Revisi',
             'verified' => 'Terverifikasi',
-            'rejected' => 'Ditolak',
             'accepted' => 'Diterima',
-        ][$status] ?? ucfirst((string) $status);
+            'rejected' => 'Ditolak',
+        ];
+    }
+
+    public static function label(?string $status): string
+    {
+        return self::labels()[$status] ?? ucfirst((string) $status);
     }
 
     public static function badge(?string $status): string

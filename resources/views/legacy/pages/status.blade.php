@@ -149,8 +149,8 @@
                                 <p class="text-[10px] text-slate-600 leading-relaxed">
                                     Sambil menunggu, pelajari materi Tes Potensi Akademik dan Bahasa Inggris untuk tahap seleksi mendatang.
                                 </p>
-                                <button class="text-[10px] font-black text-secondary uppercase tracking-widest hover:underline flex items-center gap-1 hover:translate-x-0.5 transition-transform">
-                                    Unduh Kisi-Kisi <x-lucide-icon name="arrow-right" class="w-3 h-3" />
+                                <button type="button" disabled aria-disabled="true" class="flex cursor-not-allowed items-center gap-1 text-[10px] font-black uppercase tracking-widest text-slate-400 opacity-70">
+                                    Kisi-Kisi Segera Tersedia <x-lucide-icon name="lock" class="w-3 h-3" />
                                 </button>
                             </div>
 
@@ -161,8 +161,8 @@
                                 <div class="relative z-10">
                                     <h5 class="font-bold text-base mb-2">Punya Pertanyaan?</h5>
                                     <p class="text-[10px] text-slate-300 mb-6 leading-relaxed">Tim Customer Service kami siap membantu Anda selama jam operasional kerja.</p>
-                                    <button class="w-full py-3 bg-secondary hover:bg-secondary/90 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-secondary/20 transition-all active:scale-[0.98] hover:brightness-110">
-                                        Chat via WhatsApp
+                                    <button type="button" disabled aria-disabled="true" class="w-full cursor-not-allowed rounded-xl bg-white/10 py-3 text-[10px] font-bold uppercase tracking-widest text-white/60 shadow-lg">
+                                        WhatsApp Segera Tersedia
                                     </button>
                                 </div>
                             </div>

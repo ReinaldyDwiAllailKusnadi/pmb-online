@@ -14,7 +14,11 @@ use App\Http\Controllers\StudentDocumentController;
 use App\Http\Controllers\UnduhBuktiController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('login'));
+Route::get('/', fn () => view('public.home'))->name('home');
+Route::get('/program-studi', fn () => view('public.program-studi'))->name('program-studi.index');
+Route::get('/program-studi/{slug}', fn (string $slug) => view('public.program-studi-detail', compact('slug')))->name('program-studi.show');
+Route::get('/informasi', fn () => view('public.informasi'))->name('informasi.index');
+Route::get('/kontak', fn () => view('public.kontak'))->name('kontak');
 Route::get('/login', [RegistrationController::class, 'login'])->name('login');
 Route::post('/login', [RegistrationController::class, 'loginStore'])->name('login.store');
 Route::get('/register', [RegistrationController::class, 'register'])->name('register');
