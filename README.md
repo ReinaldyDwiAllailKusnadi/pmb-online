@@ -101,6 +101,12 @@ Kelola User
 
 Manajemen akun dan role pengguna.
 
+
+Admin Login 
+Email: admin@university.ac.id
+Password: password
+
+
 🔗 Link
 🌐 Portfolio: https://reinaldyportfolio.vercel.app/
 💻 GitHub: https://github.com/ReinaldyDwiAllailKusnadi
