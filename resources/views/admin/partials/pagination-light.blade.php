@@ -1,8 +1,14 @@
 @php
     $paginator = $paginator ?? null;
+    $isPaginator = $paginator && method_exists($paginator, 'hasPages');
+    $elements = $elements ?? (
+        $paginator instanceof \Illuminate\Pagination\LengthAwarePaginator
+            ? \Illuminate\Pagination\UrlWindow::make($paginator)
+            : []
+    );
 @endphp
 
-@if ($paginator && $paginator->hasPages())
+@if ($isPaginator && $paginator->hasPages())
     <div style="background-color: rgba(241,245,249,0.6);" class="px-8 py-5 flex items-center justify-between border-t border-slate-200/60">
         <p class="text-sm font-medium" style="color:#64748B;">
             Menampilkan <span style="color:#1E3A5F;" class="font-bold">{{ $paginator->firstItem() }}</span> - <span style="color:#1E3A5F;" class="font-bold">{{ $paginator->lastItem() }}</span>

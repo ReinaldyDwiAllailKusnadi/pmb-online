@@ -6,6 +6,9 @@
     }
     $userName = $userName ?? (auth()->user()->name ?? 'Mahasiswa');
     $userRole = strtoupper($userRole ?? 'Calon Mahasiswa');
+    $authenticatedRole = strtolower((string) (auth()->user()->role ?? ''));
+    $isAdminTopbarUser = in_array($authenticatedRole, ['admin', 'system admin', 'system administrator', 'super admin', 'superadmin'], true);
+    $showTopbarSearch = ($showSearch ?? true) && $isAdminTopbarUser;
     $photoPath = auth()->user()?->foto ?? null;
     $userAvatar = $userAvatar ?? ($photoPath ? asset('storage/' . $photoPath) : 'https://ui-avatars.com/api/?name=' . urlencode($userName));
     $notificationUser = auth()->user();
@@ -37,7 +40,8 @@
     <h1 class="text-xl font-bold text-primary font-plus-jakarta">{{ $pageTitle ?? 'Formulir Pendaftaran' }}</h1>
     </div>
 
-    <div class="flex items-center gap-6">
+    <div class="flex items-center {{ $showTopbarSearch ? 'gap-6' : 'gap-4' }}">
+        @if ($showTopbarSearch)
         <div class="hidden md:flex relative">
             <input
                 class="w-64 rounded-full border-none bg-surface-container py-2 pl-10 pr-4 text-sm outline-none transition-all focus:bg-white focus:ring-2 focus:ring-secondary"
@@ -46,6 +50,7 @@
             />
             <i class="bi bi-search pointer-events-none absolute left-3 top-2.5 text-sm text-slate-400"></i>
         </div>
+        @endif
         <div class="flex items-center gap-4">
             <div class="relative" data-dropdown>
                 <button
