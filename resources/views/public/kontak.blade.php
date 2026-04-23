@@ -42,12 +42,12 @@
     <div class="min-h-screen bg-background">
 <main class="pt-20">
             <section class="px-6 py-20">
-                <div class="mx-auto max-w-7xl">
+                <div class="mx-auto max-w-[1400px]">
                     <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-[#162a45] p-12 text-center shadow-[0_10px_30px_rgba(15,23,42,0.12)] md:p-20">
                         <div class="absolute right-0 top-0 -mr-20 -mt-20 h-80 w-80 rounded-full bg-white/5 blur-3xl"></div>
                         <div class="absolute bottom-0 left-0 -mb-16 -ml-16 h-64 w-64 rounded-full bg-secondary/5 blur-3xl"></div>
                         <div class="relative z-10 space-y-4">
-                            <h1 class="font-display text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+                    <h1 class="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
                                 Hubungi Kami
                             </h1>
                             <p class="mx-auto max-w-2xl text-lg font-medium leading-relaxed text-white/80 md:text-xl">
@@ -58,7 +58,7 @@
                 </div>
             </section>
 
-            <section class="mx-auto max-w-7xl px-6 py-20">
+            <section class="mx-auto max-w-[1400px] px-6 py-20">
                 <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
                     <div class="rounded-3xl bg-white p-8 shadow-[0_10px_30px_rgba(15,23,42,0.06)] md:p-10">
                         <h2 class="mb-8 font-display text-2xl font-bold text-primary">Kirim Pesan (Demo)</h2>
@@ -147,7 +147,7 @@
                 </div>
             </section>
 
-            <section class="mx-auto max-w-7xl px-6 py-20">
+            <section class="mx-auto max-w-[1400px] px-6 py-20">
                 <div class="relative h-[480px] overflow-hidden rounded-3xl shadow-[0_10px_30px_rgba(15,23,42,0.12)]">
                     <img
                         src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=80&w=1200"

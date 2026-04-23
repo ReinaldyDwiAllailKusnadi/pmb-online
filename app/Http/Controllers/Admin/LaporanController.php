@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pendaftaran;
+use App\Models\ProgramStudi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -81,8 +82,12 @@ class LaporanController extends Controller
         $programRows = Pendaftaran::query()
             ->leftJoin('program_studi', 'applicants.program_studi_id', '=', 'program_studi.id')
             ->whereYear('applicants.created_at', $selectedYear)
+            ->where(function ($query) {
+                $query->whereIn('program_studi.nama', ProgramStudi::officialNames())
+                    ->orWhereNull('program_studi.nama');
+            })
             ->selectRaw("
-                COALESCE(CONCAT(NULLIF(program_studi.jenjang, ''), ' ', program_studi.nama), program_studi.nama, 'Belum Memilih Prodi') as name,
+                COALESCE(program_studi.nama, 'Belum Memilih Prodi') as name,
                 COUNT(applicants.id) as total
             ")
             ->groupBy('name')

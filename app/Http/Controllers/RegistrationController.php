@@ -137,7 +137,7 @@ class RegistrationController extends Controller
         $isReadonly = $this->isReadonly($applicant);
         $regions = config('indonesia_regions', []);
         $provinces = array_keys($regions);
-        $programStudi = ProgramStudi::where('is_active', true)->orderBy('nama')->get();
+        $programStudi = ProgramStudi::officialActiveOptions();
         $gelombangPendaftaran = GelombangPendaftaran::where('is_active', true)
             ->orderBy('tanggal_mulai')
             ->orderBy('nama')
@@ -189,7 +189,13 @@ class RegistrationController extends Controller
             'gender' => ['nullable', 'string', 'max:50'],
             'marital' => ['nullable', 'string', 'max:50'],
             'religion' => ['nullable', 'string', 'max:50'],
-            'program_studi_id' => ['required', 'exists:program_studi,id'],
+            'program_studi_id' => [
+                'required',
+                Rule::exists('program_studi', 'id')
+                    ->where(fn ($query) => $query
+                        ->where('is_active', true)
+                        ->whereIn('nama', ProgramStudi::officialNames())),
+            ],
             'gelombang_pendaftaran_id' => ['required', 'exists:gelombang_pendaftaran,id'],
         ]);
 

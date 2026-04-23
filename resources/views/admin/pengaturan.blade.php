@@ -3,7 +3,7 @@
 @section('content')
     @include('admin.partials.sidebar', ['activePage' => 'pengaturan', 'adminProfile' => $admin])
     @include('admin.partials.topbar', [
-        'placeholder' => 'Cari pengaturan...',
+        'showSearch' => false,
         'adminName' => 'Direktorat TIK',
         'adminRole' => 'SUPERADMIN',
     ])

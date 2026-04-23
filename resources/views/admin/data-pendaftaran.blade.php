@@ -2,7 +2,12 @@
 
 @section('content')
     @include('admin.partials.sidebar', ['activePage' => 'data-pendaftaran'])
-    @include('admin.partials.topbar', ['showSearch' => true])
+    @include('admin.partials.topbar', [
+        'showSearch' => true,
+        'placeholder' => 'Cari nomor, nama, email, atau prodi...',
+        'searchName' => 'q',
+        'searchAction' => route('admin.data-pendaftaran'),
+    ])
 
     <main class="admin-main-shell space-y-8 page-animate">
                 <div class="flex items-end justify-between">
@@ -11,6 +16,14 @@
                         <p class="text-slate-500 font-medium">Kelola seluruh data pendaftaran mahasiswa baru.</p>
                     </div>
                     <div class="flex items-center gap-3">
+                        <a
+                            href="{{ route('admin.data-pendaftaran.create') }}"
+                            class="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
+                            style="background-color:#F0A500;"
+                        >
+                            <i class="bi bi-plus-circle-fill"></i>
+                            Tambah Pendaftaran
+                        </a>
                         <a
                             href="{{ route('admin.data-pendaftaran.export.excel', request()->query()) }}"
                             class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
@@ -44,6 +57,9 @@
                     @endif
 
                     <form method="GET" action="{{ route('admin.data-pendaftaran') }}" class="grid grid-cols-4 gap-6">
+                        @if (request()->filled('q'))
+                            <input type="hidden" name="q" value="{{ request('q') }}">
+                        @endif
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Status Pendaftaran</label>
                             <select name="status" class="h-11 w-full cursor-pointer rounded-xl border-none bg-slate-50 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-secondary/50">
@@ -60,7 +76,7 @@
                                 <option value="">Semua Prodi</option>
                                 @foreach ($programStudi as $program)
                                     <option value="{{ $program->id }}" {{ (string) request('prodi') === (string) $program->id ? 'selected' : '' }}>
-                                        {{ trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) }}
+                                        {{ $program->displayName() }}
                                     </option>
                                 @endforeach
                             </select>
@@ -132,7 +148,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-5 text-sm font-semibold text-slate-600">
-                                            {{ $program ? trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) : '-' }}
+                                            {{ $program?->displayName() ?? '-' }}
                                         </td>
                                         <td class="px-6 py-5 text-sm font-semibold text-slate-600">{{ $gelombang?->nama ?? '-' }}</td>
                                         <td class="px-6 py-5">
@@ -141,10 +157,24 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-5">
-                                            <a href="{{ route('admin.data-pendaftaran.show', $row) }}" class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-black uppercase tracking-wider text-white transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
-                                                <i class="bi bi-eye-fill"></i>
-                                                Lihat Detail
-                                            </a>
+                                            <div class="flex flex-wrap items-center gap-2">
+                                                <a href="{{ route('admin.data-pendaftaran.show', $row) }}" class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 text-xs font-black uppercase tracking-wider text-white transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
+                                                    <i class="bi bi-eye-fill"></i>
+                                                    Detail
+                                                </a>
+                                                <a href="{{ route('admin.data-pendaftaran.edit', $row) }}" class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black uppercase tracking-wider text-primary transition-all hover:-translate-y-0.5 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    Edit
+                                                </a>
+                                                <form method="POST" action="{{ route('admin.data-pendaftaran.destroy', $row) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pendaftaran ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-xs font-black uppercase tracking-wider text-white transition-all hover:-translate-y-0.5 hover:bg-red-700 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -13,6 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,12 +43,30 @@ class DataPendaftaranController extends Controller
             $query->where('gelombang_pendaftaran_id', $request->integer('gelombang'));
         }
 
+        if ($request->filled('q')) {
+            $search = trim($request->string('q')->toString());
+
+            $query->where(function ($query) use ($search) {
+                $query->where('nomor_pendaftaran', 'like', "%{$search}%")
+                    ->orWhere('full_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('programStudi', function ($query) use ($search) {
+                        $query->where('nama', 'like', "%{$search}%")
+                            ->orWhere('jenjang', 'like', "%{$search}%");
+                    });
+            });
+        }
+
         $pendaftaran = $query->latest()->paginate(15)->withQueryString();
 
         $totalPendaftar = Pendaftaran::count();
         $totalDiverifikasi = Pendaftaran::whereIn('status', ['verified', 'accepted'])->count();
         $totalMenunggu = Pendaftaran::whereIn('status', ['submitted', 'under_review'])->count();
-        $programStudi = ProgramStudi::where('is_active', true)->orderBy('nama')->get();
+        $programStudi = ProgramStudi::officialActiveOptions();
         $gelombangPendaftaran = GelombangPendaftaran::where('is_active', true)
             ->orderBy('tanggal_mulai')
             ->orderBy('nama')
@@ -80,6 +99,105 @@ class DataPendaftaranController extends Controller
         $documents = $this->documentsFor($pendaftaran);
 
         return view('admin.data-pendaftaran-detail', compact('pendaftaran', 'histories', 'documents'));
+    }
+
+    public function create()
+    {
+        return view('admin.data-pendaftaran-form', array_merge(
+            $this->formOptions(),
+            [
+                'mode' => 'create',
+                'pendaftaran' => new Pendaftaran([
+                    'status' => 'draft',
+                ]),
+            ]
+        ));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $this->validatedCrudData($request);
+        $status = $validated['status'];
+        $now = now();
+
+        $pendaftaran = Pendaftaran::create(array_merge($validated, [
+            'nomor_pendaftaran' => $validated['nomor_pendaftaran'] ?: $this->generateNomorPendaftaran(),
+            'submitted_at' => in_array($status, ['submitted', 'under_review', 'revision_required', 'verified', 'accepted', 'rejected'], true) ? $now : null,
+            'verified_at' => in_array($status, ['verified', 'accepted'], true) ? $now : null,
+            'verified_by' => in_array($status, ['verified', 'accepted'], true) ? $request->user()->id : null,
+        ]));
+
+        DB::table('status_histories')->insert([
+            'pendaftaran_id' => $pendaftaran->id,
+            'user_id' => $request->user()->id,
+            'status_from' => null,
+            'status_to' => $pendaftaran->status,
+            'catatan' => 'Data pendaftaran dibuat oleh admin.',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()
+            ->route('admin.data-pendaftaran.show', $pendaftaran)
+            ->with('success', 'Data pendaftaran berhasil ditambahkan.');
+    }
+
+    public function edit(Pendaftaran $pendaftaran)
+    {
+        $pendaftaran->loadMissing(['programStudi', 'gelombangPendaftaran']);
+
+        return view('admin.data-pendaftaran-form', array_merge(
+            $this->formOptions(),
+            [
+                'mode' => 'edit',
+                'pendaftaran' => $pendaftaran,
+            ]
+        ));
+    }
+
+    public function update(Request $request, Pendaftaran $pendaftaran)
+    {
+        $validated = $this->validatedCrudData($request, $pendaftaran);
+        $statusTo = $validated['status'];
+        $statusFrom = $pendaftaran->status;
+        $note = $validated['catatan_admin'] ?: 'Data pendaftaran diperbarui oleh admin.';
+
+        $updates = $validated;
+        unset($updates['status']);
+
+        if (in_array($statusTo, ['submitted', 'under_review', 'revision_required', 'verified', 'accepted', 'rejected'], true) && ! $pendaftaran->submitted_at) {
+            $updates['submitted_at'] = now();
+        }
+
+        if (in_array($statusTo, ['verified', 'accepted'], true) && ! $pendaftaran->verified_at) {
+            $updates['verified_at'] = now();
+            $updates['verified_by'] = $request->user()->id;
+        }
+
+        if ($statusFrom !== $statusTo) {
+            app(PendaftaranStatusService::class)->transition(
+                pendaftaran: $pendaftaran,
+                statusTo: $statusTo,
+                actor: $request->user(),
+                note: $note,
+                updates: $updates
+            );
+        } else {
+            $pendaftaran->update($updates);
+        }
+
+        return redirect()
+            ->route('admin.data-pendaftaran.show', $pendaftaran)
+            ->with('success', 'Data pendaftaran berhasil diperbarui.');
+    }
+
+    public function destroy(Pendaftaran $pendaftaran)
+    {
+        $pendaftaran->delete();
+
+        return redirect()
+            ->route('admin.data-pendaftaran')
+            ->with('success', 'Data pendaftaran berhasil dihapus.');
     }
 
     public function showDocument(Pendaftaran $pendaftaran, string $document): Response
@@ -231,7 +349,99 @@ class DataPendaftaranController extends Controller
             $query->where('gelombang_pendaftaran_id', $request->integer('gelombang'));
         }
 
+        if ($request->filled('q')) {
+            $search = trim($request->string('q')->toString());
+
+            $query->where(function ($query) use ($search) {
+                $query->where('nomor_pendaftaran', 'like', "%{$search}%")
+                    ->orWhere('full_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('programStudi', function ($query) use ($search) {
+                        $query->where('nama', 'like', "%{$search}%")
+                            ->orWhere('jenjang', 'like', "%{$search}%");
+                    });
+            });
+        }
+
         return $query->latest()->get();
+    }
+
+    private function formOptions(): array
+    {
+        return [
+            'programStudi' => ProgramStudi::officialActiveOptions(),
+            'gelombangPendaftaran' => GelombangPendaftaran::where('is_active', true)
+                ->orderBy('tanggal_mulai')
+                ->orderBy('nama')
+                ->get(),
+            'statusOptions' => collect(\App\Support\StudentStatusPresenter::labels())
+                ->except('terkirim')
+                ->all(),
+        ];
+    }
+
+    private function validatedCrudData(Request $request, ?Pendaftaran $pendaftaran = null): array
+    {
+        $id = $pendaftaran?->id;
+
+        return $request->validate([
+            'nomor_pendaftaran' => [
+                'nullable',
+                'string',
+                'max:100',
+                Rule::unique('applicants', 'nomor_pendaftaran')->ignore($id),
+            ],
+            'full_name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('applicants', 'email')->ignore($id),
+            ],
+            'program_studi_id' => [
+                'nullable',
+                Rule::exists('program_studi', 'id')
+                    ->where(fn ($query) => $query
+                        ->where('is_active', true)
+                        ->whereIn('nama', ProgramStudi::officialNames())),
+            ],
+            'gelombang_pendaftaran_id' => ['nullable', 'exists:gelombang_pendaftaran,id'],
+            'status' => ['required', Rule::in($this->statusOptions())],
+            'catatan_admin' => [
+                Rule::requiredIf(fn () => in_array($request->input('status'), ['rejected', 'revision_required'], true)),
+                'nullable',
+                'string',
+                'max:2000',
+            ],
+        ]);
+    }
+
+    private function statusOptions(): array
+    {
+        return [
+            'draft',
+            'in_progress',
+            'documents_uploaded',
+            'submitted',
+            'under_review',
+            'revision_required',
+            'verified',
+            'accepted',
+            'rejected',
+        ];
+    }
+
+    private function generateNomorPendaftaran(): string
+    {
+        do {
+            $number = 'PMB-' . now()->format('Ymd') . '-' . str_pad((string) random_int(1, 9999), 4, '0', STR_PAD_LEFT);
+        } while (Pendaftaran::where('nomor_pendaftaran', $number)->exists());
+
+        return $number;
     }
 
     private function documentsFor(Pendaftaran $pendaftaran): array

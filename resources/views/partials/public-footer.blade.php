@@ -1,5 +1,5 @@
-﻿<footer class="bg-primary px-6 py-16 text-white">
-    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-3">
+﻿<footer class="bg-primary px-6 py-20 text-white">
+    <div class="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 md:grid-cols-3">
         <div class="space-y-4">
             <h2 class="font-display text-2xl font-bold tracking-tighter">PMB Online</h2>
             <p class="max-w-sm text-sm leading-relaxed text-white/70">
@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-8 text-center text-xs text-white/50">
+    <div class="mx-auto mt-12 max-w-[1400px] border-t border-white/10 pt-8 text-center text-xs text-white/50">
         © {{ date('Y') }} University New Student Admission System. All Rights Reserved.
     </div>
 </footer>

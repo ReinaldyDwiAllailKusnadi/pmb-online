@@ -124,8 +124,8 @@
     @endphp
 
     <div class="flex min-h-screen flex-col bg-background">
-<main class="flex-1 py-20">
-            <div class="mx-auto flex max-w-7xl flex-col gap-12 px-6 lg:flex-row">
+        <main class="flex-1 py-20">
+            <div class="mx-auto flex max-w-[1400px] flex-col gap-12 px-6 lg:flex-row">
                 <div class="flex w-full flex-col gap-12 lg:w-2/3">
                     <header class="flex flex-col gap-6">
                         <div>
@@ -133,7 +133,7 @@
                                 {{ $program['faculty'] }}
                             </span>
                         </div>
-                        <h1 class="text-5xl font-bold leading-tight text-primary md:text-6xl">
+                        <h1 class="text-4xl font-bold leading-tight text-primary md:text-5xl">
                             {{ $program['title'] }}
                         </h1>
                         <p class="max-w-2xl text-lg leading-relaxed text-slate-600">
@@ -159,7 +159,7 @@
                             <p class="mb-8">
                                 {{ $program['about'] }}
                             </p>
-                            <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
                                 <div class="flex flex-col gap-3">
                                     <h3 class="flex items-center gap-2 text-xl font-bold text-primary">
                                         <span class="rounded-lg bg-yellow-50 p-1.5">
@@ -226,8 +226,8 @@
                     </section>
                 </div>
 
-                <aside class="flex w-full flex-col gap-8 lg:w-1/3">
-                    <div class="sticky top-28 flex flex-col gap-8">
+                <aside class="flex w-full flex-col gap-6 lg:w-1/3">
+                    <div class="sticky top-28 flex flex-col gap-6">
                         <section class="relative flex flex-col gap-6 overflow-hidden rounded-2xl border border-slate-100 bg-white p-8 shadow-xl">
                             <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-secondary opacity-5 blur-3xl"></div>
                             <h3 class="text-2xl font-bold text-primary">Informasi Pendaftaran</h3>

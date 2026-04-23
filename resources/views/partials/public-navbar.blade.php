@@ -1,5 +1,5 @@
-<nav class="fixed top-0 z-50 w-full border-b border-outline-variant/10 bg-white/85 shadow-[0_2px_12px_rgba(30,58,95,0.08)] backdrop-blur-xl" data-public-navbar>
-    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+﻿<nav class="fixed top-0 z-50 w-full border-b border-outline-variant/10 bg-white/85 shadow-[0_2px_12px_rgba(30,58,95,0.08)] backdrop-blur-xl" data-public-navbar>
+    <div class="mx-auto flex h-20 max-w-[1400px] items-center justify-between px-6">
         <a href="{{ route('home') }}" class="font-display text-2xl font-extrabold tracking-tighter text-primary">
             PMB Online
         </a>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="hidden border-t border-outline-variant/10 bg-white/95 px-6 py-4 shadow-lg md:hidden" data-public-navbar-menu>
-        <div class="mx-auto flex max-w-7xl flex-col gap-2">
+        <div class="mx-auto flex max-w-[1400px] flex-col gap-2">
             <a href="{{ route('home') }}" class="rounded-xl px-4 py-3 text-sm font-bold {{ request()->routeIs('home') ? 'bg-secondary/10 text-secondary' : 'text-primary hover:bg-surface-container-low' }}">
                 Beranda
             </a>

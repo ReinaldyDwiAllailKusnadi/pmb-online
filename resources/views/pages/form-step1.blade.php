@@ -310,7 +310,7 @@
                                             <option value="">Pilih Program Studi</option>
                                             @foreach ($programStudi as $program)
                                                 <option value="{{ $program->id }}" {{ (string) old('program_studi_id', $applicant->program_studi_id) === (string) $program->id ? 'selected' : '' }}>
-                                                    {{ trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) }}
+                                                    {{ $program->displayName() }}
                                                 </option>
                                             @endforeach
                                         </select>

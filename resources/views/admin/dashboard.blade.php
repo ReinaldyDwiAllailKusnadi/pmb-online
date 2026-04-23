@@ -2,12 +2,9 @@
 
 @section('content')
     @include('admin.partials.sidebar', ['activePage' => 'dashboard'])
-    @include('admin.partials.topbar')
+    @include('admin.partials.topbar', ['showSearch' => false])
 
     <main class="admin-main-shell space-y-8 page-animate">
-                <script>
-                    const chartData = @json($chartData);
-                </script>
                 <div class="flex items-end justify-between">
                     <div class="space-y-1">
                         <h2 class="text-4xl font-headline font-extrabold tracking-tight" style="color:#1E3A5F;">Dashboard Admin</h2>
@@ -75,21 +72,8 @@
                             </div>
                         </div>
 
-                        <div class="flex items-end justify-between h-56 px-2 border-b border-slate-100 relative">
-                            @foreach ($chartData as $index => $day)
-                                <div class="flex flex-col items-center gap-3 w-full group" style="--bar-index: {{ $index }};">
-                                    <div
-                                        class="w-10 rounded-t-lg transition-colors relative bar-animate"
-                                        style="--bar-height: {{ max($day['height'], $day['count'] > 0 ? 8 : 0) }}%; height: 0; animation-delay: calc(var(--bar-index) * 0.1s); background-color:#1E3A5F;"
-                                        title="{{ $day['count'] }} pendaftar pada {{ $day['date'] }}"
-                                    >
-                                        <div class="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100" style="background-color:#1a2744;">
-                                            {{ $day['count'] }}
-                                        </div>
-                                    </div>
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase">{{ $day['label'] }}</span>
-                                </div>
-                            @endforeach
+                        <div class="h-56 px-2">
+                            <canvas id="adminRegistrationChart" class="h-full w-full"></canvas>
                         </div>
                     </div>
 
@@ -190,3 +174,81 @@
                 </div>
     </main>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const canvas = document.getElementById('adminRegistrationChart');
+
+            if (!canvas || typeof Chart === 'undefined') {
+                return;
+            }
+
+            const labels = @json($chartLabels);
+            const values = @json($chartValues);
+            const dates = @json($chartDates);
+
+            new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Pendaftar',
+                        data: values,
+                        backgroundColor: '#1E3A5F',
+                        borderRadius: 10,
+                        maxBarThickness: 42,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title(items) {
+                                    const index = items[0]?.dataIndex ?? 0;
+                                    return dates[index] ?? labels[index] ?? '';
+                                },
+                                label(item) {
+                                    return `${item.raw ?? 0} pendaftar`;
+                                },
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                            },
+                            ticks: {
+                                color: '#94A3B8',
+                                font: {
+                                    size: 10,
+                                    weight: '700',
+                                },
+                            },
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                color: '#94A3B8',
+                                font: {
+                                    size: 10,
+                                    weight: '700',
+                                },
+                            },
+                            grid: {
+                                color: '#F1F5F9',
+                            },
+                        },
+                    },
+                },
+            });
+        });
+    </script>
+@endpush

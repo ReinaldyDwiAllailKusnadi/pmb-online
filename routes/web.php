@@ -32,6 +32,8 @@ Route::middleware(['auth', 'active', 'role:admin'])
     ->prefix('admin')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::patch('/notifikasi/{notification}/read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.read');
+        Route::patch('/notifikasi/read-all', [NotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
         Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
         Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.export-pdf');
         Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('admin.laporan.export-excel');
@@ -39,16 +41,24 @@ Route::middleware(['auth', 'active', 'role:admin'])
         Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('admin.pengaturan');
         Route::put('/pengaturan/profil', [PengaturanController::class, 'updateProfil'])->name('admin.pengaturan.profil.update');
         Route::get('/data-pendaftaran', [DataPendaftaranController::class, 'index'])->name('admin.data-pendaftaran');
+        Route::get('/data-pendaftaran/create', [DataPendaftaranController::class, 'create'])->name('admin.data-pendaftaran.create');
+        Route::post('/data-pendaftaran', [DataPendaftaranController::class, 'store'])->name('admin.data-pendaftaran.store');
         Route::get('/data-pendaftaran/export/excel', [DataPendaftaranController::class, 'exportExcel'])->name('admin.data-pendaftaran.export.excel');
         Route::get('/data-pendaftaran/export/pdf', [DataPendaftaranController::class, 'exportPdf'])->name('admin.data-pendaftaran.export.pdf');
         Route::get('/data-pendaftaran/{pendaftaran}/dokumen/{document}', [DataPendaftaranController::class, 'showDocument'])->name('admin.data-pendaftaran.dokumen.show');
+        Route::get('/data-pendaftaran/{pendaftaran}/edit', [DataPendaftaranController::class, 'edit'])->name('admin.data-pendaftaran.edit');
+        Route::put('/data-pendaftaran/{pendaftaran}', [DataPendaftaranController::class, 'update'])->name('admin.data-pendaftaran.update');
+        Route::delete('/data-pendaftaran/{pendaftaran}', [DataPendaftaranController::class, 'destroy'])->name('admin.data-pendaftaran.destroy');
         Route::get('/data-pendaftaran/{pendaftaran}', [DataPendaftaranController::class, 'show'])->name('admin.data-pendaftaran.show');
         Route::patch('/data-pendaftaran/{pendaftaran}/mark-under-review', [DataPendaftaranController::class, 'markUnderReview'])->name('admin.data-pendaftaran.mark-under-review');
         Route::patch('/data-pendaftaran/{pendaftaran}/verify', [DataPendaftaranController::class, 'verify'])->name('admin.data-pendaftaran.verify');
         Route::patch('/data-pendaftaran/{pendaftaran}/reject', [DataPendaftaranController::class, 'reject'])->name('admin.data-pendaftaran.reject');
         Route::patch('/data-pendaftaran/{pendaftaran}/request-revision', [DataPendaftaranController::class, 'requestRevision'])->name('admin.data-pendaftaran.request-revision');
         Route::get('/kelola-user', [KelolaUserController::class, 'index'])->name('admin.kelola-user');
+        Route::get('/kelola-user/create', [KelolaUserController::class, 'create'])->name('admin.kelola-user.create');
         Route::post('/kelola-user', [KelolaUserController::class, 'store'])->name('admin.kelola-user.store');
+        Route::get('/kelola-user/{user}/edit', [KelolaUserController::class, 'edit'])->name('admin.kelola-user.edit');
+        Route::put('/kelola-user/{user}', [KelolaUserController::class, 'update'])->name('admin.kelola-user.update');
         Route::patch('/kelola-user/{user}/toggle', [KelolaUserController::class, 'toggleStatus'])->name('admin.kelola-user.toggle');
         Route::delete('/kelola-user/{user}', [KelolaUserController::class, 'destroy'])->name('admin.kelola-user.destroy');
     });
@@ -85,3 +95,4 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/unduh-bukti', [LegacyRouteController::class, 'bukti']);
     Route::get('/unduh-bukti/pdf', [LegacyRouteController::class, 'buktiPdf']);
 });
+

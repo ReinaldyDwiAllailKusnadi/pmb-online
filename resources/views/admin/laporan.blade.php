@@ -3,7 +3,7 @@
 @section('content')
     @include('admin.partials.sidebar', ['activePage' => 'laporan'])
     @include('admin.partials.topbar', [
-        'placeholder' => 'Cari laporan atau data...',
+        'showSearch' => false,
         'academicYear' => 'Tahun Laporan ' . $selectedYear,
     ])
 

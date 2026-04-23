@@ -58,10 +58,10 @@
     @endphp
 
     <div class="flex min-h-screen flex-col bg-background antialiased">
-<main class="mx-auto w-full max-w-7xl space-y-20 px-6 py-20">
+        <main class="mx-auto w-full max-w-[1400px] space-y-20 px-6 py-20">
             <section class="relative flex overflow-hidden rounded-2xl bg-primary px-8 py-20 text-white shadow-2xl">
                 <div class="z-10 max-w-2xl space-y-6">
-                    <h1 class="font-display text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
+                    <h1 class="font-display text-4xl font-bold leading-tight tracking-tight md:text-5xl">
                         Informasi Pendaftaran Mahasiswa Baru
                     </h1>
                     <p class="max-w-xl text-lg text-blue-100 md:text-xl">
@@ -79,13 +79,13 @@
                 </div>
             </section>
 
-            <section class="space-y-12">
+            <section class="space-y-20">
                 <div class="space-y-3 text-center">
                     <h2 class="font-display text-3xl font-bold text-primary md:text-4xl">Jalur Pendaftaran</h2>
                     <p class="mx-auto max-w-2xl text-slate-500">Pilih jalur pendaftaran yang sesuai dengan kualifikasi Anda untuk memulai perjalanan akademik Anda.</p>
                 </div>
 
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     @foreach ($registrationPaths as $path)
                         <article class="group flex h-full flex-col rounded-2xl border border-slate-100 bg-white p-8 shadow-[0_2px_12px_rgba(30,58,95,0.08)] transition-all duration-300 hover:-translate-y-1">
                             <div class="mb-6 flex items-center space-x-4">
@@ -105,7 +105,7 @@
                 </div>
             </section>
 
-            <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <section class="rounded-2xl border border-slate-100 bg-white p-8 shadow-[0_2px_12px_rgba(30,58,95,0.08)] lg:col-span-2">
                     <div class="mb-10 flex items-center space-x-4">
                         <div class="rounded-lg bg-secondary/10 p-2 text-secondary">
@@ -163,14 +163,14 @@
 
             <section class="relative overflow-hidden rounded-3xl bg-primary p-8 text-white shadow-2xl md:p-16">
                 <div class="relative z-10">
-                    <div class="mx-auto mb-16 max-w-3xl space-y-6 text-center">
-                        <h2 class="font-display text-4xl font-bold">Informasi Biaya Kuliah</h2>
+                <div class="mx-auto mb-12 max-w-3xl space-y-5 text-center">
+                    <h2 class="font-display text-3xl font-bold md:text-4xl">Informasi Biaya Kuliah</h2>
                         <p class="text-lg text-blue-100">
                             Transparansi biaya pendidikan adalah komitmen kami. Estimasi biaya per semester untuk tahun ajaran 2024/2025 di setiap fakultas unggulan.
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
                         @foreach ($tuitionCards as $tuition)
                             <article class="flex flex-col justify-center rounded-2xl border border-white/20 bg-white/10 p-8 text-center shadow-lg backdrop-blur-sm transition-transform duration-300 hover:scale-[1.02]">
                                 <h4 class="mb-4 font-display text-lg font-semibold text-blue-200">{{ $tuition['title'] }}</h4>

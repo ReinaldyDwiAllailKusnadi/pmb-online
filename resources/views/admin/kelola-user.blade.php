@@ -2,7 +2,12 @@
 
 @section('content')
     @include('admin.partials.sidebar', ['activePage' => 'kelola-user'])
-    @include('admin.partials.topbar', ['placeholder' => 'Cari data user, email, atau role...'])
+    @include('admin.partials.topbar', [
+        'showSearch' => true,
+        'placeholder' => 'Cari nama, email, atau role...',
+        'searchName' => 'q',
+        'searchAction' => route('admin.kelola-user'),
+    ])
 
     <main class="admin-main-shell page-animate">
                 <div class="flex justify-between items-end mb-8">
@@ -10,11 +15,23 @@
                         <h2 class="text-4xl font-extrabold tracking-tight font-headline" style="color:#1E3A5F;">Kelola User</h2>
                         <p class="font-medium" style="color:#64748B;">Manajemen hak akses dan profil pengguna sistem.</p>
                     </div>
-                    <button type="button" style="background-color:#F0A500;" class="flex cursor-pointer items-center gap-2 rounded-xl px-6 py-3 font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
+                    <a href="{{ route('admin.kelola-user.create') }}" style="background-color:#F0A500;" class="flex cursor-pointer items-center gap-2 rounded-xl px-6 py-3 font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
                         <i class="bi bi-person-plus-fill w-5 h-5"></i>
                         <span>Tambah User Baru</span>
-                    </button>
+                    </a>
                 </div>
+
+                @if (session('success'))
+                    <div class="mb-6 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-6 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
 
                 @php
                     $activeTab = request('tab', 'semua');
@@ -23,21 +40,21 @@
                 <div style="background-color:#FFFFFF;" class="rounded-2xl p-2 mb-6 flex flex-col md:flex-row items-center justify-between shadow-sm border border-slate-200/60">
                     <div class="flex gap-1 w-full md:w-auto">
                         <a
-                            href="{{ route('admin.kelola-user', ['tab' => 'semua']) }}"
+                            href="{{ route('admin.kelola-user', array_merge(request()->except(['tab', 'page']), ['tab' => 'semua'])) }}"
                             class="whitespace-nowrap rounded-xl px-6 py-2.5 text-sm font-semibold transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="{{ $activeTab === 'semua' ? 'background-color:#1a2744; color:white;' : 'color:#64748B;' }}"
                         >
                             Semua User
                         </a>
                         <a
-                            href="{{ route('admin.kelola-user', ['tab' => 'admin']) }}"
+                            href="{{ route('admin.kelola-user', array_merge(request()->except(['tab', 'page']), ['tab' => 'admin'])) }}"
                             class="whitespace-nowrap rounded-xl px-6 py-2.5 text-sm font-semibold transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="{{ $activeTab === 'admin' ? 'background-color:#1a2744; color:white;' : 'color:#64748B;' }}"
                         >
                             Admin
                         </a>
                         <a
-                            href="{{ route('admin.kelola-user', ['tab' => 'calon-mahasiswa']) }}"
+                            href="{{ route('admin.kelola-user', array_merge(request()->except(['tab', 'page']), ['tab' => 'calon-mahasiswa'])) }}"
                             class="whitespace-nowrap rounded-xl px-6 py-2.5 text-sm font-semibold transition-all hover:bg-slate-100 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70"
                             style="{{ $activeTab === 'calon-mahasiswa' ? 'background-color:#1a2744; color:white;' : 'color:#64748B;' }}"
                         >
@@ -78,7 +95,6 @@
                                     $roleClass = match($roleName) {
                                         'system admin', 'admin' => 'bg-blue-100 text-blue-800',
                                         'calon mahasiswa' => 'bg-amber-100 text-amber-800',
-                                        'sekretariat' => 'bg-gray-100 text-gray-800',
                                         default => 'bg-slate-100 text-slate-800',
                                     };
                                     $avatar = $user->foto
@@ -133,9 +149,20 @@
                                         <p class="text-[10px]" style="color:#64748B;">IP: {{ $user->last_login_ip ?? '-' }}</p>
                                     </td>
                                     <td class="py-4 px-6 text-right">
-                                        <button type="button" class="cursor-pointer rounded-lg p-2 text-slate-500 transition-all hover:bg-slate-100 hover:text-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
-                                            <i class="bi bi-three-dots-vertical w-5 h-5"></i>
-                                        </button>
+                                        <div class="flex justify-end gap-2">
+                                            <a href="{{ route('admin.kelola-user.edit', $user) }}" class="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition-all hover:bg-slate-50 hover:text-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/70">
+                                                <i class="bi bi-pencil-square"></i>
+                                                Edit
+                                            </a>
+                                            <form method="POST" action="{{ route('admin.kelola-user.destroy', $user) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-red-100 px-3 py-2 text-xs font-bold text-red-600 transition-all hover:bg-red-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -182,13 +209,6 @@
                                         <p class="text-lg font-extrabold" style="color:#1E3A5F;">{{ $roleStats['pendaftar'] }}</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-3 h-3 rounded-full bg-gray-400"></div>
-                                    <div>
-                                        <p class="text-xs font-bold" style="color:#64748B;">Sekretariat</p>
-                                        <p class="text-lg font-extrabold" style="color:#1E3A5F;">{{ $roleStats['sekretariat'] }}</p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -205,3 +225,8 @@
                 </div>
     </main>
 @endsection
+
+
+
+
+

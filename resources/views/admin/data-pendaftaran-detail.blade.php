@@ -38,6 +38,20 @@
             <div class="rounded-2xl bg-white px-6 py-4 text-right shadow-sm border border-slate-200/50">
                 <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Nomor Pendaftaran</p>
                 <p class="mt-1 text-lg font-black text-primary">{{ $nomorPendaftaran }}</p>
+                <div class="mt-4 flex justify-end gap-2">
+                    <a href="{{ route('admin.data-pendaftaran.edit', $pendaftaran) }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-black uppercase tracking-wider text-primary transition-all hover:-translate-y-0.5 hover:bg-slate-50">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit
+                    </a>
+                    <form method="POST" action="{{ route('admin.data-pendaftaran.destroy', $pendaftaran) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pendaftaran ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-xs font-black uppercase tracking-wider text-white transition-all hover:-translate-y-0.5 hover:bg-red-700">
+                            <i class="bi bi-trash-fill"></i>
+                            Hapus
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -105,7 +119,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="rounded-2xl bg-slate-50 p-5">
                             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Program Studi</p>
-                            <p class="mt-2 text-sm font-bold text-slate-700">{{ $program ? trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) : '-' }}</p>
+                            <p class="mt-2 text-sm font-bold text-slate-700">{{ $program?->displayName() ?? '-' }}</p>
                             <p class="mt-1 text-xs font-semibold text-slate-500">{{ $program?->fakultas ?: '-' }}</p>
                         </div>
                         <div class="rounded-2xl bg-slate-50 p-5">

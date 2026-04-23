@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Pendaftaran;
+use App\Models\User;
 use App\Services\PendaftaranStatusService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -57,6 +59,8 @@ class KonfirmasiPendaftaranController extends Controller
                 'nomor_pendaftaran' => $applicant->nomor_pendaftaran ?: $this->generateNomorPendaftaran($applicant),
             ]
         );
+
+        $this->notifyAdminsOfNewSubmission($applicant);
 
         return redirect()
             ->route('status.pendaftaran')
@@ -233,5 +237,25 @@ class KonfirmasiPendaftaranController extends Controller
         }
 
         return null;
+    }
+
+    private function notifyAdminsOfNewSubmission(Pendaftaran $applicant): void
+    {
+        $name = $applicant->full_name ?: $applicant->user?->name ?: 'Calon Mahasiswa';
+
+        User::query()
+            ->where('is_active', true)
+            ->whereIn('role', ['SYSTEM ADMIN', 'system admin', 'ADMIN', 'admin', 'SYSTEM ADMINISTRATOR', 'SUPER ADMIN', 'SUPERADMIN'])
+            ->get()
+            ->each(function (User $admin) use ($name) {
+                Notification::create([
+                    'user_id' => $admin->id,
+                    'title' => 'Pendaftaran Baru',
+                    'message' => 'Ada pendaftaran baru dari ' . $name,
+                    'type' => 'info',
+                    'is_read' => false,
+                    'created_at' => now(),
+                ]);
+            });
     }
 }

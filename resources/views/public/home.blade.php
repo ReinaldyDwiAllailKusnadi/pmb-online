@@ -23,19 +23,19 @@
 
     <main class="min-h-screen bg-background pt-20">
         <section class="relative overflow-hidden bg-surface-container-low py-20">
-            <div class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
+            <div class="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2">
                 <div class="relative z-10">
                     <span class="mb-6 inline-block rounded-full bg-secondary/10 px-4 py-1 text-sm font-bold tracking-wider text-secondary">PENERIMAAN MAHASISWA BARU 2024/2025</span>
-                    <h1 class="mb-6 max-w-xl font-display text-5xl font-extrabold leading-tight tracking-tight text-primary lg:text-6xl">Mulai Masa Depan Gemilang di Universitas Harapan Bangsa</h1>
+                    <h1 class="mb-6 max-w-2xl font-display text-5xl font-extrabold leading-tight tracking-tight text-primary lg:text-6xl">Mulai Masa Depan Gemilang di Universitas Harapan Bangsa</h1>
                     <p class="mb-10 max-w-xl text-lg leading-relaxed text-on-surface-variant">Temukan program studi impian Anda dan bergabunglah dengan komunitas akademik unggul yang mencetak pemimpin masa depan kelas dunia.</p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('register') }}" class="rounded-xl bg-primary px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-[#1E3A5F] active:scale-95">Daftar Sekarang</a>
-                        <span aria-disabled="true" class="flex cursor-not-allowed items-center gap-2 rounded-xl bg-gray-100 px-6 py-3 font-bold text-gray-400 opacity-70"><i class="bi bi-play-circle-fill text-xl"></i>Tur Kampus Segera Tersedia</span>
+                        <a href="{{ route('register') }}" class="rounded-xl bg-primary px-8 py-4 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-[#1E3A5F] active:scale-95">Daftar Sekarang</a>
+                        <span aria-disabled="true" class="flex cursor-not-allowed items-center gap-2 rounded-xl bg-gray-100 px-8 py-4 font-bold text-gray-400 opacity-70"><i class="bi bi-play-circle-fill text-xl"></i>Tur Kampus Segera Tersedia</span>
                     </div>
                 </div>
-                <div class="relative rotate-0 transition-transform duration-500 lg:rotate-2">
-                    <div class="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-secondary/10 blur-3xl"></div>
-                    <div class="absolute -bottom-12 -left-12 h-64 w-64 rounded-full bg-primary/5 blur-3xl"></div>
+                <div class="relative mx-auto max-w-2xl rotate-0 transition-transform duration-500 lg:ml-auto lg:rotate-2">
+                    <div class="absolute -right-12 -top-12 h-72 w-72 rounded-full bg-secondary/10 blur-3xl"></div>
+                    <div class="absolute -bottom-12 -left-12 h-72 w-72 rounded-full bg-primary/5 blur-3xl"></div>
                     <div class="relative overflow-hidden rounded-2xl shadow-2xl">
                         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2CJHPa2x6fIMlfT_ACbQYDxGE_jUl2vvTBTkrdRpeEhEMdZ4elVb1RSUDL-6zLuL7CuMDiV9Uory9hz9u4PAYaPaUJNmPNotdk_zCwQH6Y7pDiVm8guzDKkqmCFWGf-_i4NmakbVYu40Md3bam_igBJiFfVLIzwlCIpdu64i9NsUsOJp8f5GR6u7eqT7whFJ774Zyz8og4I8VzSHA_wUVlDAlfcd4rt_a5DmKmohdy5V2rlnkVXlvqKwg8XJvIiycTpBalBSD81A" alt="University Campus" class="aspect-[4/3] h-full w-full object-cover" referrerpolicy="no-referrer">
                     </div>
@@ -44,7 +44,7 @@
         </section>
 
         <section class="bg-surface-container-lowest py-20">
-            <div class="mx-auto max-w-7xl px-6">
+            <div class="mx-auto max-w-[1400px] px-6">
                 <div class="mb-12 text-center"><h2 class="mb-4 font-display text-3xl font-extrabold tracking-tight text-primary">Mengapa Memilih Kami?</h2><div class="mx-auto h-1 w-24 rounded-full bg-secondary"></div></div>
                 <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
                     @foreach ($features as $feature)
@@ -59,7 +59,7 @@
         </section>
 
         <section class="bg-surface-container-high py-20">
-            <div class="mx-auto max-w-7xl px-6">
+            <div class="mx-auto max-w-[1400px] px-6">
                 <div class="mb-12 text-center"><h2 class="mb-4 font-display text-3xl font-extrabold text-primary">Langkah Pendaftaran</h2><p class="text-on-surface-variant">Proses pendaftaran yang mudah dan transparan sepenuhnya secara online.</p></div>
                 <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
                     @foreach ($steps as $step)
@@ -75,7 +75,7 @@
         </section>
 
         <section class="bg-surface-container-lowest py-20">
-            <div class="mx-auto max-w-7xl px-6">
+            <div class="mx-auto max-w-[1400px] px-6">
                 <div class="mb-12 flex items-end justify-between gap-6"><div><h2 class="mb-2 font-display text-3xl font-extrabold text-primary">Program Studi Unggulan</h2><p class="text-on-surface-variant">Pilih disiplin ilmu yang sesuai dengan passion dan karir masa depan Anda.</p></div><a class="hidden font-bold text-secondary hover:underline md:block" href="{{ route('program-studi.index') }}">Lihat Semua Program</a></div>
                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($programs as $program)
@@ -89,7 +89,7 @@
         </section>
 
         <section class="bg-surface-container-low py-20">
-            <div class="mx-auto max-w-7xl px-6">
+            <div class="mx-auto max-w-[1400px] px-6">
                 <h2 class="mb-12 text-center font-display text-3xl font-extrabold text-primary">Berita & Pengumuman</h2>
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
                     <article class="flex flex-col overflow-hidden rounded-3xl border border-outline-variant/5 bg-white shadow-md md:flex-row lg:col-span-7">

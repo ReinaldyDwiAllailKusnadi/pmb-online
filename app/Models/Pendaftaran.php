@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pendaftaran extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'applicants';
 
     protected $guarded = [];
@@ -30,9 +33,7 @@ class Pendaftaran extends Model
     {
         $prodi = new \stdClass();
         $programStudi = $this->programStudiModel();
-        $prodi->nama_prodi = $programStudi
-            ? trim(($programStudi->jenjang ? $programStudi->jenjang . ' ' : '') . $programStudi->nama)
-            : null;
+        $prodi->nama_prodi = $programStudi?->displayName();
 
         return $prodi;
     }
@@ -60,7 +61,7 @@ class Pendaftaran extends Model
             return null;
         }
 
-        return trim(($programStudi->jenjang ? $programStudi->jenjang . ' ' : '') . $programStudi->nama);
+        return $programStudi->displayName();
     }
 
     public function getAsalSekolahAttribute(): ?string

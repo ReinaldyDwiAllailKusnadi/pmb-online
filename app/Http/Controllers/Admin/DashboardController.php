@@ -48,20 +48,25 @@ class DashboardController extends Controller
             ->latest()
             ->take(5)
             ->get();
-        $chartData = $this->buildChartData();
+        $registrationChart = $this->buildRegistrationChart();
+        $chartLabels = $registrationChart['labels'];
+        $chartValues = $registrationChart['values'];
+        $chartDates = $registrationChart['dates'];
         $statusLabels = $this->statusLabels();
         $statusBadgeClasses = $this->statusBadgeClasses();
 
         return view('admin.dashboard', compact(
             'stats',
             'pendaftaranTerbaru',
-            'chartData',
+            'chartLabels',
+            'chartValues',
+            'chartDates',
             'statusLabels',
             'statusBadgeClasses'
         ));
     }
 
-    private function buildChartData(): array
+    private function buildRegistrationChart(): array
     {
         $startDate = Carbon::today()->subDays(6);
         $endDate = Carbon::today();
@@ -82,13 +87,11 @@ class DashboardController extends Controller
             ];
         });
 
-        $max = max($days->pluck('count')->max(), 1);
-
-        return $days->map(function (array $day) use ($max) {
-            $day['height'] = (int) round(($day['count'] / $max) * 100);
-
-            return $day;
-        })->all();
+        return [
+            'labels' => $days->pluck('label')->all(),
+            'values' => $days->pluck('count')->all(),
+            'dates' => $days->pluck('date')->all(),
+        ];
     }
 
     private function monthlyTrendLabel(int $thisMonth, int $previousMonth): string

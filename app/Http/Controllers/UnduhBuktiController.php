@@ -78,7 +78,7 @@ class UnduhBuktiController extends Controller
             : $applicant->programStudi()->first();
 
         return [
-            'nama' => $program ? trim(($program->jenjang ? $program->jenjang . ' ' : '') . $program->nama) : null,
+            'nama' => $program?->displayName(),
             'fakultas' => $program?->fakultas,
         ];
     }

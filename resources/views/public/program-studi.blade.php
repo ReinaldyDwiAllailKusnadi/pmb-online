@@ -13,18 +13,18 @@
     @endphp
 
     <main class="min-h-screen bg-background pt-20">
-        <section class="mx-auto max-w-7xl px-6 py-20">
+        <section class="mx-auto max-w-[1400px] px-6 py-20">
             <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary to-[#1E3A5F] p-12 text-center shadow-2xl md:p-24">
                 <div class="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-secondary/20 blur-[80px]"></div>
                 <div class="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-blue-400/10 blur-[80px]"></div>
                 <div class="relative z-10">
-                    <h1 class="mb-8 text-5xl font-extrabold tracking-tight text-white md:text-7xl">Program Studi</h1>
+                <h1 class="mb-6 text-4xl font-extrabold tracking-tight text-white md:text-5xl">Program Studi</h1>
                     <p class="mx-auto max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">Temukan program studi yang sesuai dengan passion dan wujudkan masa depan cemerlang Anda bersama institusi pendidikan terkemuka.</p>
                 </div>
             </div>
         </section>
 
-        <section class="mx-auto max-w-7xl px-6 pb-20">
+        <section class="mx-auto max-w-[1400px] px-6 pb-16">
             <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($studyPrograms as $program)
                     <article id="program-{{ $program['id'] }}" class="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_2px_12px_rgba(30,58,95,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_18px_38px_rgba(30,58,95,0.14)]">
