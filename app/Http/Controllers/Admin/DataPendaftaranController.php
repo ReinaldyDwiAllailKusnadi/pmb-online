@@ -55,8 +55,7 @@ class DataPendaftaranController extends Controller
                             ->orWhere('email', 'like', "%{$search}%");
                     })
                     ->orWhereHas('programStudi', function ($query) use ($search) {
-                        $query->where('nama', 'like', "%{$search}%")
-                            ->orWhere('jenjang', 'like', "%{$search}%");
+                        $query->where('nama', 'like', "%{$search}%");
                     });
             });
         }
@@ -361,8 +360,7 @@ class DataPendaftaranController extends Controller
                             ->orWhere('email', 'like', "%{$search}%");
                     })
                     ->orWhereHas('programStudi', function ($query) use ($search) {
-                        $query->where('nama', 'like', "%{$search}%")
-                            ->orWhere('jenjang', 'like', "%{$search}%");
+                        $query->where('nama', 'like', "%{$search}%");
                     });
             });
         }
@@ -510,5 +508,4 @@ class DataPendaftaranController extends Controller
             'created_at' => now(),
         ]);
     }
-
 }

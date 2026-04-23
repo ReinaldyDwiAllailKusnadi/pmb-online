@@ -74,7 +74,7 @@
                             </div>
                         @endif
 
-                        <form id="form-step1" class="space-y-8" method="POST" action="{{ route('form.step1.store') }}" enctype="multipart/form-data">
+                        <form id="form-step1" class="space-y-8" method="POST" action="{{ route('form.step1.store') }}" enctype="multipart/form-data" novalidate>
                             @csrf
                             <fieldset @disabled($isReadonly)>
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -123,6 +123,8 @@
                                             name="full_name"
                                             value="{{ old('full_name', $applicant->full_name) }}"
                                             placeholder="Masukkan nama sesuai KTP"
+                                            data-client-required
+                                            data-field-label="Nama Lengkap"
                                             class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary"
                                         />
                                         <span class="text-[10px] text-error font-medium flex items-center gap-1">
@@ -160,7 +162,7 @@
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Kabupaten / Kota</label>
                                     <div class="relative">
-                                        <select id="city-select" name="city" data-selected-city="{{ $selectedCity }}" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                        <select id="city-select" name="city" data-selected-city="{{ $selectedCity }}" data-client-required data-field-label="Kabupaten / Kota" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
                                             <option value="">Pilih Kabupaten / Kota</option>
                                             @foreach ($selectedCities as $city)
                                                 <option value="{{ $city }}" {{ $selectedCity === $city ? 'selected' : '' }}>{{ $city }}</option>
@@ -181,7 +183,7 @@
                                 <div class="space-y-2 relative">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Provinsi</label>
                                     <div class="relative">
-                                        <select id="province-select" name="province" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                        <select id="province-select" name="province" data-client-required data-field-label="Provinsi" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
                                             <option value="">Pilih Provinsi</option>
                                             @foreach ($provinces as $province)
                                                 <option value="{{ $province }}" {{ $selectedProvince === $province ? 'selected' : '' }}>{{ $province }}</option>
@@ -197,7 +199,7 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Telepon Rumah</label>
-                                    <input name="home_phone" value="{{ old('home_phone', $applicant->home_phone) }}" placeholder="021xxxxxx" type="tel" inputmode="numeric" pattern="[0-9]*" data-numeric-only class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    <input name="home_phone" value="{{ old('home_phone', $applicant->home_phone) }}" placeholder="021xxxxxx" type="tel" inputmode="numeric" pattern="[0-9]*" data-numeric-only data-numeric-message="Isian harus format angka" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
                                     @error('home_phone')
                                         <p class="text-xs font-semibold text-error">{{ $message }}</p>
                                     @enderror
@@ -205,19 +207,19 @@
 
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Nomor Handphone</label>
-                                    <input name="phone" value="{{ old('phone', $applicant->phone) }}" placeholder="08xxxxxxx" type="tel" inputmode="numeric" pattern="[0-9]*" data-numeric-only class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    <input name="phone" value="{{ old('phone', $applicant->phone) }}" placeholder="08xxxxxxx" type="tel" inputmode="numeric" pattern="[0-9]*" data-numeric-only data-client-required data-field-label="Nomor Handphone" data-numeric-message="Isian harus format angka" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
                                     @error('phone')
                                         <p class="text-xs font-semibold text-error">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Alamat Email</label>
-                                    <input name="email" type="email" value="{{ old('email', $applicant->email) }}" placeholder="contoh@mail.com" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    <input name="email" type="email" value="{{ old('email', $applicant->email) }}" placeholder="contoh@mail.com" data-client-required data-email-format data-field-label="Alamat Email" data-email-message="Isian tidak sesuai" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
                                 </div>
 
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Asal Sekolah</label>
-                                    <input name="asal_sekolah" value="{{ old('asal_sekolah', $applicant->asal_sekolah) }}" placeholder="Nama SMA/SMK/MA asal" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
+                                    <input name="asal_sekolah" value="{{ old('asal_sekolah', $applicant->asal_sekolah) }}" placeholder="Nama SMA/SMK/MA asal" data-client-required data-field-label="Asal Sekolah" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium focus:ring-1 focus:ring-primary" />
                                     @error('asal_sekolah')
                                         <p class="text-xs font-semibold text-error">{{ $message }}</p>
                                     @enderror
@@ -306,7 +308,7 @@
                                 <div class="space-y-2 relative">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Program Studi Pilihan</label>
                                     <div class="relative">
-                                        <select name="program_studi_id" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                        <select name="program_studi_id" data-client-required data-field-label="Program Studi Pilihan" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
                                             <option value="">Pilih Program Studi</option>
                                             @foreach ($programStudi as $program)
                                                 <option value="{{ $program->id }}" {{ (string) old('program_studi_id', $applicant->program_studi_id) === (string) $program->id ? 'selected' : '' }}>
@@ -323,7 +325,7 @@
                                 <div class="space-y-2 relative">
                                     <label class="text-xs font-bold text-primary uppercase tracking-wider">Gelombang Pendaftaran</label>
                                     <div class="relative">
-                                        <select name="gelombang_pendaftaran_id" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
+                                        <select name="gelombang_pendaftaran_id" data-client-required data-field-label="Gelombang Pendaftaran" class="w-full p-4 bg-surface-container-low border-none rounded-xl ghost-border text-primary font-medium appearance-none focus:ring-1 focus:ring-primary">
                                             <option value="">Pilih Gelombang</option>
                                             @foreach ($gelombangPendaftaran as $gelombang)
                                                 <option value="{{ $gelombang->id }}" {{ (string) old('gelombang_pendaftaran_id', $applicant->gelombang_pendaftaran_id) === (string) $gelombang->id ? 'selected' : '' }}>
@@ -424,10 +426,125 @@
             renderCityOptions(provinceSelect.value);
         });
 
+        const formStep1 = document.getElementById('form-step1');
+        const invalidInputClass = ['!ring-2', '!ring-red-400', '!bg-red-50'];
+
+        function fieldErrorElement(field) {
+            let error = field.closest('.space-y-2, .space-y-4, .relative')?.querySelector(':scope > [data-client-error]');
+
+            if (!error) {
+                error = document.createElement('p');
+                error.dataset.clientError = 'true';
+                error.className = 'text-xs font-semibold text-error';
+                (field.closest('.space-y-2, .space-y-4, .relative') || field.parentElement)?.appendChild(error);
+            }
+
+            return error;
+        }
+
+        function setFieldError(field, message) {
+            field.classList.add(...invalidInputClass);
+            field.setAttribute('aria-invalid', 'true');
+            fieldErrorElement(field).textContent = message;
+        }
+
+        function clearFieldError(field) {
+            field.classList.remove(...invalidInputClass);
+            field.removeAttribute('aria-invalid');
+
+            const error = field.closest('.space-y-2, .space-y-4, .relative')?.querySelector(':scope > [data-client-error]');
+
+            if (error) {
+                error.textContent = '';
+            }
+        }
+
+        function isFilled(field) {
+            if (field.type === 'radio') {
+                return Boolean(formStep1?.querySelector(`[name="${field.name}"]:checked`));
+            }
+
+            if (field.type === 'file') {
+                return field.files && field.files.length > 0;
+            }
+
+            return String(field.value || '').trim() !== '';
+        }
+
+        function validateField(field) {
+            if (field.disabled) {
+                clearFieldError(field);
+                return true;
+            }
+
+            if (field.matches('[data-client-required]') && !isFilled(field)) {
+                setFieldError(field, 'Wajib diisi');
+                return false;
+            }
+
+            if (field.matches('[data-email-format]') && field.value.trim() !== '') {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailPattern.test(field.value.trim())) {
+                    setFieldError(field, field.dataset.emailMessage || 'Isian tidak sesuai');
+                    return false;
+                }
+            }
+
+            if (field.matches('[data-numeric-only]') && field.value.trim() !== '' && !/^[0-9]+$/.test(field.value.trim())) {
+                setFieldError(field, field.dataset.numericMessage || 'Isian harus format angka');
+                return false;
+            }
+
+            clearFieldError(field);
+            return true;
+        }
+
         document.querySelectorAll('[data-numeric-only]').forEach(function (input) {
             input.addEventListener('input', function () {
-                input.value = input.value.replace(/\D/g, '');
+                const originalValue = input.value;
+                input.value = originalValue.replace(/\D/g, '');
+
+                if (originalValue !== input.value) {
+                    setFieldError(input, input.dataset.numericMessage || 'Isian harus format angka');
+                    return;
+                }
+
+                validateField(input);
             });
+        });
+
+        formStep1?.querySelectorAll('[data-client-required], [data-email-format], [data-numeric-only]').forEach(function (field) {
+            field.addEventListener('blur', function () {
+                validateField(field);
+            });
+
+            field.addEventListener('change', function () {
+                validateField(field);
+            });
+
+            if (!field.matches('[data-numeric-only]')) {
+                field.addEventListener('input', function () {
+                    validateField(field);
+                });
+            }
+        });
+
+        formStep1?.addEventListener('submit', function (event) {
+            const fields = Array.from(formStep1.querySelectorAll('[data-client-required], [data-email-format], [data-numeric-only]'));
+            const isValid = fields.every(validateField);
+
+            if (isValid) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            alert('Mohon lengkapi seluruh data yang wajib diisi terlebih dahulu.');
+
+            const firstInvalid = formStep1.querySelector('[aria-invalid="true"]');
+            firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid?.focus({ preventScroll: true });
         });
 
         @if (! $isReadonly)
